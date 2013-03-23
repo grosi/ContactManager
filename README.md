@@ -1,4 +1,4 @@
 ContactManager
 ==============
 
-Kontaktverwaltung für Vereine
+Kontaktverwaltung fuer Vereine
