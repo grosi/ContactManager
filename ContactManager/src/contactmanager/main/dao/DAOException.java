@@ -1,5 +1,5 @@
 
-package contactmanager.main.DAO;
+package contactmanager.main.dao;
 
 /**
  * @author grosi
