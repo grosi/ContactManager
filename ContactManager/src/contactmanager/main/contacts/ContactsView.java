@@ -1,7 +1,7 @@
-package contactmanager.main.view;
+package contactmanager.main.contacts;
 
 import contactmanager.main.AbstractView;
-import contactmanager.main.controller.ContactsController;
+import contactmanager.main.contacts.ContactsController;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
@@ -60,7 +60,7 @@ public final class ContactsView extends AbstractView {
         
         this.add(nameTextField);
         this.add(nameCloneTextField);
-        this.add(changeButton);               
+        this.add(changeButton); 
     }
     
     

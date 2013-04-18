@@ -1,8 +1,6 @@
 
 package contactmanager.main;
 
-import contactmanager.main.controller.PropertyChangeEventSink;
-import contactmanager.main.view.MainFrame;
 import javax.swing.JPanel;
 
 /**

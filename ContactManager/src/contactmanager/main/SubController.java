@@ -1,5 +1,7 @@
 
-package contactmanager.main.controller;
+package contactmanager.main;
+
+import contactmanager.main.MainController;
 
 /**
  * @author Simon Grossenbacher

@@ -1,7 +1,8 @@
 
-package contactmanager.main.DAO;
+package contactmanager.main.dao;
 
-import contactmanager.main.model.Contact;
+import contactmanager.main.contacts.ContactsDAO;
+import contactmanager.main.contacts.Contact;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;

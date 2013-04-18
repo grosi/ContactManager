@@ -1,9 +1,9 @@
-package contactmanager.main.controller;
+package contactmanager.main.contacts;
 
-import contactmanager.main.view.ContactsView;
-import contactmanager.main.model.ContactsModel;
 import contactmanager.main.AbstractController;
 import contactmanager.main.AbstractView;
+import contactmanager.main.MainController;
+import contactmanager.main.SubController;
 
 
 /**

@@ -1,5 +1,5 @@
 
-package contactmanager.main.controller;
+package contactmanager.main;
 
 import java.beans.PropertyChangeEvent;
 

@@ -1,9 +1,9 @@
-package contactmanager.main.model;
+package contactmanager.main.contacts;
 
 import contactmanager.main.AbstractModel;
-import contactmanager.main.DAO.ContactsDAO;
-import contactmanager.main.DAO.MySQLContactsDAO;
-import contactmanager.main.controller.ContactsController;
+import contactmanager.main.contacts.ContactsDAO;
+import contactmanager.main.dao.MySQLContactsDAO;
+import contactmanager.main.contacts.ContactsController;
 
 
 /**

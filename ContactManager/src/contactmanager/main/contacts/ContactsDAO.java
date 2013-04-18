@@ -1,6 +1,6 @@
-package contactmanager.main.DAO;
+package contactmanager.main.contacts;
 
-import contactmanager.main.model.Contact;
+import contactmanager.main.dao.DAOException;
 
 /**
  * @author Simon Grossenbacher

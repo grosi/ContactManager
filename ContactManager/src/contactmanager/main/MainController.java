@@ -1,10 +1,8 @@
 
-package contactmanager.main.controller;
+package contactmanager.main;
 
+import contactmanager.main.contacts.ContactsController;
 import contactmanager.main.AbstractController;
-import contactmanager.main.model.MainModel;
-import contactmanager.main.view.MainFrame;
-import contactmanager.main.controller.ContactsController;
 
 /**
  * @author Simon Grossenbacher
@@ -12,8 +10,6 @@ import contactmanager.main.controller.ContactsController;
  * @since 27.03.2013
  */
 public class MainController extends AbstractController implements MainInterface {
-    
-    
     
     private MainFrame mainFrame;
     private MainModel mainModel;
@@ -34,7 +30,7 @@ public class MainController extends AbstractController implements MainInterface 
         addView(mainFrame);
         
         /* Alle SubController */
-        contactsController = new ContactsController(this);
+        this.contactsController = new ContactsController(this);
     }
 
     /***************************************************************************
@@ -61,6 +57,7 @@ public class MainController extends AbstractController implements MainInterface 
      */
     public void changeTabSelection(String tabName) {
         mainModel.tabChange(tabName);
+        System.err.println("changeTabSelection");
     }
 
     

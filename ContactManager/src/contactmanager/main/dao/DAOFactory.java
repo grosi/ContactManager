@@ -1,5 +1,7 @@
 
-package contactmanager.main.DAO;
+package contactmanager.main.dao;
+
+import contactmanager.main.contacts.ContactsDAO;
 
 /**
  * @author grosi

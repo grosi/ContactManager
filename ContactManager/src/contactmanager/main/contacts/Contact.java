@@ -1,5 +1,5 @@
 
-package contactmanager.main.model;
+package contactmanager.main.contacts;
 
 /**
  * @author grosi

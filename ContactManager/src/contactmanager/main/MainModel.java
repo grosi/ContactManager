@@ -1,8 +1,8 @@
 
-package contactmanager.main.model;
+package contactmanager.main;
 
 import contactmanager.main.AbstractModel;
-import contactmanager.main.controller.MainController;
+import contactmanager.main.MainController;
 
 /**
  * @author grosi

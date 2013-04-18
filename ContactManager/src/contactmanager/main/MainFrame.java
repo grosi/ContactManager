@@ -1,10 +1,12 @@
-package contactmanager.main.view;
+package contactmanager.main;
 
 import contactmanager.main.AbstractFrame;
-import contactmanager.main.controller.MainController;
+import contactmanager.main.MainController;
+import java.awt.Component;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.beans.PropertyChangeEvent;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
@@ -34,9 +36,9 @@ public final class MainFrame extends AbstractFrame {
                 tabPaneChangeEvent(ce);
             }
         });
+       
         
-        //Hauptfenster
-        
+        //Hauptfenster 
         tabPane.add("Test",new JPanel());
         this.add(tabPane);
         
@@ -115,6 +117,8 @@ public final class MainFrame extends AbstractFrame {
     
 
     private void windowOpenedEvent(WindowEvent we) {
+        int index = tabPane.getSelectedIndex();
+        controller.changeTabSelection(tabPane.getTitleAt(index));
         /**@TODO */
     }
     
@@ -155,6 +159,7 @@ public final class MainFrame extends AbstractFrame {
     public void modelPropertyChange(PropertyChangeEvent evt) {
         switch (evt.getPropertyName()) {
             case MainController.CURRENT_TAB_CHANGED_EVENT:
+                System.out.println("EVENT");
                 this.setTitle(evt.getNewValue().toString());
                 break;
             default:

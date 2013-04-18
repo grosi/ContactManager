@@ -1,6 +1,5 @@
 package contactmanager.main;
 
-import contactmanager.main.controller.PropertyChangeEventSink;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
