@@ -1,8 +1,9 @@
 
-package contactmanager.main;
+package contactmanager.main.frame;
 
 import contactmanager.main.AbstractModel;
-import contactmanager.main.MainController;
+import contactmanager.main.AbstractModel;
+import contactmanager.main.frame.MainController;
 
 /**
  * @author grosi

@@ -1,7 +1,8 @@
-package contactmanager.main;
+package contactmanager.main.frame;
 
 import contactmanager.main.AbstractFrame;
-import contactmanager.main.MainController;
+import contactmanager.main.AbstractFrame;
+import contactmanager.main.frame.MainController;
 import java.awt.Component;
 import java.awt.Frame;
 import java.awt.event.WindowEvent;

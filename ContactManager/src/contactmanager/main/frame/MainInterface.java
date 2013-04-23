@@ -1,5 +1,5 @@
 
-package contactmanager.main;
+package contactmanager.main.frame;
 
 /**
  * @author grosi

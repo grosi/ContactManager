@@ -1,6 +1,7 @@
 
 package contactmanager.main;
 
+import contactmanager.main.frame.MainController;
 import javax.swing.SwingUtilities;
 
 /**
