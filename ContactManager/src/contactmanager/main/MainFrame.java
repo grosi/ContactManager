@@ -3,6 +3,7 @@ package contactmanager.main;
 import contactmanager.main.AbstractFrame;
 import contactmanager.main.MainController;
 import java.awt.Component;
+import java.awt.Frame;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.beans.PropertyChangeEvent;
@@ -42,8 +43,10 @@ public final class MainFrame extends AbstractFrame {
         tabPane.add("Test",new JPanel());
         this.add(tabPane);
         
-        this.setSize(1000, 600);
-        this.setBounds(200, 200, 500, 100);
+        //this.setSize(1000, 600);
+        this.setExtendedState(Frame.MAXIMIZED_BOTH);
+        this.setResizable(false);
+        //this.setBounds(200, 200, 500, 100);
         this.setVisible(true);
         
         
