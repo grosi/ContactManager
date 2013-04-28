@@ -1,6 +1,7 @@
 package contactmanager.main.contacts;
 
 import contactmanager.main.AbstractView;
+import contactmanager.main.GraphicDesign;
 import contactmanager.main.contacts.ContactsController;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,7 +14,7 @@ import javax.swing.JTextField;
  * @version 0.1
  * @since 27.03.2013
  */
-public final class ContactsView extends AbstractView {
+public final class ContactsView extends AbstractView implements GraphicDesign {
     
     private ContactsController controller;
     
