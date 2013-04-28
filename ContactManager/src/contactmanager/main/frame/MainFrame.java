@@ -2,13 +2,20 @@ package contactmanager.main.frame;
 
 import contactmanager.main.AbstractFrame;
 import contactmanager.main.AbstractFrame;
+import contactmanager.main.GraphicDesign;
 import contactmanager.main.frame.MainController;
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.beans.PropertyChangeEvent;
+import javax.swing.BoxLayout;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
@@ -19,7 +26,7 @@ import javax.swing.event.ChangeListener;
  * @version 0.1
  * @since 27.03.2013
  */
-public final class MainFrame extends AbstractFrame {
+public final class MainFrame extends AbstractFrame implements GraphicDesign{
 
     private final MainController controller;
     private final JTabbedPane tabPane;
@@ -31,6 +38,8 @@ public final class MainFrame extends AbstractFrame {
 
         //Tabs
         tabPane = new JTabbedPane();
+        tabPane.setBackground(Color.yellow);
+        tabPane.setMinimumSize(new Dimension(150,150));
         tabPane.addChangeListener(new ChangeListener() {
 
             @Override
@@ -41,7 +50,9 @@ public final class MainFrame extends AbstractFrame {
        
         
         //Hauptfenster 
-        tabPane.add("Test",new JPanel());
+        //tabPane.add("<html><body leftmargin=15 topmargin=8 marginwidth=15 marginheight=5>Test</body></html>",new JPanel());
+        
+       // this.setLayout(new FlowLayout(FlowLayout.CENTER));
         this.add(tabPane);
         
         //this.setSize(1000, 600);
@@ -90,18 +101,20 @@ public final class MainFrame extends AbstractFrame {
         });
     }
     
-    /**
+    /***************************************************************************
      *  Methoden fuer Subviews
-     */
+     **************************************************************************/
     
     /**
      * Weiterer Tab hinzufuegen
      * @param panelName Name des Tabs
      * @param panel Referenz auf Tab
+     * @TODO Groesse des Tabs beruecksichtigen
      */
     public void addTab(String panelName, JPanel panel) {
         tabPane.add(panelName, panel);
     }
+    
     
     
     /***************************************************************************
