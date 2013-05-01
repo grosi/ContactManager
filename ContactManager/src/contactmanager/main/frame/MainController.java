@@ -4,6 +4,7 @@ package contactmanager.main.frame;
 import contactmanager.main.contacts.ContactsController;
 import contactmanager.main.AbstractController;
 import contactmanager.main.AbstractController;
+import contactmanager.main.dao.DAOFactory;
 
 /**
  * @author Simon Grossenbacher
@@ -44,6 +45,15 @@ public class MainController extends AbstractController implements MainInterface 
      */
     public MainFrame getMainFrame() {
         return mainFrame;
+    }
+    
+    
+    /**
+     * Referenz auf DAO Factory
+     * @return Referenz
+     */
+    public DAOFactory getDAOFactory() {
+        return mainModel.getDAOFactory();
     }
     
     
