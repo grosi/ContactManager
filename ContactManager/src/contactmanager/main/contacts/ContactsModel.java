@@ -13,13 +13,16 @@ import contactmanager.main.contacts.ContactsController;
  */
 public final class ContactsModel extends AbstractModel {
     
+    private ContactsController controller;
     private String name;
-    private ContactsDAO dataHandler;
+    private ContactsDAO contactsdao;
 
-    public ContactsModel() {
+    public ContactsModel(ContactsController controller) {
         super();
         
-        this.dataHandler = new MySQLContactsDAO();
+        this.controller = controller;
+        
+        this.contactsdao = controller.getMainController().getDAOFactory().getContactsDAO();
     }
     
     /**
