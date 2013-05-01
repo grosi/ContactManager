@@ -27,7 +27,7 @@ public class ContactsController extends AbstractController implements ContactsIn
         this.mainController = mainController;
         
         /* Modelle eintragen (diejenigen die Views aktualisieren sollen*/
-        contactsModel = new ContactsModel();
+        contactsModel = new ContactsModel(this);
         addModel(contactsModel);
         
         /* Views eintragen -> werden durch Modelle aktualisiert */
