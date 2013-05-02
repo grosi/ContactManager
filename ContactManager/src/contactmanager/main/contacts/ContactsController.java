@@ -36,6 +36,11 @@ public class ContactsController extends AbstractController implements ContactsIn
     }
  
     
+    
+    /***************************************************************************
+     * Model/View -> MainController Methoden, inkl. Exception Handling
+     **************************************************************************/
+    
     @Override
     public MainController getMainController() {
         return this.mainController;
