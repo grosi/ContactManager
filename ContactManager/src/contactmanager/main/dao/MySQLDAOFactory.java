@@ -2,6 +2,7 @@
 package contactmanager.main.dao;
 
 import contactmanager.main.contacts.ContactsDAO;
+import contactmanager.main.groups.GroupsDAO;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -44,9 +45,26 @@ public class MySQLDAOFactory extends DAOFactory {
         return instance;
     }
     
+    
+    
+    /**
+     * DAO fuer Kontakt-Modul
+     * @return neue DAO
+     */
     @Override
     public ContactsDAO getContactsDAO() {
         return new MySQLContactsDAO();
+    }
+
+    
+    
+    /**
+     * DAO fuer Gruppen-Modul
+     * @return neue DAO
+     */
+    @Override
+    public GroupsDAO getGroupsDAO() {
+        return new MySQLGroupsDAO();
     }
 
    
