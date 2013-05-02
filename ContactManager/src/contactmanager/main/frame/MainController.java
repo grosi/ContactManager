@@ -3,8 +3,8 @@ package contactmanager.main.frame;
 
 import contactmanager.main.contacts.ContactsController;
 import contactmanager.main.AbstractController;
-import contactmanager.main.AbstractController;
 import contactmanager.main.dao.DAOFactory;
+import contactmanager.main.groups.GroupsController;
 
 /**
  * @author Simon Grossenbacher
@@ -13,26 +13,28 @@ import contactmanager.main.dao.DAOFactory;
  */
 public class MainController extends AbstractController implements MainInterface {
     
-    private MainFrame mainFrame;
-    private MainModel mainModel;
+    private MainFrame main_frame;
+    private MainModel main_model;
     
     /** Subcontroller */
-    private ContactsController contactsController;
+    private ContactsController contacts_controller;
+    private GroupsController groups_controller;
     
     public MainController() {
         
         super();
         
         /* Modelle eintragen (diejenigen die Views aktualisieren sollen*/
-        mainModel = new MainModel();
-        addModel(mainModel);
+        main_model = new MainModel();
+        addModel(main_model);
         
         /* Views eintragen -> werden durch Modelle aktualisiert */
-        mainFrame = new MainFrame(this);
-        addView(mainFrame);
+        main_frame = new MainFrame(this);
+        addView(main_frame);
         
         /* Alle SubController */
-        this.contactsController = new ContactsController(this);
+        this.contacts_controller = new ContactsController(this);
+        this.groups_controller = new GroupsController(this);
     }
 
     /***************************************************************************
@@ -44,7 +46,7 @@ public class MainController extends AbstractController implements MainInterface 
      * @return
      */
     public MainFrame getMainFrame() {
-        return mainFrame;
+        return main_frame;
     }
     
     
@@ -53,7 +55,7 @@ public class MainController extends AbstractController implements MainInterface 
      * @return Referenz
      */
     public DAOFactory getDAOFactory() {
-        return mainModel.getDAOFactory();
+        return main_model.getDAOFactory();
     }
     
     
@@ -67,7 +69,7 @@ public class MainController extends AbstractController implements MainInterface 
      * @param tabName
      */
     public void changeTabSelection(String tabName) {
-        mainModel.tabChange(tabName);
+        main_model.tabChange(tabName);
         System.err.println("changeTabSelection");
     }
 
@@ -76,7 +78,7 @@ public class MainController extends AbstractController implements MainInterface 
      * Programm beenden
      */
     public void closeApplication() {
-        mainModel.closeApplication();
+        main_model.closeApplication();
     }
     
 }
