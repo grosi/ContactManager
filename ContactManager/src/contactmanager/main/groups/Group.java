@@ -1,12 +1,10 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package contactmanager.main.groups;
 
 /**
- *
  * @author grosi
+ * @version 0.1
+ * @since 02.05.2013
  */
 public class Group {
     
