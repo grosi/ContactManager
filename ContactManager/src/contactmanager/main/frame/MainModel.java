@@ -19,16 +19,16 @@ public class MainModel extends AbstractModel {
     
     private DAOFactory daofactory;
     
-    private String applicationTitle = null;
+    private String application_title = null;
     
     public MainModel() {
         super();
         
-        try {
+        /*try {
             daofactory = DAOFactory.getDAOFactory(DAOFactory.MySQL);
         } catch (DAOException ex) {
             System.err.println("Datenbank nicht erreichtbar");
-        }
+        }*/
     }
     
     
@@ -37,9 +37,9 @@ public class MainModel extends AbstractModel {
      * @param tabName 
      */
     public void tabChange(String tabName) {
-        String oldTitle = this.applicationTitle;
-        this.applicationTitle = MainController.APPLICATION_TITLE + " - " + tabName;
-        firePropertyChange(MainController.CURRENT_TAB_CHANGED_EVENT, oldTitle, applicationTitle);
+        String oldTitle = this.application_title;
+        this.application_title = MainController.APPLICATION_TITLE + " - " + tabName;
+        firePropertyChange(MainController.CURRENT_TAB_CHANGED_EVENT, oldTitle, application_title);
     }
 
     
