@@ -65,6 +65,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign {
     }
     
     
+    
     /***************************************************************************
      * View -> Controller
      **************************************************************************/
@@ -82,10 +83,10 @@ public final class ContactsView extends AbstractView implements GraphicDesign {
     }
 
 
+    
     /***************************************************************************
      * Model -> View
      **************************************************************************/
-   
     /**
      * Aenderungen aus dem Model in View uebernehmen
      * @param evt 
