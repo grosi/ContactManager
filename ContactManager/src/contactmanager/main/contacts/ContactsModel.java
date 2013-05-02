@@ -22,7 +22,7 @@ public final class ContactsModel extends AbstractModel {
         
         this.controller = controller;
         
-        this.contactsdao = controller.getMainController().getDAOFactory().getContactsDAO();
+        //this.contactsdao = controller.getMainController().getDAOFactory().getContactsDAO();
     }
     
     /**
