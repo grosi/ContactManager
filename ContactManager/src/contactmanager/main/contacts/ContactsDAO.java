@@ -10,6 +10,6 @@ import contactmanager.main.dao.DAOException;
 public interface ContactsDAO {
     /* @TODO noch Schnittstellen definieren */
     public Contact getContact(int id) throws DAOException;
+    public boolean storeContact(Contact updateContact) throws DAOException;
     public boolean deleteContact(int id) throws DAOException;
-    public boolean updateContact(Contact updateContact) throws DAOException;
 }

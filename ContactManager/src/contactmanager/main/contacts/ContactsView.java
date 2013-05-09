@@ -1,13 +1,27 @@
 package contactmanager.main.contacts;
 
+import ca.odell.glazedlists.BasicEventList;
+import ca.odell.glazedlists.EventList;
+import ca.odell.glazedlists.SeparatorList;
+import ca.odell.glazedlists.SortedList;
 import contactmanager.main.AbstractView;
-import contactmanager.main.GraphicDesign;
-import contactmanager.main.contacts.ContactsController;
+import contactmanager.main.graphic.GraphicDesign;
+import contactmanager.main.graphic.JSeparatorList;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
+import java.util.Comparator;
+import javax.swing.BorderFactory;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.ListCellRenderer;
 
 /**
  * @author Simon Grossenbacher
@@ -21,6 +35,18 @@ public final class ContactsView extends AbstractView implements GraphicDesign {
     private JTextField nameTextField = new JTextField("Test");
     private JTextField nameCloneTextField = new JTextField("     ");
     private JButton changeButton = new JButton("Test");
+    private JScrollPane scrollpane = new JScrollPane();
+    private JSeparatorList checklist = new JSeparatorList();// = new JCheckList();
+    
+   
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JScrollPane contactspane;
+    private javax.swing.JScrollPane detailspane;
+    private javax.swing.JTextField searchtext;
+
 
     
     /**
@@ -29,6 +55,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign {
      */
     public ContactsView(ContactsController controller) {
         super(controller.getMainController().getMainFrame());
+        
         this.controller = controller;
         
         initComponents();
@@ -37,31 +64,99 @@ public final class ContactsView extends AbstractView implements GraphicDesign {
     }
 
     
+    
     /**
      * Panel initialisieren
      */
     @Override
     protected void initComponents() {
+       
+        contactspane = new javax.swing.JScrollPane();
+        detailspane = new javax.swing.JScrollPane();
+        searchtext = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
         
-        changeButton.addActionListener(new ActionListener() {
+        checklist = new JSeparatorList();
+
+        
+        contactspane.setViewportView(checklist);
+        contactspane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        contactspane.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+ 
+        
+
+        searchtext.setText("jTextField1");
+
+        jButton1.setText("Hinzufügen");
+        jButton1.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent ae) {
-                changeButtonActionPerformed(ae);
+                checklist.addListMember("Test", 99);
+                checklist.addListMember("Simon", 98);
+                checklist.addListMember("Kevin", 1);
+                checklist.addListMember("Kevin33", 1);
+                System.out.println("ADD");
             }
         });
-        
-        nameTextField.addActionListener(new ActionListener() {
-            
+
+        jButton2.setText("Löschen");
+        jButton2.addActionListener(new ActionListener() {
+
             @Override
             public void actionPerformed(ActionEvent ae) {
-                nameTextFieldActionPerformed(ae);
+                checklist.removeListMember(99);
             }
         });
         
-        this.add(nameTextField);
-        this.add(nameCloneTextField);
-        this.add(changeButton); 
+
+        jButton3.setText("jButton3");
+
+        jButton4.setText("jButton4");
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(searchtext, javax.swing.GroupLayout.DEFAULT_SIZE, 310, Short.MAX_VALUE)
+                    .addComponent(contactspane))
+                .addGap(48, 48, 48)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(detailspane)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 112, Short.MAX_VALUE)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(26, 26, 26)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(searchtext, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1)
+                    .addComponent(jButton2)
+                    .addComponent(jButton3)
+                    .addComponent(jButton4))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(contactspane, javax.swing.GroupLayout.DEFAULT_SIZE, 378, Short.MAX_VALUE)
+                    .addComponent(detailspane))
+                .addContainerGap())
+        );
+        
     }
     
     
@@ -74,12 +169,21 @@ public final class ContactsView extends AbstractView implements GraphicDesign {
      * 
      * @param evt 
      */
-    private void nameTextFieldActionPerformed(ActionEvent evt) {
-        controller.changeElementName(nameTextField.getText());
+    private void addButtonActionPerformed(ActionEvent evt) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
-    private void changeButtonActionPerformed(ActionEvent evt) {
-        controller.changeElementChange();
+    private void removeButtonActionPerformed(ActionEvent evt) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+    }
+
+    private void saveButtonActionPerformed(ActionEvent evt) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void messageButtonActionPerformed(ActionEvent evt) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 
@@ -108,6 +212,5 @@ public final class ContactsView extends AbstractView implements GraphicDesign {
                 
         }
     }
-  
     
 }

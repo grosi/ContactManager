@@ -34,7 +34,7 @@ public class MainController extends AbstractController implements MainInterface 
         
         /* Alle SubController */
         this.contacts_controller = new ContactsController(this);
-        this.groups_controller = new GroupsController(this);
+        //this.groups_controller = new GroupsController(this);
     }
 
     /***************************************************************************

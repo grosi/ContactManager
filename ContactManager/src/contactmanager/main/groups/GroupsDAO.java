@@ -8,4 +8,8 @@ package contactmanager.main.groups;
  */
 public interface GroupsDAO {
     
+    public Group getGroup(int id);
+    public boolean deleteGroup(int id);
+    public boolean storeGroup(Group group);
+    
 }

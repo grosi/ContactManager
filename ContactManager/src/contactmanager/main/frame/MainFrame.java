@@ -1,21 +1,13 @@
 package contactmanager.main.frame;
 
 import contactmanager.main.AbstractFrame;
-import contactmanager.main.AbstractFrame;
-import contactmanager.main.GraphicDesign;
-import contactmanager.main.frame.MainController;
-import java.awt.BorderLayout;
+import contactmanager.main.graphic.GraphicDesign;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.beans.PropertyChangeEvent;
-import javax.swing.BoxLayout;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
@@ -55,9 +47,9 @@ public final class MainFrame extends AbstractFrame implements GraphicDesign{
        // this.setLayout(new FlowLayout(FlowLayout.CENTER));
         this.add(tabPane);
         
-        //this.setSize(1000, 600);
-        this.setExtendedState(Frame.MAXIMIZED_BOTH);
-        this.setResizable(false);
+        this.setSize(1000, 600);
+        //this.setExtendedState(Frame.MAXIMIZED_BOTH);
+        this.setResizable(true);
         //this.setBounds(200, 200, 500, 100);
         this.setVisible(true);
         

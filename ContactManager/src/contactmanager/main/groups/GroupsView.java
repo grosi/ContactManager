@@ -2,7 +2,7 @@
 package contactmanager.main.groups;
 
 import contactmanager.main.AbstractView;
-import contactmanager.main.GraphicDesign;
+import contactmanager.main.graphic.GraphicDesign;
 import java.beans.PropertyChangeEvent;
 
 /**

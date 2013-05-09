@@ -14,10 +14,10 @@ import java.sql.SQLException;
  */
 public class MySQLDAOFactory extends DAOFactory {
 
-    private static final String DRIVER= "org.gjt.mm.mysql.Driver";
-    private static final String DBURL=  "jdbc:mysql://localhost:3306/blabla" ;
-    private static final String USER = "root";
-    private static final String PW = "";
+    private static final String DRIVER= "com.mysql.jdbc.Driver";
+    private static final String DBURL=  "jdbc:mysql://sql2.freesqldatabase.com:3306/sql27717" ;
+    private static final String USER = "sql27717";
+    private static final String PW = "wZ3!cX7!";
     
     public static Connection connection = null;
     

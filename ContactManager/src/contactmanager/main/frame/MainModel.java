@@ -24,11 +24,11 @@ public class MainModel extends AbstractModel {
     public MainModel() {
         super();
         
-        /*try {
+        try {
             daofactory = DAOFactory.getDAOFactory(DAOFactory.MySQL);
         } catch (DAOException ex) {
             System.err.println("Datenbank nicht erreichtbar");
-        }*/
+        }
     }
     
     

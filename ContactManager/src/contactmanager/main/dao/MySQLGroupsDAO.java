@@ -1,6 +1,7 @@
 
 package contactmanager.main.dao;
 
+import contactmanager.main.groups.Group;
 import contactmanager.main.groups.GroupsDAO;
 
 /**
@@ -12,5 +13,20 @@ public class MySQLGroupsDAO implements GroupsDAO {
     
     
     public MySQLGroupsDAO() {}
+
+    @Override
+    public Group getGroup(int id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean deleteGroup(int id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean storeGroup(Group group) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

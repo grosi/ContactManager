@@ -47,7 +47,7 @@ public class MySQLContactsDAO implements ContactsDAO {
     }
     
     @Override
-    public boolean updateContact(Contact updateContact) throws DAOException {
+    public boolean storeContact(Contact updateContact) throws DAOException {
         PreparedStatement s;
         
         try {
