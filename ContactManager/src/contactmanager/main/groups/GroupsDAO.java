@@ -1,6 +1,10 @@
 
 package contactmanager.main.groups;
 
+import contactmanager.main.contacts.ContactDTO;
+import contactmanager.main.dao.DAOException;
+import java.util.ArrayList;
+
 /**
  * @author grosi
  * @version 0.1
@@ -8,8 +12,19 @@ package contactmanager.main.groups;
  */
 public interface GroupsDAO {
     
-    public Group getGroup(int id);
-    public boolean deleteGroup(int id);
-    public boolean storeGroup(Group group);
+    /* Gruppenlisten */
+    public ArrayList<GroupDTO> selectGroupList() throws DAOException;
+    public ArrayList<GroupDTO> searchGroupList(String search_pattern) throws DAOException;
+    
+    /* Schnittstelle der einzelnen Kontakte */
+    public ContactDTO selectGroup(int group_id) throws DAOException;
+    public boolean insertGroup(ContactDTO insert_group) throws DAOException;
+    public boolean updateGroup(ContactDTO update_group) throws DAOException;
+    public boolean deleteGroup(int group_id) throws DAOException;
+    
+    /* Schnittstelle der Kontaktzugehoerigkeit */
+    public ArrayList<ContactDTO> selectContactsFromGroup(int group_id) throws DAOException;
+    public boolean addGroupToContact(int group_id, int contact_id) throws DAOException;
+    public boolean deleteGroupFromContact(int group_id, int contact_id) throws DAOException;
     
 }
