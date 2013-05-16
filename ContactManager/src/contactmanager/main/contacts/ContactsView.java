@@ -1,34 +1,21 @@
 package contactmanager.main.contacts;
 
-import ca.odell.glazedlists.BasicEventList;
-import ca.odell.glazedlists.EventList;
-import ca.odell.glazedlists.SeparatorList;
-import ca.odell.glazedlists.SortedList;
 import contactmanager.main.AbstractView;
 import contactmanager.main.graphic.GraphicDesign;
 import contactmanager.main.graphic.JSeparatorList;
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
-import java.util.Comparator;
-import javax.swing.BorderFactory;
-import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import javax.swing.ListCellRenderer;
 
 /**
  * @author Simon Grossenbacher
  * @version 0.1
  * @since 27.03.2013
  */
-public final class ContactsView extends AbstractView implements GraphicDesign {
+public final class ContactsView extends AbstractView implements GraphicDesign, ContactsInterface {
     
     private ContactsController controller;
     
@@ -165,10 +152,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign {
      * View -> Controller
      **************************************************************************/
     
-    /**
-     * 
-     * @param evt 
-     */
+    
     private void addButtonActionPerformed(ActionEvent evt) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
@@ -197,20 +181,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign {
      */
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
-        switch (evt.getPropertyName()) {
-            case ContactsController.NAME_CHANGED_EVENT:
-                nameCloneTextField.setText(evt.getNewValue().toString());
-                System.out.println("HALLO ICH BIN EIN EVENT");
-                break;
-                
-            case ContactsController.ADDRESS_CHANGED_EVENT:
-                System.out.println("ADDRESS EVENT");
-                break;
-                
-            default:
-                System.err.println("Kein passender Component gefunden");
-                
-        }
+        
     }
     
 }
