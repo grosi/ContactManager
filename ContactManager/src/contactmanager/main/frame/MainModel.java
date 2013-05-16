@@ -2,20 +2,15 @@
 package contactmanager.main.frame;
 
 import contactmanager.main.AbstractModel;
-import contactmanager.main.AbstractModel;
 import contactmanager.main.dao.DAOException;
 import contactmanager.main.dao.DAOFactory;
-import contactmanager.main.dao.MySQLDAOFactory;
-import contactmanager.main.frame.MainController;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * @author grosi
  * @version 0.1
  * @since 27.03.2013
  */
-public class MainModel extends AbstractModel {
+public class MainModel extends AbstractModel implements MainInterface {
     
     private DAOFactory daofactory;
     
@@ -39,7 +34,7 @@ public class MainModel extends AbstractModel {
     public void tabChange(String tabName) {
         String oldTitle = this.application_title;
         this.application_title = MainController.APPLICATION_TITLE + " - " + tabName;
-        firePropertyChange(MainController.CURRENT_TAB_CHANGED_EVENT, oldTitle, application_title);
+        firePropertyChange(CURRENT_TAB_CHANGED_EVENT, oldTitle, application_title);
     }
 
     
