@@ -10,6 +10,8 @@ import java.awt.event.WindowListener;
 import java.beans.PropertyChangeEvent;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -18,7 +20,7 @@ import javax.swing.event.ChangeListener;
  * @version 0.1
  * @since 27.03.2013
  */
-public final class MainFrame extends AbstractFrame implements GraphicDesign{
+public final class MainFrame extends AbstractFrame implements GraphicDesign, MainInterface {
 
     private final MainController controller;
     private final JTabbedPane tabPane;
@@ -27,6 +29,12 @@ public final class MainFrame extends AbstractFrame implements GraphicDesign{
     public MainFrame(MainController controller) {
         
         this.controller = controller;
+        
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException e) {
+            /**@TODO */
+        }
 
         //Tabs
         tabPane = new JTabbedPane();
@@ -167,12 +175,12 @@ public final class MainFrame extends AbstractFrame implements GraphicDesign{
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
         switch (evt.getPropertyName()) {
-            case MainController.CURRENT_TAB_CHANGED_EVENT:
+            case CURRENT_TAB_CHANGED_EVENT:
                 System.out.println("EVENT");
                 this.setTitle(evt.getNewValue().toString());
                 break;
             default:
-                System.err.println("Kein passender Component gefunden");
+                System.err.println("Unknows Event");
         }
     }
 }
