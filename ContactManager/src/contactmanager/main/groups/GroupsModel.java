@@ -8,7 +8,7 @@ import contactmanager.main.AbstractModel;
  * @version 0.1
  * @since 02.05.2013
  */
-public class GroupsModel extends AbstractModel{
+public class GroupsModel extends AbstractModel implements GroupsInterface {
     
     private GroupsController controller;
     private GroupsDAO groupsdao;
@@ -17,6 +17,7 @@ public class GroupsModel extends AbstractModel{
         super();
         
         this.controller = controller;
+        
         //this.groupsdao = controller.getMainController().getDAOFactory().getGroupsDAO();
            
     }
