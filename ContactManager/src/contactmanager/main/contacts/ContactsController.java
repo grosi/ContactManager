@@ -38,7 +38,7 @@ public class ContactsController extends AbstractController implements ContactsIn
     
     
     /***************************************************************************
-     * Model/View -> MainController Methoden, inkl. Exception Handling
+     * Model/View -> MainController Methoden
      **************************************************************************/
     
     @Override
@@ -48,23 +48,7 @@ public class ContactsController extends AbstractController implements ContactsIn
     
     
     /***************************************************************************
-     * GUI -> Model Methoden, inkl. Exception Handling
+     * GUI -> Model Methoden
      **************************************************************************/
-    
-    /**
-     * @TODO nur Testmethode
-     * @param newName 
-     */
-    public void changeElementName(String newName) {
-        contactsModel.setName(newName);
-        //setModelProperty(ELEMENT_TEXT_PROPERTY, newName);
-    }
-    
-    /**
-     *  @TODO nur Testmethode 
-     */
-    public void changeElementChange() {
-        contactsModel.setChange();
-        //setModelProperty(ELEMENT_CHANGE_PROPERTY, this);
-    }    
+ 
 }
