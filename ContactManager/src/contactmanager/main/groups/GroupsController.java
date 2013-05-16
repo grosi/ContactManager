@@ -11,7 +11,7 @@ import contactmanager.main.frame.MainController;
  * @version 0.1
  * @since 02.05.2013
  */
-public class GroupsController extends AbstractController implements SubController, GroupsInterface {
+public class GroupsController extends AbstractController implements SubController {
     
     private MainController main_controller;
 
@@ -39,7 +39,7 @@ public class GroupsController extends AbstractController implements SubControlle
     
     
     /***************************************************************************
-     * Model/View -> MainController Methoden, inkl. Exception Handling
+     * Model/View -> MainController Methoden
      **************************************************************************/
     
     @Override
@@ -50,7 +50,7 @@ public class GroupsController extends AbstractController implements SubControlle
     
     
     /***************************************************************************
-     * GUI -> Model Methoden, inkl. Exception Handling
+     * GUI -> Model Methoden
      **************************************************************************/
     
     
