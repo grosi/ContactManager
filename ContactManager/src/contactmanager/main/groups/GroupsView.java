@@ -3,8 +3,23 @@ package contactmanager.main.groups;
 
 import contactmanager.main.AbstractView;
 import contactmanager.main.graphic.GraphicDesign;
+import contactmanager.main.graphic.JSeparatorList;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
+import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import net.miginfocom.swing.MigLayout;
 
 /**
  * @author grosi
@@ -15,16 +30,32 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
     
     private GroupsController controller;
     
-    private javax.swing.ButtonGroup buttonGroup1;
-    private javax.swing.ButtonGroup buttonGroup2;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JList jList1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextField jTextField1;
+    /* Linke Spalte */
+    private JScrollPane list_scrollpane;
+    private JSeparatorList separatorlist;
+    
+    /* Rechte Spalte */
+    private JScrollPane detail_scrollpane;
+    private JPanel detail_main_panel;
+    private JPanel detail_static_panel;
+    private JLabel detail_static_label;
+    private JSeparator detail_static_separator;
+    private JTextField detail_static_name_textfield;
+    private JPanel detail_member_panel;
+    private JScrollPane detail_member_scrollpane;
+    private JSeparatorList detail_member_separatorlist;
+    private JLabel detail_member_label;
+    private JSeparator detail_member_separator;
+    
+    /* Suche */
+    private JTextField search_textfield;
+    
+    /* Schaltflaechen */
+    private JButton add_button;
+    private JButton remove_button;
+    private JButton save_button;
+    private JButton message_button;
+
 
     
     /**
@@ -41,105 +72,163 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
     }
     
     
-    
-    
     @Override
     protected void initComponents() {
-    buttonGroup1 = new javax.swing.ButtonGroup();
-        buttonGroup2 = new javax.swing.ButtonGroup();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTextField1 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        
+        /* Linke Spalte */
+        //Suchfeld
+        search_textfield = new JTextField(GROUP_TAB_DEFAULT_SEARCH_TEXT);
+        search_textfield.setBackground(Color.white);
+        search_textfield.addActionListener(new ActionListener() {
 
-        setMaximumSize(new java.awt.Dimension(66, 66));
-        setMinimumSize(new java.awt.Dimension(32, 32));
-        setPreferredSize(new java.awt.Dimension(800, 500));
-
-        jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        jScrollPane1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jScrollPane1.setMaximumSize(new java.awt.Dimension(500, 32767));
-        jScrollPane1.setMinimumSize(new java.awt.Dimension(200, 50));
-        jScrollPane1.setName(""); // NOI18N
-
-        jList1.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5dncjsdfczhsdbhjcbsdchjdbschjbdshjcbhdjbvchjdbvcjkhsdbvfhjd" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                searchTextActionPerformed(ae);
+            }
         });
-        jList1.setMinimumSize(new java.awt.Dimension(150, 165));
-        jScrollPane1.setViewportView(jList1);
+        
+        //Liste
+        separatorlist = new JSeparatorList();
+        separatorlist.addListSelectionListener(new ListSelectionListener() {
 
-        jTextField1.setText("jTextField1");
-
-        jButton1.setText("B1");
-        jButton1.setMaximumSize(new java.awt.Dimension(66, 66));
-        jButton1.setMinimumSize(new java.awt.Dimension(32, 32));
-        jButton1.setPreferredSize(new java.awt.Dimension(48, 48));
+            @Override
+            public void valueChanged(ListSelectionEvent lse) {
+                groupListValueChanged(lse);
+            }
+        });
+        
+        //Scroll Pane
+        list_scrollpane = new JScrollPane();
+        list_scrollpane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        list_scrollpane.setMinimumSize(new Dimension(GROUP_TAB_GROUPLIST_MIN_WIDTH, GROUP_TAB_GROUPLIST_MIN_HEIGHT));
+        list_scrollpane.setViewportView(separatorlist); //Separator Liste hinzufuegen
         
 
-        jButton2.setText("B1");
-        jButton2.setMaximumSize(new java.awt.Dimension(66, 66));
-        jButton2.setMinimumSize(new java.awt.Dimension(32, 32));
-        jButton2.setPreferredSize(new java.awt.Dimension(48, 48));
-        
+        /* Rechte Spalte */
+        //Nachricht Schaltflaeche 
+        message_button = new JButton();
+        message_button.setIcon(new ImageIcon(IMAGES_FILEPATH+"messages32x32.png"));  
+        message_button.setMnemonic(GROUP_TAB_MESSAGE_MNEMONIC);
+        message_button.setToolTipText(GROUP_TAB_MESSAGE_TOOLTIP);
+        message_button.addActionListener(new ActionListener() {
 
-        jButton3.setText("B1");
-        jButton3.setMaximumSize(new java.awt.Dimension(66, 66));
-        jButton3.setMinimumSize(new java.awt.Dimension(32, 32));
-        jButton3.setPreferredSize(new java.awt.Dimension(48, 48));
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                messageButtonActionPerformed(ae);
+            }
+        });
         
+        //Speichern Schaltflaeche
+        save_button = new JButton();
+        save_button.setIcon(new ImageIcon(IMAGES_FILEPATH+"save32x32.png"));
+        save_button.setMnemonic(GROUP_TAB_SAVE_MNEMONIC);
+        save_button.setToolTipText(GROUP_TAB_SAVE_TOOLTIP);
+        save_button.addActionListener(new ActionListener() {
 
-        jButton4.setText("B1");
-        jButton4.setMaximumSize(new java.awt.Dimension(66, 66));
-        jButton4.setMinimumSize(new java.awt.Dimension(32, 32));
-        jButton4.setPreferredSize(new java.awt.Dimension(48, 48));
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                saveButtonActionPerformed(ae);
+            }
+        });
         
+        //Hinzufuegen Schaltflaeche
+        add_button = new JButton();
+        add_button.setIcon(new ImageIcon(IMAGES_FILEPATH+"add32x32.png"));
+        add_button.setMnemonic(GROUP_TAB_ADD_MNEMONIC);
+        add_button.setToolTipText(GROUP_TAB_ADD_TOOLTIP);
+        add_button.addActionListener(new ActionListener() {
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
-                    .addComponent(jTextField1))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 370, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(14, 14, 14)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 424, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2))
-                .addContainerGap())
-        );
-    }// </editor-fold>                        
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                addButtonActionPerformed(ae);
+            }
+        });
+        
+        //Entfernen Schaltflaeche
+        remove_button = new JButton();
+        remove_button.setIcon(new ImageIcon(IMAGES_FILEPATH+"remove32x32.png"));
+        remove_button.setMnemonic(GROUP_TAB_REMOVE_MNEMONIC);
+        remove_button.setToolTipText(GROUP_TAB_REMOVE_TOOLTIP);
+        remove_button.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                removeButtonActionPerformed(ae);
+            }
+        });
+        
+        
+        //Static Detail Panel
+        detail_static_panel = new JPanel(new MigLayout("", //Layout Grenzen
+                "min[][grow,fill]min", //Spalten Grenzen
+                "[][]")); //Zeilen Grenzen
+        detail_static_panel.setBackground(Color.WHITE);
+        detail_static_label = new JLabel(GROUP_TAB_GROUPOVERVIEW_LABEL);
+        detail_static_separator = new JSeparator();
+        detail_static_name_textfield = new JTextField(GROUP_TAB_DEFAULT_NAME_TEXT);
+        detail_static_panel.add(detail_static_label, "cell 0 0");
+        detail_static_panel.add(detail_static_separator, "cell 1 0");
+        detail_static_panel.add(detail_static_name_textfield, "cell 0 1 2 1,growx");
+        
+        
+        //Member Panel
+        detail_member_panel = new JPanel(new MigLayout("", //Layout Grenzen
+                "min[][grow,fill]min", //Spalten Grenzen
+                "[][grow,fill]min")); //Zeilen Grenzen
+        detail_member_panel.setBackground(Color.WHITE);
+        detail_member_label = new JLabel(GROUP_TAB_GROUPMEMBER_LABEL);
+        detail_member_separator = new JSeparator();
+        detail_member_scrollpane = new JScrollPane();
+        detail_member_separatorlist = new JSeparatorList();
+        detail_member_scrollpane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        detail_member_scrollpane.setViewportView(detail_member_separatorlist);
+        detail_member_panel.add(detail_member_label, "cell 0 0");
+        detail_member_panel.add(detail_member_separator, "cell 1 0");
+        detail_member_panel.add(detail_member_scrollpane, "cell 0 1 2 1,growx");
+        
+        detail_member_separatorlist.addListMember("Hallo", 1);
+        detail_member_separatorlist.addListMember("Hallo", 2);
+        detail_member_separatorlist.addListMember("Hallo", 3);
+        detail_member_separatorlist.addListMember("Hallo", 4);
+        detail_member_separatorlist.addListMember("Hallo", 5);
+        detail_member_separatorlist.addListMember("Hallo", 6);
+        detail_member_separatorlist.addListMember("Hallo", 7);
+        detail_member_separatorlist.addListMember("Hallo", 8);
+        detail_member_separatorlist.addListMember("Hallo", 9);
+        detail_member_separatorlist.addListMember("Hallo", 10);
+        detail_member_separatorlist.addListMember("Hallo",11);
+        detail_member_separatorlist.addListMember("Hallo",12);
+        
+        
+        
+        //Detail Haupt-Panel
+        detail_main_panel = new JPanel(new MigLayout("", //Layout Grenzen
+                "[grow,fill]", //Spalten Grenzen
+                "[]min[grow,fill]")); //Zeilen Grenzen
+        detail_main_panel.setBackground(Color.white);
+        detail_main_panel.add(detail_static_panel, "cell 0 0");
+        detail_main_panel.add(detail_member_panel, "cell 0 1");
+        
+        
+        //Scroll Pane
+        detail_scrollpane = new JScrollPane();
+        detail_scrollpane.setMinimumSize(new Dimension(GROUP_TAB_GROUPDETAIL_MIN_WIDTH, GROUP_TAB_GROUPDETAIL_MIN_HEIGHT));
+        detail_scrollpane.setViewportView(detail_main_panel);
+        
+        
+        /* Alle Komponente zum Tab-Panel hinzufuegen */
+        this.setLayout(new MigLayout("", //Layout Grenzen
+                "rel[grow,fill]unrel[grow,fill]rel[]rel[]rel[]rel[]unrel", //Spalten Grenzen
+                "unrel[]unrel[grow,fill]unrel")); //Zeilen Grenzen
+        this.add(search_textfield, "growy");
+        this.add(list_scrollpane, "cell 0 1");
+        this.add(message_button, "cell 2 0");
+        this.add(save_button, "cell 3 0");
+        this.add(add_button, "cell 4 0");
+        this.add(remove_button, "cell 5 0");
+        this.add(detail_scrollpane, "cell 1 1 5 1");
+        
+    }                    
 
                                    
     
@@ -148,24 +237,30 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
      * View -> Controller
      **************************************************************************/
     
-    private void addButtonActionPerformed(ActionEvent evt) {
+    private void addButtonActionPerformed(ActionEvent ae) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
-    private void removeButtonActionPerformed(ActionEvent evt) {
+    private void removeButtonActionPerformed(ActionEvent ae) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         
     }
 
-    private void saveButtonActionPerformed(ActionEvent evt) {
+    private void saveButtonActionPerformed(ActionEvent ae) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    private void messageButtonActionPerformed(ActionEvent evt) {
+    private void messageButtonActionPerformed(ActionEvent ae) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
+    private void searchTextActionPerformed(ActionEvent ae) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
+    private void groupListValueChanged(ListSelectionEvent lse) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.    
+    }
     
     /***************************************************************************
      * Model -> View
