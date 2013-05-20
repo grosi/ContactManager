@@ -57,7 +57,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
      */
     @Override
     protected void initComponents() {
-       
+
         contactspane = new javax.swing.JScrollPane();
         detailspane = new javax.swing.JScrollPane();
         searchtext = new javax.swing.JTextField();
