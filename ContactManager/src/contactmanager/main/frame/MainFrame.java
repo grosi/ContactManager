@@ -56,7 +56,7 @@ public final class MainFrame extends AbstractFrame implements GraphicDesign, Mai
         this.add(tabPane);
         
         this.setSize(1000, 600);
-        //this.setExtendedState(Frame.MAXIMIZED_BOTH);
+        this.setMinimumSize(new Dimension(FRAME_MIN_WIDTH, FRAME_MIN_HEIGHT));
         this.setResizable(true);
         //this.setBounds(200, 200, 500, 100);
         this.setVisible(true);
