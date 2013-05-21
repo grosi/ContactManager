@@ -4,11 +4,15 @@ package contactmanager.main.groups;
 import contactmanager.main.AbstractView;
 import contactmanager.main.graphic.GraphicDesign;
 import contactmanager.main.graphic.JSeparatorList;
+import contactmanager.main.graphic.JSeparatorList.ListMember;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -16,6 +20,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
+import javax.swing.ListModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -66,9 +71,14 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
         super(controller.getMainController().getMainFrame());
         this.controller = controller;
         
+        /* Alle Komponente Initialisieren */
         initComponents();
 
+        /* Gruppen Tab zu Frame hinzufuegen */
         mainFrame.addTab(GROUPS_TITLE, this);
+        
+        /* Inhalt anfordern */
+        controller.getGroupList();
     }
     
     
@@ -186,18 +196,18 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
         detail_member_panel.add(detail_member_separator, "cell 1 0");
         detail_member_panel.add(detail_member_scrollpane, "cell 0 1 2 1,growx");
         
-        detail_member_separatorlist.addListMember("Hallo", 1);
-        detail_member_separatorlist.addListMember("Hallo", 2);
-        detail_member_separatorlist.addListMember("Hallo", 3);
-        detail_member_separatorlist.addListMember("Hallo", 4);
-        detail_member_separatorlist.addListMember("Hallo", 5);
-        detail_member_separatorlist.addListMember("Hallo", 6);
-        detail_member_separatorlist.addListMember("Hallo", 7);
-        detail_member_separatorlist.addListMember("Hallo", 8);
-        detail_member_separatorlist.addListMember("Hallo", 9);
-        detail_member_separatorlist.addListMember("Hallo", 10);
-        detail_member_separatorlist.addListMember("Hallo",11);
-        detail_member_separatorlist.addListMember("Hallo",12);
+        detail_member_separatorlist.addListMember("1", 1);
+        detail_member_separatorlist.addListMember("2", 2);
+        detail_member_separatorlist.addListMember("3", 3);
+        detail_member_separatorlist.addListMember("4", 4);
+        detail_member_separatorlist.addListMember("5", 5);
+        detail_member_separatorlist.addListMember("6", 6);
+        detail_member_separatorlist.addListMember("7", 7);
+        detail_member_separatorlist.addListMember("8", 8);
+        detail_member_separatorlist.addListMember("9", 9);
+        detail_member_separatorlist.addListMember("10", 10);
+        detail_member_separatorlist.addListMember("11",11);
+        detail_member_separatorlist.addListMember("12",12);
         
         
         
@@ -238,11 +248,21 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
      **************************************************************************/
     
     private void addButtonActionPerformed(ActionEvent ae) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        controller.addGroup();
+        System.out.println("ADD");
     }
     
     private void removeButtonActionPerformed(ActionEvent ae) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<ListMember> selected_items = separatorlist.getSelectedValuesList();
+        int size = selected_items.size();
+        
+        /* DTO erstellen */
+        for(int i = 0; i < size; i++) {
+            GroupDTO group = new GroupDTO();
+            group.group_id = selected_items.get(i).getID();
+            group.group_name = selected_items.get(i).getText();
+            controller.removeGroup(group);
+        }
         
     }
 
@@ -263,6 +283,22 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
     }
     
     /***************************************************************************
+     * Controller -> View
+     **************************************************************************/
+    
+    /**
+     * Die Detail-Spalte auf Default zuruecksetzen
+     */
+    public void setDetailToDefault() {
+        detail_static_name_textfield.setText(GROUP_TAB_DEFAULT_NAME_TEXT);
+        int size = detail_member_separatorlist.getListSize();      
+        
+        /* Alle Elemente der Liste loeschen */
+        for(int i = 0; i < size; i++)    
+            detail_member_separatorlist.remove(0);
+    }
+    
+    /***************************************************************************
      * Model -> View
      **************************************************************************/
     /**
@@ -271,11 +307,22 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
      */
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
+//        int size;
+        
         switch(evt.getPropertyName()) {
             case GROUP_LIST_SELECT_EVENT:
-                break;
                 
             case GROUP_SEARCH_EVENT:
+                int size = separatorlist.getListSize();      
+        
+                /* Alle Elemente der Liste zuerst loeschen */
+                for(int i = 0; i < size; i++)    
+                    separatorlist.remove(0);
+                
+                /* Neu Elemente hinzufuegen */
+                for(GroupDTO group : (ArrayList<GroupDTO>)evt.getNewValue()) {
+                    separatorlist.addListMember(group.group_name, group.group_id);
+                }
                 break;
                 
             case GROUP_SELECT_EVENT:
@@ -288,6 +335,7 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
                 break;
                 
             case GROUP_DELETE_EVENT:
+                
                 break;
                 
             case GROUP_SELECT_CONTACTS_EVENT:
