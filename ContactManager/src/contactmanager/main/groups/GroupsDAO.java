@@ -17,7 +17,7 @@ public interface GroupsDAO {
     public ArrayList<GroupDTO> searchGroupList(String search_pattern) throws DAOException;
     
     /* Schnittstelle der einzelnen Kontakte */
-    public ContactDTO selectGroup(int group_id) throws DAOException;
+    public GroupDTO selectGroup(int group_id) throws DAOException;
     public boolean insertGroup(ContactDTO insert_group) throws DAOException;
     public boolean updateGroup(ContactDTO update_group) throws DAOException;
     public boolean deleteGroup(int group_id) throws DAOException;
