@@ -27,7 +27,7 @@ public class MySQLGroupsDAO implements GroupsDAO {
     }
 
     @Override
-    public ContactDTO selectGroup(int group_id) throws DAOException {
+    public GroupDTO selectGroup(int group_id) throws DAOException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -60,6 +60,8 @@ public class MySQLGroupsDAO implements GroupsDAO {
     public boolean deleteGroupFromContact(int group_id, int contact_id) throws DAOException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    
 
    
 
