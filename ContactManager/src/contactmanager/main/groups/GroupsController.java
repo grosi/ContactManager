@@ -2,7 +2,6 @@
 package contactmanager.main.groups;
 
 import contactmanager.main.AbstractController;
-import contactmanager.main.AbstractView;
 import contactmanager.main.SubController;
 import contactmanager.main.frame.MainController;
 
@@ -19,7 +18,7 @@ public class GroupsController extends AbstractController implements SubControlle
     private GroupsModel groups_model;
     
     /* Views */
-    private AbstractView groups_view;
+    private GroupsView groups_view;
     
     
     public GroupsController(MainController mainController) {
@@ -50,9 +49,23 @@ public class GroupsController extends AbstractController implements SubControlle
     
     
     /***************************************************************************
-     * GUI -> Model Methoden
+     * GUI -> Controller Methoden
      **************************************************************************/
     
+    public void getGroupList() {
+        
+    }
+    
+    /**
+     * Neue Gruppe hinzufuegen
+     */
+    public void addGroup() {
+        groups_view.setDetailToDefault();
+    }
+    
+    public void removeGroup(GroupDTO group) {
+        groups_model.removeGroup(group);
+    }
     
 }
 
