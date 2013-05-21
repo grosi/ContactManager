@@ -2,6 +2,9 @@
 package contactmanager.main.groups;
 
 import contactmanager.main.AbstractModel;
+import contactmanager.main.dao.DAOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author grosi
@@ -20,6 +23,22 @@ public class GroupsModel extends AbstractModel implements GroupsInterface {
         
         //this.groupsdao = controller.getMainController().getDAOFactory().getGroupsDAO();
            
+    }
+    
+    
+    /**
+     * Entfernt eine Gruppe
+     * @param group Gruppen Data Transfer Objekt
+     */
+    public void removeGroup(GroupDTO group) {
+        
+        try {
+            groupsdao.deleteGroup(group.group_id);
+        } catch (DAOException ex) {
+            group = null;
+        }
+        
+        firePropertyChange(GROUP_DELETE_EVENT, group, group);    
     }
 
     
