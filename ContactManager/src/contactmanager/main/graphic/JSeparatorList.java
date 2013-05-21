@@ -98,6 +98,11 @@ public class JSeparatorList extends JList{
         }
         
     }
+    
+    @Override
+    public void remove(int index) {
+        this.listmember.remove(index);
+    }
    
     
     /**
@@ -106,7 +111,10 @@ public class JSeparatorList extends JList{
      */
     public int getListSize() {
         return listmember.size();
+        //return listmember_separator.size();
     }
+    
+    
     
     
     /**
