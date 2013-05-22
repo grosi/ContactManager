@@ -289,10 +289,12 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
         JPanel email_new = new JPanel(new MigLayout("wrap 4"));
         JComboBox email_type = new JComboBox(email_types);
         JTextField email_adress = new JTextField(email);
-        ImageIcon remove_image = new ImageIcon("remove.png");
+        ImageIcon remove_image = new ImageIcon(IMAGES_FILEPATH+"remove16x16.png");
         JButton remove_email = new JButton("Löschen");
-        ImageIcon send_image = new ImageIcon("remove.png");
-        JButton send_email = new JButton(send_image);
+        remove_email.setIcon(remove_image);
+        ImageIcon send_image = new ImageIcon(IMAGES_FILEPATH+"messages16x16.png");
+        JButton send_email = new JButton("Senden");
+        send_email.setIcon(send_image);
         
         
         email_type.addActionListener(new ActionListener() {
