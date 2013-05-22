@@ -18,8 +18,8 @@ public interface GroupsDAO {
     
     /* Schnittstelle der einzelnen Kontakte */
     public GroupDTO selectGroup(int group_id) throws DAOException;
-    public boolean insertGroup(ContactDTO insert_group) throws DAOException;
-    public boolean updateGroup(ContactDTO update_group) throws DAOException;
+    public int insertGroup(GroupDTO insert_group) throws DAOException;
+    public boolean updateGroup(GroupDTO update_group) throws DAOException;
     public boolean deleteGroup(int group_id) throws DAOException;
     
     /* Schnittstelle der Kontaktzugehoerigkeit */
