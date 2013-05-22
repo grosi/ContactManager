@@ -227,7 +227,7 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
         
         
         /* Alle Komponente zum Tab-Panel hinzufuegen */
-        this.setLayout(new MigLayout("", //Layout Grenzen
+        this.setLayout(new MigLayout("debug", //Layout Grenzen
                 "rel[grow,fill]unrel[grow,fill]rel[]rel[]rel[]rel[]unrel", //Spalten Grenzen
                 "unrel[]unrel[grow,fill]unrel")); //Zeilen Grenzen
         this.add(search_textfield, "growy");

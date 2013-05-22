@@ -58,6 +58,11 @@ public interface GraphicDesign {
     public static final String GROUP_TAB_ADD_TOOLTIP = "Neue Gruppe erstellen";
     public static final String GROUP_TAB_REMOVE_TOOLTIP = "Gruppe löschen";
     
+       
+    public static final String CONTACT_TAB_MESSAGE_TOOLTIP = "E-Mail erstellen";
+    public static final String CONTACT_TAB_SAVE_TOOLTIP = "Kontakt speichern";
+    public static final String CONTACT_TAB_ADD_TOOLTIP = "Neuer Kontakt erstellen";
+    public static final String CONTACT_TAB_REMOVE_TOOLTIP = "Kontakt löschen";
     
     
     /** Labels */
@@ -67,10 +72,25 @@ public interface GraphicDesign {
     public static final String GROUP_TAB_GROUPMEMBER_LABEL = "Gruppen-Mitglieder";
     public static final String GROUP_TAB_GROUPOVERVIEW_LABEL = "Gruppen-Übersicht";
     
+    /* Kontakte Tab */
+    public static final String CONTACT_TAB_NAME_LABEL = "Name";
+    public static final String CONTACT_TAB_PRENAME_LABEL = "Vorname";
+    public static final String CONTACT_TAB_EMAIL_LABEL = "E-Mail Adresse";
+    
     
     /** Textfelder */
     
     /* Gruppen Tab */
     public static final String GROUP_TAB_DEFAULT_SEARCH_TEXT = "Suchbegriff eingeben...";
     public static final String GROUP_TAB_DEFAULT_NAME_TEXT = "Gruppen-Name";
+    
+    
+    /* Kontakte Tab */
+    public static final String CONTACT_TAB_DEFAULT_SEARCH_TEXT = "Suchbegriff eingeben...";
+    public static final String CONTACT_TAB_DEFAULT_NAME_TEXT = "Name eingeben";
+    public static final String CONTACT_TAB_DEFAULT_PRENAME_TEXT = "Vorname eingeben";
+    
+    
+    
+    
 }
