@@ -62,15 +62,17 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
     /* Rechte Spalte */
     private JScrollPane detail_scrollpane;
     private JPanel detail_main_panel;
-    private JPanel detail_static_panel;
+    private JPanel detail_static_panel_name;
+    private JPanel detail_static_panel_prename;
     private JLabel detail_static_label;
     private JSeparator detail_static_separator;
     private JTextField detail_static_name_textfield;
-    private JPanel detail_member_panel;
+    private JTextField detail_static_prename_textfield;
+    private JPanel detail_dynamic_panel_email;
     private JScrollPane detail_member_scrollpane;
     private JSeparatorList detail_member_separatorlist;
     private JLabel detail_member_label;
-    private JSeparator detail_member_separator;
+    private JSeparator detail_dynamic_separator;
     
     /* Suche */
     private JTextField search_textfield;
@@ -138,7 +140,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
         message_button = new JButton();
         message_button.setIcon(new ImageIcon(IMAGES_FILEPATH+"messages32x32.png"));  
         message_button.setMnemonic(GROUP_TAB_MESSAGE_MNEMONIC);
-        message_button.setToolTipText(GROUP_TAB_MESSAGE_TOOLTIP);
+        message_button.setToolTipText(CONTACT_TAB_MESSAGE_TOOLTIP);
         message_button.addActionListener(new ActionListener() {
 
             @Override
@@ -151,7 +153,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
         save_button = new JButton();
         save_button.setIcon(new ImageIcon(IMAGES_FILEPATH+"save32x32.png"));
         save_button.setMnemonic(GROUP_TAB_SAVE_MNEMONIC);
-        save_button.setToolTipText(GROUP_TAB_SAVE_TOOLTIP);
+        save_button.setToolTipText(CONTACT_TAB_SAVE_TOOLTIP);
         save_button.addActionListener(new ActionListener() {
 
             @Override
@@ -164,7 +166,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
         add_button = new JButton();
         add_button.setIcon(new ImageIcon(IMAGES_FILEPATH+"add32x32.png"));
         add_button.setMnemonic(GROUP_TAB_ADD_MNEMONIC);
-        add_button.setToolTipText(GROUP_TAB_ADD_TOOLTIP);
+        add_button.setToolTipText(CONTACT_TAB_ADD_TOOLTIP);
         add_button.addActionListener(new ActionListener() {
 
             @Override
@@ -177,7 +179,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
         remove_button = new JButton();
         remove_button.setIcon(new ImageIcon(IMAGES_FILEPATH+"remove32x32.png"));
         remove_button.setMnemonic(GROUP_TAB_REMOVE_MNEMONIC);
-        remove_button.setToolTipText(GROUP_TAB_REMOVE_TOOLTIP);
+        remove_button.setToolTipText(CONTACT_TAB_REMOVE_TOOLTIP);
         remove_button.addActionListener(new ActionListener() {
 
             @Override
@@ -187,46 +189,49 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
         });
         
         
-        //Static Detail Panel
-        detail_static_panel = new JPanel(new MigLayout("", //Layout Grenzen
+        //Static Detail Panel Name
+        detail_static_panel_name = new JPanel(new MigLayout("", //Layout Grenzen
                 "min[][grow,fill]min", //Spalten Grenzen
                 "[][]")); //Zeilen Grenzen
-        detail_static_panel.setBackground(Color.WHITE);
-        detail_static_label = new JLabel(GROUP_TAB_GROUPOVERVIEW_LABEL);
+        detail_static_panel_name.setBackground(Color.white);
+        detail_static_label = new JLabel(CONTACT_TAB_NAME_LABEL);
         detail_static_separator = new JSeparator();
-        detail_static_name_textfield = new JTextField(GROUP_TAB_DEFAULT_NAME_TEXT);
-        detail_static_panel.add(detail_static_label, "cell 0 0");
-        detail_static_panel.add(detail_static_separator, "cell 1 0");
-        detail_static_panel.add(detail_static_name_textfield, "cell 0 1 2 1,growx");
+        detail_static_name_textfield = new JTextField(CONTACT_TAB_DEFAULT_NAME_TEXT);
+        detail_static_panel_name.add(detail_static_label, "cell 0 0");
+        detail_static_panel_name.add(detail_static_separator, "cell 1 0");
+        detail_static_panel_name.add(detail_static_name_textfield, "cell 0 1 2 1,growx");
+        
+        //Static Detail Panel Vorname      
+        detail_static_panel_prename = new JPanel(new MigLayout("", //Layout Grenzen
+                "min[][grow,fill]min", //Spalten Grenzen
+                "[][]min")); //Zeilen Grenzen
+        detail_static_panel_prename.setBackground(Color.white);
+        detail_static_label = new JLabel(CONTACT_TAB_PRENAME_LABEL);
+        detail_static_separator = new JSeparator();
+        detail_static_prename_textfield = new JTextField(CONTACT_TAB_DEFAULT_PRENAME_TEXT);
+        detail_static_panel_prename.add(detail_static_label, "cell 0 0");
+        detail_static_panel_prename.add(detail_static_separator, "cell 1 0");
+        detail_static_panel_prename.add(detail_static_prename_textfield, "cell 0 1 2 1,growx");
         
         
-        //Member Panel
-        detail_member_panel = new JPanel(new MigLayout("", //Layout Grenzen
+        
+        //Dynamic Panel E-Mail
+        detail_dynamic_panel_email = new JPanel(new MigLayout("", //Layout Grenzen
                 "min[][grow,fill]min", //Spalten Grenzen
                 "[][grow,fill]min")); //Zeilen Grenzen
-        detail_member_panel.setBackground(Color.WHITE);
-        detail_member_label = new JLabel(GROUP_TAB_GROUPMEMBER_LABEL);
-        detail_member_separator = new JSeparator();
+        detail_dynamic_panel_email.setBackground(Color.RED);
+        detail_member_label = new JLabel(CONTACT_TAB_EMAIL_LABEL);
+        detail_dynamic_separator = new JSeparator();
         detail_member_scrollpane = new JScrollPane();
         detail_member_separatorlist = new JSeparatorList();
         detail_member_scrollpane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         detail_member_scrollpane.setViewportView(detail_member_separatorlist);
-        detail_member_panel.add(detail_member_label, "cell 0 0");
-        detail_member_panel.add(detail_member_separator, "cell 1 0");
-        detail_member_panel.add(detail_member_scrollpane, "cell 0 1 2 1,growx");
+        detail_dynamic_panel_email.add(detail_member_label, "cell 0 0");
+        detail_dynamic_panel_email.add(detail_dynamic_separator, "cell 1 0");
+        detail_dynamic_panel_email.add(detail_member_scrollpane, "cell 0 1 2 1,growx");
         
         detail_member_separatorlist.addListMember("Hallo", 1);
-        detail_member_separatorlist.addListMember("Hallo", 2);
-        detail_member_separatorlist.addListMember("Hallo", 3);
-        detail_member_separatorlist.addListMember("Hallo", 4);
-        detail_member_separatorlist.addListMember("Hallo", 5);
-        detail_member_separatorlist.addListMember("Hallo", 6);
-        detail_member_separatorlist.addListMember("Hallo", 7);
-        detail_member_separatorlist.addListMember("Hallo", 8);
-        detail_member_separatorlist.addListMember("Hallo", 9);
-        detail_member_separatorlist.addListMember("Hallo", 10);
-        detail_member_separatorlist.addListMember("Hallo",11);
-        detail_member_separatorlist.addListMember("Hallo",12);
+
         
         
         
@@ -235,8 +240,9 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
                 "[grow,fill]", //Spalten Grenzen
                 "[]min[grow,fill]")); //Zeilen Grenzen
         detail_main_panel.setBackground(Color.white);
-        detail_main_panel.add(detail_static_panel, "cell 0 0");
-        detail_main_panel.add(detail_member_panel, "cell 0 1");
+        detail_main_panel.add(detail_static_panel_name, "cell 0 0");
+        detail_main_panel.add(detail_static_panel_prename, "cell 0 1");
+        detail_main_panel.add(detail_dynamic_panel_email, "cell 0 2");
         
         
         //Scroll Pane
