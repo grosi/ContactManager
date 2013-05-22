@@ -30,12 +30,18 @@ import static contactmanager.main.groups.GroupsInterface.GROUP_SELECT_CONTACTS_E
 import static contactmanager.main.groups.GroupsInterface.GROUP_SELECT_EVENT;
 import static contactmanager.main.groups.GroupsInterface.GROUP_UPDATE_EVENT;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
+import java.util.Map;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -68,11 +74,10 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
     private JSeparator detail_static_separator;
     private JTextField detail_static_name_textfield;
     private JTextField detail_static_prename_textfield;
-    private JPanel detail_dynamic_panel_email;
-    private JScrollPane detail_member_scrollpane;
-    private JSeparatorList detail_member_separatorlist;
-    private JLabel detail_member_label;
+    private static JPanel detail_dynamic_panel_email;
+    private JLabel detail_dynamic_label;
     private JSeparator detail_dynamic_separator;
+    private static JButton detail_dynamic_addbutton;
     
     /* Suche */
     private JTextField search_textfield;
@@ -82,6 +87,14 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
     private JButton remove_button;
     private JButton save_button;
     private JButton message_button;
+    
+    
+    
+    private static ArrayList<JButton> email_send_button = new ArrayList<>();
+    private static ArrayList<JButton> email_remove_button = new ArrayList<>();
+    private static ArrayList<JComboBox> email_combo = new ArrayList<>();
+    private static ArrayList<JTextField> email_text = new ArrayList<>();
+    private static ArrayList<JPanel> email_panel = new ArrayList<>();
 
     
     /**
@@ -116,6 +129,9 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
             public void actionPerformed(ActionEvent ae) {
                 searchTextActionPerformed(ae);
             }
+            
+         
+
         });
         
         //Liste
@@ -192,7 +208,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
         //Static Detail Panel Name
         detail_static_panel_name = new JPanel(new MigLayout("", //Layout Grenzen
                 "min[][grow,fill]min", //Spalten Grenzen
-                "[][]")); //Zeilen Grenzen
+                "[][]min")); //Zeilen Grenzen
         detail_static_panel_name.setBackground(Color.white);
         detail_static_label = new JLabel(CONTACT_TAB_NAME_LABEL);
         detail_static_separator = new JSeparator();
@@ -218,19 +234,16 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
         //Dynamic Panel E-Mail
         detail_dynamic_panel_email = new JPanel(new MigLayout("", //Layout Grenzen
                 "min[][grow,fill]min", //Spalten Grenzen
-                "[][grow,fill]min")); //Zeilen Grenzen
-        detail_dynamic_panel_email.setBackground(Color.RED);
-        detail_member_label = new JLabel(CONTACT_TAB_EMAIL_LABEL);
+                "[][]")); //Zeilen Grenzen
+        detail_dynamic_panel_email.setBackground(Color.white);
+        detail_dynamic_label = new JLabel(CONTACT_TAB_EMAIL_LABEL);
         detail_dynamic_separator = new JSeparator();
-        detail_member_scrollpane = new JScrollPane();
-        detail_member_separatorlist = new JSeparatorList();
-        detail_member_scrollpane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        detail_member_scrollpane.setViewportView(detail_member_separatorlist);
-        detail_dynamic_panel_email.add(detail_member_label, "cell 0 0");
-        detail_dynamic_panel_email.add(detail_dynamic_separator, "cell 1 0");
-        detail_dynamic_panel_email.add(detail_member_scrollpane, "cell 0 1 2 1,growx");
+        detail_dynamic_addbutton = new JButton("add");
+        detail_dynamic_panel_email.add(detail_dynamic_label, "cell 0 0");
+        detail_dynamic_panel_email.add(detail_dynamic_separator, "cell 1 0,wrap");
+        detail_dynamic_panel_email.add(detail_dynamic_addbutton,"wrap");
+        addEmail();
         
-        detail_member_separatorlist.addListMember("Hallo", 1);
 
         
         
@@ -238,11 +251,20 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
         //Detail Haupt-Panel
         detail_main_panel = new JPanel(new MigLayout("", //Layout Grenzen
                 "[grow,fill]", //Spalten Grenzen
-                "[]min[grow,fill]")); //Zeilen Grenzen
+                "[top]")); //Zeilen Grenzen
         detail_main_panel.setBackground(Color.white);
-        detail_main_panel.add(detail_static_panel_name, "cell 0 0");
-        detail_main_panel.add(detail_static_panel_prename, "cell 0 1");
-        detail_main_panel.add(detail_dynamic_panel_email, "cell 0 2");
+        detail_main_panel.add(detail_static_panel_name, "wrap");
+        detail_main_panel.add(detail_static_panel_prename, "wrap");
+        detail_main_panel.add(detail_dynamic_panel_email, "wrap");
+        
+       detail_dynamic_addbutton.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                addEmail("sigro@gmx.ch", "Private");
+                System.out.println("ADD");
+            }
+        });
         
         
         //Scroll Pane
@@ -265,8 +287,181 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
         
     }                    
 
+    
+        private static void addEmail(String email, String type) {
+        Map<Component, Object> constraint_map = ((MigLayout)detail_dynamic_panel_email.getLayout()).getConstraintMap();
+        Component[] all_components = detail_dynamic_panel_email.getComponents();
+        
+        String[] email_types = {"Private", "Business"};
+        JPanel email_new = new JPanel(new MigLayout("wrap 4"));
+        JComboBox email_type = new JComboBox(email_types);
+        JTextField email_adress = new JTextField(email);
+        ImageIcon remove_image = new ImageIcon("remove.png");
+        JButton remove_email = new JButton("Löschen");
+        ImageIcon send_image = new ImageIcon("remove.png");
+        JButton send_email = new JButton(send_image);
+        
+        
+        email_type.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                System.out.println("Email Type geändert");
+            }
+        });
+        
+        email_adress.addFocusListener(new FocusListener() {
+
+            @Override
+            public void focusGained(FocusEvent fe) {
+                System.out.println("Adresse angewählt"); 
+                selectEmail(fe);
+           }
+
+            @Override
+            public void focusLost(FocusEvent fe) {
+                System.out.println("Adresse abgewählt");
+                deselectEmail(fe);
+            }
+        });
+        
+        remove_email.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                System.out.println("Email löschen");
+                removeEmail(ae);
+            }
+        });
+        
+        send_email.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                System.out.println("Email schreiben");
+            }
+        });
+        
+        
+        detail_dynamic_panel_email.removeAll();
+        
+        for(Component c : all_components) {
+           
+            if(c instanceof JButton) {
+
+                email_type.setSelectedIndex(1);
+                email_new.add(email_type);
+                email_new.add(email_adress, " span 2");
+                email_new.add(send_email);
+                
+                detail_dynamic_panel_email.add(email_new, "growx,wrap");
+            }
+            
+            detail_dynamic_panel_email.add(c, constraint_map.get(c));
+        }
+        
+        email_panel.add(email_new);
+        email_combo.add(email_type);
+        email_text.add(email_adress);
+        email_remove_button.add(remove_email);
+        email_send_button.add(send_email);
+       
+        detail_dynamic_panel_email.revalidate();
+        
+        System.out.println("ADD EXIST");
+    }
+    
+    
+    
+    
+     private static void addEmail() {
+        Map<Component, Object> constraint_map = ((MigLayout)detail_dynamic_panel_email.getLayout()).getConstraintMap();
+        Component[] all_components = detail_dynamic_panel_email.getComponents();
+        String[] email_types = {"Default", "Private", "Business"};
+        JPanel email_new = new JPanel(new MigLayout("", //Layout Grenzen
+                "min[][grow,fill]min", //Spalten Grenzen
+                "[][]"));
+        JComboBox email_type = new JComboBox(email_types);
+        JTextField email_adress = new JTextField("Email-Adreese eingeben");
+        
+        email_type.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                System.out.println("Email Type geändert");
+            }
+        });
+        
+        
+        detail_dynamic_panel_email.removeAll();
+        
+        for(Component c : all_components) {
+             
+            if(c instanceof JButton) {
+                
+                email_new.add(email_type);
+                email_new.add(email_adress,"span 2");
+                
+                detail_dynamic_panel_email.add(email_new, "cell 0 1 2 1,growx,wrap");
+            }
+            
+            detail_dynamic_panel_email.add(c, constraint_map.get(c));
+        }
+        
+        
+        
+        detail_dynamic_panel_email.revalidate();
+    }
                                    
     
+     
+        private static void removeEmail(ActionEvent ae) {
+        JButton remove = (JButton)ae.getSource();
+        int index = email_remove_button.indexOf(remove);
+        JPanel panel = email_panel.get(index);
+        
+        detail_dynamic_panel_email.remove(panel);
+        detail_dynamic_panel_email.revalidate();
+        
+    }
+    
+     
+        
+    private static void selectEmail(FocusEvent hallo) {
+        JTextField text = (JTextField)hallo.getSource();
+        int index = email_text.indexOf(text);
+        JButton send = email_send_button.get(index);
+        JButton remove = email_remove_button.get(index);
+        JPanel panel = email_panel.get(index);
+        
+        panel.remove(send);
+        panel.add(remove);
+        
+        panel.revalidate();
+        
+    }
+    
+    
+    
+        private static void deselectEmail(FocusEvent fe) {
+        JTextField text = (JTextField)fe.getSource();
+        int index = email_text.indexOf(text);
+        JButton send = email_send_button.get(index);
+        JButton remove = email_remove_button.get(index);
+        JPanel panel = email_panel.get(index);
+        
+        panel.remove(remove);
+        panel.add(send);
+        
+        panel.revalidate();
+        
+    }
+   
+
+    
+     
+     
+     
     
     /***************************************************************************
      * View -> Controller
