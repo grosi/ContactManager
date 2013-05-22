@@ -58,7 +58,7 @@ public interface GraphicDesign {
     public static final String GROUP_TAB_ADD_TOOLTIP = "Neue Gruppe erstellen";
     public static final String GROUP_TAB_REMOVE_TOOLTIP = "Gruppe löschen";
     
-       
+    /* Kontakte Tab */
     public static final String CONTACT_TAB_MESSAGE_TOOLTIP = "E-Mail erstellen";
     public static final String CONTACT_TAB_SAVE_TOOLTIP = "Kontakt speichern";
     public static final String CONTACT_TAB_ADD_TOOLTIP = "Neuer Kontakt erstellen";
