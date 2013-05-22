@@ -15,15 +15,19 @@ import java.util.Comparator;
 import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListCellRenderer;
+import javax.swing.DefaultListSelectionModel;
 import javax.swing.ListCellRenderer;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.ListSelectionModel;
 
 /**
  * Swing-Komponente, die eine Check-Liste zur Verfuegung stellt
  * @author grosi
  * @version 0.1
  * @since 25.04.2013
+ * @TODO remove Methoden zum leeren der Liste hinzufuegen
+ * @TODO Sortiermoeglichkeiten anpassbar machen -> Sortierkriterrium
  */
 public class JSeparatorList extends JList{
 
@@ -47,8 +51,9 @@ public class JSeparatorList extends JList{
         listmember_filtered = new FilterList(listmember, new ListMemberMatcher());
 
         this.setModel(new DefaultEventListModel(listmember_separator));
+        this.setSelectionModel(createListSelectionModel());
         this.setCellRenderer(createListCellRenderer());
-
+        //this.get
     }
     
     
@@ -79,7 +84,7 @@ public class JSeparatorList extends JList{
     
     
     /**
-     * Löescht ein Listenelement
+     * Loescht ein Listenelement anhand einer ID
      * @param id
      */
     public boolean removeListMember(int id) {
@@ -99,11 +104,25 @@ public class JSeparatorList extends JList{
         
     }
     
-    @Override
-    public void remove(int index) {
+    
+     /**
+     * Loescht ein Listenelemts anhand des Index
+     * @param index Index eines Listenelementes
+     */
+    public void removeListMemberOfIndex(int index) {
         this.listmember.remove(index);
     }
-   
+    
+    
+    /**
+     * ID eines Listenelementes 
+     * @param index Index eines Listenelementes
+     * @return ID des Listenelementes
+     */
+    public int getListMemberOfIndex(int index) {
+        return ((ListMember)listmember_separator.get(index)).getID();  
+    }
+    
     
     /**
      * Gibt die aktuelle Anzahl an Listenelemente zurueck
@@ -242,6 +261,7 @@ public class JSeparatorList extends JList{
 
     /**
      * List Renderer der nach Inhalt und Separator unterscheidet
+     * @return Angepasster Default-Renderer
      */
     private ListCellRenderer createListCellRenderer() {
         return new DefaultListCellRenderer() {
@@ -251,7 +271,6 @@ public class JSeparatorList extends JList{
                 
                 JLabel label = (JLabel) super.getListCellRendererComponent(
                         list, value, index, isSelected, cellHasFocus);
-                
 
                 /* Separator: Schrift Bold */
                 if (value instanceof SeparatorList.Separator) {
@@ -269,6 +288,24 @@ public class JSeparatorList extends JList{
                 }
 
                 return label;
+            }
+        };
+    }
+    
+    
+    /**
+     * Selection Model, das das Selektieren von Separatoren verhindert
+     * @return Angepasstes Selection Model
+     */
+    private ListSelectionModel createListSelectionModel() {
+        return new DefaultListSelectionModel() {
+            @Override
+            public void setSelectionInterval(int index0, int index1) {
+                
+                if(!(listmember_separator.get(index0) instanceof SeparatorList.Separator)) {
+                    super.setSelectionInterval(index0, index0);
+                }
+                
             }
         };
     }
