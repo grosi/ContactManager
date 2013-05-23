@@ -36,6 +36,9 @@ public final class GroupsController extends AbstractController implements SubCon
         
         /* Daten von Datenbank abfragen */
         /** @TODO erste wenn DB funktioniert getGroupList(); */
+        
+        /* Mail-Client kontrollieren und View entsprechend anpassen */
+        setMessageState();
     }
  
     
@@ -102,6 +105,73 @@ public final class GroupsController extends AbstractController implements SubCon
             groups_model.saveGroup(group);
     }
     
+    
+    /**
+     * Nach Gruppen suchen
+     * @param text
+     */
+    public void searchGroup(String text) {
+        groups_model.searchGroup(text);
+    }
+    
+    
+    /**
+     * Nachricht an alle Gruppen-Mitglieder senden
+     * @param group Gruppen Data Transfer Objekt
+     */
+    public void sendMessage(GroupDTO group) {
+        groups_model.sendMessage(group);
+    }
+    
+    
+    /**
+     * Nachricht an entsprechende Empfaenger schreiben
+     * @param email E-Mail Adressen
+     */
+    public void sendMessage(String email) {
+        main_controller.sendEmail(email);
+    }
+    
+    
+    /**
+     * Gruppen-Name angewaehlt
+     * @param text aktueller eingetragener Gruppen-Name
+     */
+    public void focusGainedGroupName(String text) {
+        
+        if(text.compareTo(GroupsView.GROUP_TAB_DEFAULT_NAME_TEXT) == 0) 
+            groups_view.selectGroupName();
+    }
+    
+    
+    /**
+     * Gruppen-Name abgewaehlt
+     * @param aktueller eingetragener Gruppen-Name
+     */
+    public void focusLostGroupName(String text) {
+        
+        if(text.compareTo(GroupsView.GROUP_TAB_DEFAULT_NAME_TEXT) == 0)
+            groups_view.deselectGroupName();
+    }
+    
+    
+    /**
+     * Name der Gruppe wurde geaendert
+     * @param text Gruppen-Name
+     */
+    public void changeGroupName(String text) {
+        if(text.compareTo(GroupsView.GROUP_TAB_DEFAULT_NAME_TEXT) == 0)
+            groups_view.enableSaveButton(false);
+        else
+            groups_view.enableSaveButton(true);
+    }
+    
+    public void setMessageState() {
+        if(main_controller.getEmailClientStatus())
+            groups_view.enableMessageButton(true);
+        else
+            groups_view.enableMessageButton(false);
+    }
     
     
 }
