@@ -260,7 +260,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
             @Override
             public void actionPerformed(ActionEvent ae) {
                 addEmail("E-Mail Adresse eingeben", "Private");
-                email_adress.setText("E-Mail Adresse eingeben");
+//                email_adress.setText("E-Mail Adresse eingeben");
                 System.out.println("ADD");
             }
         });
@@ -277,6 +277,16 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
         detail_dynamic_panel_address.add(detail_dynamic_separator_address, "cell 1 0,wrap");
         detail_dynamic_panel_address.add(detail_dynamic_addbutton_address,"wrap");
         addAddress("street", "code", "city", "country", "Default");
+    
+        detail_dynamic_addbutton_address.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                addAddress("street", "code", "city", "country", "Default");
+
+                System.out.println("ADD");
+            }
+        });
         
         
         //Dynamic Panel Telefonnummer
@@ -334,7 +344,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
         Map<Component, Object> constraint_map = ((MigLayout)detail_dynamic_panel_address.getLayout()).getConstraintMap();
         Component[] all_components = detail_dynamic_panel_address.getComponents();
         
-        String[] adress_types = {"Default","Private", "Business"};
+        String[] adress_types = {"Privat","Business", "Bill"};
         JPanel address_new = new JPanel(new MigLayout("wrap 40"));
         JComboBox address_type = new JComboBox(adress_types);
         JTextField street_address = new JTextField(street);
@@ -358,13 +368,27 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
             }
         });
         
+         street_address.addFocusListener(new FocusListener() {
+
+            @Override
+            public void focusGained(FocusEvent fe) {
+                System.out.println("Adresse angewählt"); 
+                selectAddress(fe);
+           }
+
+            @Override
+            public void focusLost(FocusEvent fe) {
+                System.out.println("Adresse abgewählt");
+                deselectAddress(fe);
+            }
+        });
     
         remove_address.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent ae) {
                 System.out.println("Email löschen");
-                //removeEmail(ae);
+                removeAddress(ae);
             }
         });
         
@@ -377,6 +401,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
                 address_new.add(code_address, "cell 0 1");
                 address_new.add(city_address, " cell 1 1 9 1");
                 address_new.add(country_address, " cell 0 2 10 1");
+                
  
                 detail_dynamic_panel_address.add(address_new, "growx,wrap");
                 
@@ -405,6 +430,46 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
           
             
         }
+        
+        
+     private static void removeAddress(ActionEvent ae) {
+        JButton remove = (JButton)ae.getSource();
+        int index = address_remove_button.indexOf(remove);
+        JPanel panel = address_panel.get(index);
+        
+        detail_dynamic_panel_address.remove(panel);
+        detail_dynamic_panel_address.revalidate();
+        
+    }
+    
+     
+        
+    private static void selectAddress(FocusEvent hallo) {
+        JTextField text = (JTextField)hallo.getSource();
+        int index = address_code.indexOf(text);
+        JButton remove = address_remove_button.get(index);
+        JPanel panel = address_panel.get(index);
+        
+
+        panel.add(remove, "dock east");
+        
+        panel.revalidate();
+        
+    }
+    
+    
+    
+        private static void deselectAddress(FocusEvent fe) {
+        JTextField text = (JTextField)fe.getSource();
+        int index = address_code.indexOf(text);
+        JButton remove = address_remove_button.get(index);
+        JPanel panel = address_panel.get(index);
+        
+        panel.remove(remove);
+        
+        panel.revalidate();
+        
+    }
     
         private static void addEmail(String email, String type) {
         Map<Component, Object> constraint_map = ((MigLayout)detail_dynamic_panel_email.getLayout()).getConstraintMap();
