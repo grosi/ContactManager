@@ -20,6 +20,8 @@ public class MainController extends AbstractController implements MainInterface 
     private ContactsController contacts_controller;
     private GroupsController groups_controller;
     
+    private boolean email_client_available;
+    
     public MainController() {
         
         super();
@@ -32,9 +34,12 @@ public class MainController extends AbstractController implements MainInterface 
         main_frame = new MainFrame(this);
         addView(main_frame);
         
+        /* E-Mail Client ueberpruefen */
+        email_client_available = main_model.checkMailClient();
+        
         /* Alle SubController */
         this.contacts_controller = new ContactsController(this);
-        this.groups_controller = new GroupsController(this);
+        this.groups_controller = new GroupsController(this);    
     }
 
     /***************************************************************************
@@ -44,6 +49,7 @@ public class MainController extends AbstractController implements MainInterface 
     /**
      * Gibt Referenz auf das Hauptfenster zurueck
      * @return
+     * @TODO Kapselung verbessern
      */
     public MainFrame getMainFrame() {
         return main_frame;
@@ -58,6 +64,24 @@ public class MainController extends AbstractController implements MainInterface 
         return main_model.getDAOFactory();
     }
     
+    
+    /**
+     * Status des E-Mail Clients des Betriebssystems
+     * @return true -> Client vorhanden
+     */
+    public boolean getEmailClientStatus() {
+        return email_client_available;
+    }
+    
+    
+    /**
+     * E-Mail senden
+     * @param email String mit E-Mail Adressen, getrennt durch ','
+     * @return true -> Client bereit
+     */
+    public boolean sendEmail(String email) {
+        return main_model.sendMail(email);
+    }
     
     
     /***************************************************************************
