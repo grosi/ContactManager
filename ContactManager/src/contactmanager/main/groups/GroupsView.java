@@ -10,10 +10,11 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -21,9 +22,10 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
-import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import net.miginfocom.swing.MigLayout;
@@ -88,13 +90,24 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
         //Suchfeld
         search_textfield = new JTextField(GROUP_TAB_DEFAULT_SEARCH_TEXT);
         search_textfield.setBackground(Color.white);
-        search_textfield.addActionListener(new ActionListener() {
+        search_textfield.getDocument().addDocumentListener(new DocumentListener() {
 
             @Override
-            public void actionPerformed(ActionEvent ae) {
-                searchTextActionPerformed(ae);
+            public void insertUpdate(DocumentEvent de) {
+                searchTextChange(de);
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent de) {
+                searchTextChange(de);
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent de) {
+                searchTextChange(de);
             }
         });
+
         
         //Liste
         groupoverview_separatorlist = new JSeparatorList();
@@ -106,12 +119,6 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
                 groupListValueChanged(lse);
             }
         });
-        
-        
-        groupoverview_separatorlist.addListMember("Vorstand", 1);
-        groupoverview_separatorlist.addListMember("Ehrenmitglieder", 2);
-        groupoverview_separatorlist.addListMember("A-Mitglieder", 3);
-        groupoverview_separatorlist.addListMember("B-Mitglieder", 4);
         
         
         //Scroll Pane
@@ -183,6 +190,36 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
         detail_static_label = new JLabel(GROUP_TAB_GROUPOVERVIEW_LABEL);
         detail_static_separator = new JSeparator();
         detail_static_name_textfield = new JTextField(GROUP_TAB_DEFAULT_NAME_TEXT);
+        detail_static_name_textfield.addFocusListener(new FocusListener() {
+
+            @Override
+            public void focusGained(FocusEvent fe) {
+                groupnameTextFocusGained(fe);
+            }
+
+            @Override
+            public void focusLost(FocusEvent fe) {
+                groupnameTextFocusLost(fe);
+            }
+        });
+        
+        detail_static_name_textfield.getDocument().addDocumentListener(new DocumentListener() {
+
+            @Override
+            public void insertUpdate(DocumentEvent de) {
+                groupnameTextChange(de);
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent de) {
+                groupnameTextChange(de);
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent de) {
+                groupnameTextChange(de);
+            }
+        });
         detail_static_panel.add(detail_static_label, "cell 0 0");
         detail_static_panel.add(detail_static_separator, "cell 1 0");
         detail_static_panel.add(detail_static_name_textfield, "cell 0 1 2 1,growx");
@@ -202,20 +239,6 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
         detail_member_panel.add(detail_member_label, "cell 0 0");
         detail_member_panel.add(detail_member_separator, "cell 1 0");
         detail_member_panel.add(detail_member_scrollpane, "cell 0 1 2 1,growx");
-        
-        detail_member_separatorlist.addListMember("1", 1);
-        detail_member_separatorlist.addListMember("2", 2);
-        detail_member_separatorlist.addListMember("3", 3);
-        detail_member_separatorlist.addListMember("4", 4);
-        detail_member_separatorlist.addListMember("5", 5);
-        detail_member_separatorlist.addListMember("6", 6);
-        detail_member_separatorlist.addListMember("7", 7);
-        detail_member_separatorlist.addListMember("8", 8);
-        detail_member_separatorlist.addListMember("9", 9);
-        detail_member_separatorlist.addListMember("10", 10);
-        detail_member_separatorlist.addListMember("11",11);
-        detail_member_separatorlist.addListMember("12",12);
-        
         
         
         //Detail Haupt-Panel
@@ -282,17 +305,24 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
            group.group_name = detail_static_name_textfield.getText();
            if(size == 1)
                group.group_id = selected_items.get(0).getID();
-        }
-        
-        controller.saveGroup(group);
+           controller.saveGroup(group);
+        }   
     }
 
     private void messageButtonActionPerformed(ActionEvent ae) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<ListMember> selected_items = groupoverview_separatorlist.getSelectedValuesList();
+        int size = selected_items.size();
+        GroupDTO group = new GroupDTO();
+        
+        if(size >= 1) {
+            group.group_id = selected_items.get(0).getID();
+            group.group_name = detail_static_name_textfield.getText();
+            controller.sendMessage(group);
+        }   
     }
     
-    private void searchTextActionPerformed(ActionEvent ae) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private void searchTextChange(DocumentEvent de) {
+        controller.searchGroup(search_textfield.getText());
     }
     
     private void groupListValueChanged(ListSelectionEvent lse) {
@@ -302,6 +332,18 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
         
         group.group_id = group_id;
         controller.getGroup(group);
+    }
+    
+    private void groupnameTextFocusGained(FocusEvent fe) {
+        controller.focusGainedGroupName(detail_static_name_textfield.getText());
+    }
+    
+    private void groupnameTextFocusLost(FocusEvent fe) {
+        controller.focusLostGroupName(detail_static_name_textfield.getText());
+    }
+    
+    private void groupnameTextChange(DocumentEvent de) {
+        controller.changeGroupName(detail_static_name_textfield.getText());
     }
     
     /***************************************************************************
@@ -318,6 +360,22 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
         /* Alle Elemente der Liste loeschen */
         for(int i = 0; i < size; i++)    
             detail_member_separatorlist.removeListMemberOfIndex(0);
+        enableSaveButton(false);
+    }
+    
+    /**
+     * Gesamter Gruppen-Name selektieren
+     */
+    public void selectGroupName() {
+        detail_static_name_textfield.select(0, detail_static_name_textfield.getText().length());
+    }
+    
+    
+    /**
+     * Gesamter Gruppen-Name deselektieren
+     */
+    public void deselectGroupName() {
+        detail_static_name_textfield.select(0, 0);
     }
     
     
@@ -326,6 +384,24 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
      */
     public void deselectGroupList() {
         groupoverview_separatorlist.clearSelection();
+    }
+    
+    
+    /**
+     * Save-Button aktiviern oder deaktivieren
+     * @param state
+     */
+    public void enableSaveButton(boolean state) {
+        save_button.setEnabled(state);
+    }
+    
+    
+    /**
+     * Message-Button aktiviern oder deaktivieren
+     * @param state
+     */
+    public void enableMessageButton(boolean state) {
+        message_button.setEnabled(state);
     }
     
     /***************************************************************************
@@ -343,11 +419,11 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
             case GROUP_SEARCH_EVENT:
                 int groupoverview_size = groupoverview_separatorlist.getListSize();      
         
+                /* Alle Elemente der Liste zuerst loeschen */
+                for(int i = 0; i < groupoverview_size; i++)    
+                    groupoverview_separatorlist.removeListMemberOfIndex(0);
+                
                 if(evt.getNewValue() != null) {
-                    /* Alle Elemente der Liste zuerst loeschen */
-                    for(int i = 0; i < groupoverview_size; i++)    
-                        groupoverview_separatorlist.removeListMemberOfIndex(0);
-
                     /* Neu Elemente hinzufuegen */
                     for(GroupDTO group : (ArrayList<GroupDTO>)evt.getNewValue()) {
                         groupoverview_separatorlist.addListMember(group.group_name, group.group_id);
@@ -358,19 +434,21 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
             case GROUP_SELECT_EVENT:
                 int groupmember_size = detail_member_separatorlist.getListSize();
                 
+                /* Alle Elemente der Liste zuerst loeschen */
+                for(int i = 0; i < groupmember_size; i++)    
+                    detail_member_separatorlist.removeListMemberOfIndex(0);
+                
                 if(evt.getNewValue() != null) {
                     
                     detail_static_name_textfield.setText(((GroupDTO)evt.getNewValue()).group_name);
                     
-                    /* Alle Elemente der Liste zuerst loeschen */
-                    for(int i = 0; i < groupmember_size; i++)    
-                        detail_member_separatorlist.removeListMemberOfIndex(0);
-
                     /* Neu Elemente hinzufuegen */
                     for(ContactDTO groupmember : ((GroupDTO)evt.getNewValue()).group_contacts) {
                         detail_member_separatorlist.addListMember(groupmember.user_lastname+" "+groupmember.user_prename,
                                 groupmember.user_id);
                     }
+                } else {
+                    detail_static_name_textfield.setText(GROUP_TAB_DEFAULT_NAME_TEXT);
                 }
                 break;
                 
