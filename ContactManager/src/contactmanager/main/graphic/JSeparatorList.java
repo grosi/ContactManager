@@ -304,8 +304,13 @@ public class JSeparatorList extends JList{
                 
                 if(!(listmember_separator.get(index0) instanceof SeparatorList.Separator)) {
                     super.setSelectionInterval(index0, index0);
-                }
-                
+                } else {
+                    if(getAnchorSelectionIndex() < index0) {
+                        super.setSelectionInterval(index0+1, index0+1);
+                    } else {
+                        super.setSelectionInterval(index0-1, index0-1);
+                    }
+                }   
             }
         };
     }
