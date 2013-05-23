@@ -266,6 +266,9 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
         });
         addEmail("Test","Private");
         
+        
+        
+        
         //Dynamic Panel Adresse
         detail_dynamic_panel_address = new JPanel(new MigLayout("", //Layout Grenzen
                 "min[][grow,fill]min", //Spalten Grenzen
@@ -379,7 +382,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
             @Override
             public void focusLost(FocusEvent fe) {
                 System.out.println("Adresse abgewählt");
-                deselectAddress(fe);
+                deselectAddress(fe,1);
             }
         });
     
@@ -393,7 +396,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
             @Override
             public void focusLost(FocusEvent fe) {
                 System.out.println("Adresse abgewählt");
-                deselectAddress(fe);
+                deselectAddress(fe,2);
             }
         });
          
@@ -407,7 +410,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
             @Override
             public void focusLost(FocusEvent fe) {
                 System.out.println("Adresse abgewählt");
-                deselectAddress(fe);
+                deselectAddress(fe,3);
             }
         });
           
@@ -421,7 +424,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
             @Override
             public void focusLost(FocusEvent fe) {
                 System.out.println("Adresse abgewählt");
-                deselectAddress(fe);
+                deselectAddress(fe,4);
             }
         });
          
@@ -510,9 +513,22 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
     
     
     
-        private static void deselectAddress(FocusEvent fe) {
+        private static void deselectAddress(FocusEvent fe, int indicator) {
         JTextField text = (JTextField)fe.getSource();
-        int index = address_street.indexOf(text);
+        int index = 0;
+        switch(indicator){
+                case 1: index = address_street.indexOf(text);
+                    break;
+                case 2: index = address_code.indexOf(text);
+                    break;
+                case 3: index = address_city.indexOf(text);
+                    break;
+                case 4: index = address_country.indexOf(text);
+                    break;
+        }         
+        
+        
+        
         JButton remove = address_remove_button.get(index);
         JPanel panel = address_panel.get(index);   
         panel.remove(remove);       
