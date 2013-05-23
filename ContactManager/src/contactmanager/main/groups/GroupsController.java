@@ -65,7 +65,7 @@ public final class GroupsController extends AbstractController implements SubCon
      * @param group Gruppen Data Transfer Objekt
      */
     public void getGroup(GroupDTO group) {
-        groups_model.getGroup(group);
+        //groups_model.getGroup(group);
     }
     
     
