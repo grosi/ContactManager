@@ -373,7 +373,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
             @Override
             public void focusGained(FocusEvent fe) {
                 System.out.println("Adresse angewählt"); 
-                selectAddress(fe);
+                selectAddress(fe,1);
            }
 
             @Override
@@ -383,6 +383,50 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
             }
         });
     
+           code_address.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent fe) {
+                System.out.println("Adresse angewählt"); 
+                selectAddress(fe,2);
+           }
+
+            @Override
+            public void focusLost(FocusEvent fe) {
+                System.out.println("Adresse abgewählt");
+                deselectAddress(fe);
+            }
+        });
+         
+          city_address.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent fe) {
+                System.out.println("Adresse angewählt"); 
+                selectAddress(fe,3);
+           }
+
+            @Override
+            public void focusLost(FocusEvent fe) {
+                System.out.println("Adresse abgewählt");
+                deselectAddress(fe);
+            }
+        });
+          
+         country_address.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent fe) {
+                System.out.println("Adresse angewählt"); 
+                selectAddress(fe,4);
+           }
+
+            @Override
+            public void focusLost(FocusEvent fe) {
+                System.out.println("Adresse abgewählt");
+                deselectAddress(fe);
+            }
+        });
+         
+           
+           
         remove_address.addActionListener(new ActionListener() {
 
             @Override
@@ -436,7 +480,6 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
         JButton remove = (JButton)ae.getSource();
         int index = address_remove_button.indexOf(remove);
         JPanel panel = address_panel.get(index);
-        
         detail_dynamic_panel_address.remove(panel);
         detail_dynamic_panel_address.revalidate();
         
@@ -444,31 +487,36 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
     
      
         
-    private static void selectAddress(FocusEvent hallo) {
-        JTextField text = (JTextField)hallo.getSource();
-        int index = address_code.indexOf(text);
+    private static void selectAddress(FocusEvent fe, int indicator) {
+        JTextField text = (JTextField)fe.getSource();
+        int index = 0;
+        switch(indicator){
+                case 1: index = address_street.indexOf(text);
+                    break;
+                case 2: index = address_code.indexOf(text);
+                    break;
+                case 3: index = address_city.indexOf(text);
+                    break;
+                case 4: index = address_country.indexOf(text);
+                    break;
+                 
+        }
+        
         JButton remove = address_remove_button.get(index);
         JPanel panel = address_panel.get(index);
-        
-
         panel.add(remove, "dock east");
-        
-        panel.revalidate();
-        
+        panel.revalidate();      
     }
     
     
     
         private static void deselectAddress(FocusEvent fe) {
         JTextField text = (JTextField)fe.getSource();
-        int index = address_code.indexOf(text);
+        int index = address_street.indexOf(text);
         JButton remove = address_remove_button.get(index);
-        JPanel panel = address_panel.get(index);
-        
-        panel.remove(remove);
-        
-        panel.revalidate();
-        
+        JPanel panel = address_panel.get(index);   
+        panel.remove(remove);       
+        panel.revalidate();      
     }
     
         private static void addEmail(String email, String type) {
