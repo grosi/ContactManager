@@ -67,14 +67,14 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
     private JSeparator detail_static_separator;
     private JTextField detail_static_name_textfield;
     private JTextField detail_static_prename_textfield;
-    private static JPanel detail_dynamic_panel_email;
-    private static JPanel detail_dynamic_panel_address;
+    private JPanel detail_dynamic_panel_email;
+    private JPanel detail_dynamic_panel_address;
     private JLabel detail_dynamic_label_email;
     private JLabel detail_dynamic_label_adress;
     private JSeparator detail_dynamic_separator_email;
     private JSeparator detail_dynamic_separator_address;
-    private static JButton detail_dynamic_addbutton;
-    private static JTextField email_adress;
+    private JButton detail_dynamic_addbutton;
+    private JTextField email_adress;
     
     /* Suche */
     private JTextField search_textfield;
@@ -87,24 +87,24 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
     
     
     
-    private static ArrayList<JButton> email_send_button = new ArrayList<>();
-    private static ArrayList<JButton> email_remove_button = new ArrayList<>();
-    private static ArrayList<JComboBox> email_combo = new ArrayList<>();
-    private static ArrayList<JTextField> email_text = new ArrayList<>();
-    private static ArrayList<JPanel> email_panel = new ArrayList<>();
+    private ArrayList<JButton> email_send_button = new ArrayList<>();
+    private ArrayList<JButton> email_remove_button = new ArrayList<>();
+    private ArrayList<JComboBox> email_combo = new ArrayList<>();
+    private ArrayList<JTextField> email_text = new ArrayList<>();
+    private ArrayList<JPanel> email_panel = new ArrayList<>();
     
-    private static ArrayList<JButton> address_remove_button = new ArrayList<>();
-    private static ArrayList<JComboBox> address_combo = new ArrayList<>();
-    private static ArrayList<JTextField> address_street = new ArrayList<>();
-    private static ArrayList<JTextField> address_code = new ArrayList<>();
-    private static ArrayList<JTextField> address_city = new ArrayList<>();
-    private static ArrayList<JTextField> address_country = new ArrayList<>();
-    private static ArrayList<JPanel> address_panel = new ArrayList<>();
+    private ArrayList<JButton> address_remove_button = new ArrayList<>();
+    private ArrayList<JComboBox> address_combo = new ArrayList<>();
+    private ArrayList<JTextField> address_street = new ArrayList<>();
+    private ArrayList<JTextField> address_code = new ArrayList<>();
+    private ArrayList<JTextField> address_city = new ArrayList<>();
+    private ArrayList<JTextField> address_country = new ArrayList<>();
+    private ArrayList<JPanel> address_panel = new ArrayList<>();
         
-    private static ArrayList<JButton> phone_remove_button = new ArrayList<>();
-    private static ArrayList<JComboBox> phone_combo = new ArrayList<>();
-    private static ArrayList<JTextField> phone_text = new ArrayList<>();
-    private static ArrayList<JPanel> phone_panel = new ArrayList<>();
+    private ArrayList<JButton> phone_remove_button = new ArrayList<>();
+    private ArrayList<JComboBox> phone_combo = new ArrayList<>();
+    private ArrayList<JTextField> phone_text = new ArrayList<>();
+    private ArrayList<JPanel> phone_panel = new ArrayList<>();
     
 
     private JPanel detail_dynamic_panel_phone;
@@ -112,6 +112,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
     private JSeparator detail_dynamic_separator_phone;
     private JButton detail_dynamic_addbutton_address;
     private JButton detail_dynamic_addbutton_phone;
+    private ImageIcon detail_dynamic_imageicon_address;
 
     
     /**
@@ -282,7 +283,9 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
         detail_dynamic_panel_address.setBackground(Color.white);
         detail_dynamic_label_adress = new JLabel(CONTACT_TAB_ADRESS_LABEL);
         detail_dynamic_separator_address = new JSeparator();
-        detail_dynamic_addbutton_address = new JButton("add");
+        detail_dynamic_imageicon_address = new ImageIcon(IMAGES_FILEPATH+"add16x16.png");
+        detail_dynamic_addbutton_address = new JButton("      Hinzufügen");
+        detail_dynamic_addbutton_address.setIcon(detail_dynamic_imageicon_address);
         detail_dynamic_panel_address.add(detail_dynamic_label_adress, "cell 0 0");
         detail_dynamic_panel_address.add(detail_dynamic_separator_address, "cell 1 0,wrap");
         detail_dynamic_panel_address.add(detail_dynamic_addbutton_address,"wrap");
@@ -462,7 +465,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
         
   
         panel.add(remove);
-        
+        remove.setVisible(true);
         panel.revalidate();
         
     }
@@ -474,14 +477,14 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
         int index = phone_text.indexOf(text);
         JButton remove = phone_remove_button.get(index);
         JPanel panel = phone_panel.get(index);
-        
+        remove.setVisible(false);
         panel.remove(remove);
         panel.revalidate();
         
     }
    
     
-        private static void addAddress(String street, String code, String city, String country ,String type){
+        private void addAddress(String street, String code, String city, String country ,String type){
         Map<Component, Object> constraint_map = ((MigLayout)detail_dynamic_panel_address.getLayout()).getConstraintMap();
         Component[] all_components = detail_dynamic_panel_address.getComponents();
         
@@ -617,7 +620,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
         }
         
         
-     private static void removeAddress(ActionEvent ae) {
+     private void removeAddress(ActionEvent ae) {
         JButton remove = (JButton)ae.getSource();
         int index = address_remove_button.indexOf(remove);
         JPanel panel = address_panel.get(index);
@@ -628,7 +631,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
     
      
         
-    private static void selectAddress(FocusEvent fe, int indicator) {
+    private void selectAddress(FocusEvent fe, int indicator) {
         JTextField text = (JTextField)fe.getSource();
         int index = 0;
         switch(indicator){
@@ -646,12 +649,13 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
         JButton remove = address_remove_button.get(index);
         JPanel panel = address_panel.get(index);
         panel.add(remove, "dock east");
+        remove.setVisible(true);
         panel.revalidate();      
     }
     
     
     
-        private static void deselectAddress(FocusEvent fe, int indicator) {
+        private void deselectAddress(FocusEvent fe, int indicator) {
         JTextField text = (JTextField)fe.getSource();
         int index = 0;
         switch(indicator){
@@ -669,11 +673,12 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
         
         JButton remove = address_remove_button.get(index);
         JPanel panel = address_panel.get(index);   
+        remove.setVisible(false);
         panel.remove(remove);       
         panel.revalidate();      
     }
     
-        private static void addEmail(String email, String type) {
+        private void addEmail(String email, String type) {
         Map<Component, Object> constraint_map = ((MigLayout)detail_dynamic_panel_email.getLayout()).getConstraintMap();
         Component[] all_components = detail_dynamic_panel_email.getComponents();
         
@@ -766,7 +771,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
     
     
     
-     private static void addEmail() {
+     private void addEmail() {
         Map<Component, Object> constraint_map = ((MigLayout)detail_dynamic_panel_email.getLayout()).getConstraintMap();
         Component[] all_components = detail_dynamic_panel_email.getComponents();
         String[] email_types = {"Default", "Private", "Business"};
@@ -809,45 +814,51 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
                                    
     
      
-        private static void removeEmail(ActionEvent ae) {
-        JButton remove = (JButton)ae.getSource();
+        private void removeEmail(ActionEvent aeremove) {
+        JButton remove = (JButton)aeremove.getSource();
         int index = email_remove_button.indexOf(remove);
         JPanel panel = email_panel.get(index);
         
         detail_dynamic_panel_email.remove(panel);
         detail_dynamic_panel_email.revalidate();
-        
+        panel.revalidate();
     }
     
      
         
-    private static void selectEmail(FocusEvent hallo) {
-        JTextField text = (JTextField)hallo.getSource();
+    private void selectEmail(FocusEvent feselct) {
+        JTextField text = (JTextField)feselct.getSource();
         int index = email_text.indexOf(text);
         JButton send = email_send_button.get(index);
         JButton remove = email_remove_button.get(index);
         JPanel panel = email_panel.get(index);
         
         panel.remove(send);
-        panel.add(remove);
+        
+        panel.add(remove);      
+        remove.setVisible(true);
+
         
         panel.revalidate();
-        
+        detail_dynamic_label_email.revalidate();
+      
     }
     
     
     
-        private static void deselectEmail(FocusEvent fe) {
-        JTextField text = (JTextField)fe.getSource();
+        private void deselectEmail(FocusEvent fedeselect) {
+        JTextField text = (JTextField)fedeselect.getSource();
         int index = email_text.indexOf(text);
         JButton send = email_send_button.get(index);
         JButton remove = email_remove_button.get(index);
         JPanel panel = email_panel.get(index);
-        
+        remove.setVisible(false);
         panel.remove(remove);
         panel.add(send);
+
         
         panel.revalidate();
+        detail_dynamic_label_email.revalidate();
         
     }
    
