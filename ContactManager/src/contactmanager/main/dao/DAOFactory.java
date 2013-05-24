@@ -3,6 +3,8 @@ package contactmanager.main.dao;
 
 import contactmanager.main.contacts.ContactsDAO;
 import contactmanager.main.groups.GroupsDAO;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 /**
  * @author grosi
@@ -29,10 +31,9 @@ public abstract class DAOFactory {
     public static DAOFactory getDAOFactory(int database) throws DAOException {
         switch (database) {
             case MySQL:
-                return new MySQLDAOFactory();
+                return MySQLDAOFactory.getInstance();
             default:
                 return null;
         }
     }
-
 }
