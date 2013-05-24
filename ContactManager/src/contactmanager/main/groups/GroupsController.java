@@ -36,6 +36,7 @@ public final class GroupsController extends AbstractController implements SubCon
         
         /* Daten von Datenbank abfragen */
         /** @TODO erste wenn DB funktioniert getGroupList(); */
+        getGroupList();
         
         /* Mail-Client kontrollieren und View entsprechend anpassen */
         setMessageState();
@@ -68,7 +69,7 @@ public final class GroupsController extends AbstractController implements SubCon
      * @param group Gruppen Data Transfer Objekt
      */
     public void getGroup(GroupDTO group) {
-        //groups_model.getGroup(group);
+        groups_model.getGroup(group);
     }
     
     
