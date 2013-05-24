@@ -8,8 +8,7 @@ import java.awt.Desktop;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 /**
  * @author grosi
@@ -26,12 +25,6 @@ public class MainModel extends AbstractModel implements MainInterface {
     
     public MainModel() {
         super();
-        
-//        try {
-//            daofactory = DAOFactory.getDAOFactory(DAOFactory.MySQL);
-//        } catch (DAOException ex) {
-//            System.err.println("Datenbank nicht erreichtbar");
-//        }
     }
     
     
@@ -51,6 +44,18 @@ public class MainModel extends AbstractModel implements MainInterface {
      */
     public void closeApplication() {
         System.exit(1);
+    }
+    
+    
+    /**
+     * MySQL Factory instanzieren
+     */
+    public void createDAOFactory() {
+        try {
+            this.daofactory = DAOFactory.getDAOFactory(DAOFactory.MySQL);
+        } catch (DAOException ex) {
+            System.err.println("Datenbank nicht erreichtbar");
+        }
     }
     
     
