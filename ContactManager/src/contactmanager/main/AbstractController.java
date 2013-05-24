@@ -9,7 +9,7 @@ import java.util.ArrayList;
  * @version 0.1
  * @since 27.03.2013
  */
-public class AbstractController implements PropertyChangeListener {
+public abstract class AbstractController implements PropertyChangeListener {
     
     private ArrayList<PropertyChangeEventSink> registeredViews;
     private ArrayList<AbstractModel> registeredModels;
