@@ -18,31 +18,34 @@ public class MySQLDAOFactory extends DAOFactory {
     private static final String DBURL=  "jdbc:mysql://sql2.freesqldatabase.com:3306/sql27717" ;
     private static final String USER = "sql27717";
     private static final String PW = "wZ3!cX7!";
+
+    private static Connection connection = null;
+    private static MySQLDAOFactory instance = null; 
     
-    public static Connection connection = null;
-    
-    private MySQLDAOFactory instance = null; 
-    
-    protected MySQLDAOFactory() throws DAOException {
+    private MySQLDAOFactory() throws DAOException {
         try {
             Class.forName(DRIVER);
-            connection = DriverManager.getConnection(DBURL, USER, PW);
-            
         } catch (ClassNotFoundException ex) {
             ex.printStackTrace();
             throw new DAOException("ClassNotFoundException");
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            throw new DAOException("SQLException");
         }
     }
     
-    public MySQLDAOFactory getInstance() throws DAOException {
+    public static MySQLDAOFactory getInstance() throws DAOException {
         if (instance == null) {
             instance = new MySQLDAOFactory();
         }
         
         return instance;
+    }
+    
+    
+    public Connection getConnection() throws SQLException {
+        if(connection == null) {
+            connection = DriverManager.getConnection(DBURL, USER, PW);
+        }
+        
+        return connection;
     }
     
     
