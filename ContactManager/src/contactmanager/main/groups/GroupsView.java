@@ -346,6 +346,7 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
         controller.changeGroupName(detail_static_name_textfield.getText());
     }
     
+    
     /***************************************************************************
      * Controller -> View
      **************************************************************************/
@@ -404,6 +405,15 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
         message_button.setEnabled(state);
     }
     
+    
+    /**
+     * Remove-Button aktiviern oder deaktivieren
+     * @param state
+     */
+    public void enableRemoveButton(boolean state) {
+        remove_button.setEnabled(state);
+    }
+    
     /***************************************************************************
      * Model -> View
      **************************************************************************/
@@ -413,7 +423,7 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
      */
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
-        
+        System.out.println("GROUP EVENT");
         switch(evt.getPropertyName()) {
             case GROUP_LIST_SELECT_EVENT:    
             case GROUP_SEARCH_EVENT:
