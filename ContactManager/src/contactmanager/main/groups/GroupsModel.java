@@ -5,8 +5,6 @@ import contactmanager.main.AbstractModel;
 import contactmanager.main.contacts.ContactDTO;
 import contactmanager.main.dao.DAOException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * @author grosi
@@ -23,7 +21,7 @@ public final class GroupsModel extends AbstractModel implements GroupsInterface 
         
         this.controller = controller;
         
-        //this.groupsdao = controller.getMainController().getDAOFactory().getGroupsDAO();   
+        this.groupsdao = controller.getMainController().getDAOFactory().getGroupsDAO();   
     }
     
     
@@ -39,7 +37,7 @@ public final class GroupsModel extends AbstractModel implements GroupsInterface 
             group_list = null;
         }
         
-        firePropertyChange(GROUP_LIST_SELECT_EVENT, group_list, group_list);
+        firePropertyChange(GROUP_LIST_SELECT_EVENT, null, group_list);
     }
     
     
@@ -54,7 +52,7 @@ public final class GroupsModel extends AbstractModel implements GroupsInterface 
             group = null;
         }
         
-        firePropertyChange(GROUP_SELECT_EVENT, group, group);
+        firePropertyChange(GROUP_SELECT_EVENT, null, group);
     }
     
     
@@ -69,7 +67,7 @@ public final class GroupsModel extends AbstractModel implements GroupsInterface 
             group = null;
         }
         
-        firePropertyChange(GROUP_INSERT_EVENT, group, group);
+        firePropertyChange(GROUP_INSERT_EVENT, null, group);
     }
     
     
@@ -84,7 +82,7 @@ public final class GroupsModel extends AbstractModel implements GroupsInterface 
             group = null;
         }
         
-        firePropertyChange(GROUP_DELETE_EVENT, group, group);    
+        firePropertyChange(GROUP_DELETE_EVENT, null, group);    
     }
     
     
@@ -99,7 +97,7 @@ public final class GroupsModel extends AbstractModel implements GroupsInterface 
             group = null;
         }
         
-        firePropertyChange(GROUP_UPDATE_EVENT, group, group);
+        firePropertyChange(GROUP_UPDATE_EVENT, null, group);
     }
     
     
@@ -115,7 +113,7 @@ public final class GroupsModel extends AbstractModel implements GroupsInterface 
             group_list = null;
         }
         
-        firePropertyChange(GROUP_SEARCH_EVENT, group_list, group_list);
+        firePropertyChange(GROUP_SEARCH_EVENT, null, group_list);
     }
     
     
