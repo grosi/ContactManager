@@ -37,6 +37,9 @@ public class MainController extends AbstractController implements MainInterface 
         /* E-Mail Client ueberpruefen */
         email_client_available = main_model.checkMailClient();
         
+        /* Datenbank oeffnen */
+        main_model.createDAOFactory();
+        
         /* Alle SubController */
         this.contacts_controller = new ContactsController(this);
         this.groups_controller = new GroupsController(this);    
