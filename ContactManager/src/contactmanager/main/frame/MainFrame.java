@@ -4,7 +4,6 @@ import contactmanager.main.AbstractFrame;
 import contactmanager.main.graphic.GraphicDesign;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Frame;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.beans.PropertyChangeEvent;
@@ -134,8 +133,9 @@ public final class MainFrame extends AbstractFrame implements GraphicDesign, Mai
     
 
     private void windowOpenedEvent(WindowEvent we) {
+        System.out.println("Frame OPEN");
         int index = tabPane.getSelectedIndex();
-        controller.changeTabSelection(tabPane.getTitleAt(index));
+        //controller.changeTabSelection(tabPane.getTitleAt(index));
         /**@TODO */
     }
     
