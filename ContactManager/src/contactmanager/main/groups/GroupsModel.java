@@ -21,7 +21,7 @@ public final class GroupsModel extends AbstractModel implements GroupsInterface 
         
         this.controller = controller;
         
-        this.groupsdao = controller.getMainController().getDAOFactory().getGroupsDAO();   
+        this.groupsdao = (GroupsDAO)controller.getDAO();
     }
     
     
@@ -54,6 +54,7 @@ public final class GroupsModel extends AbstractModel implements GroupsInterface 
         
         firePropertyChange(GROUP_SELECT_EVENT, null, group);
     }
+    
     
     
     /**
