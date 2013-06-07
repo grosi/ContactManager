@@ -8,9 +8,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * @author grosi
@@ -31,19 +30,31 @@ public class MySQLGroupsDAO implements GroupsDAO {
     public ArrayList<GroupDTO> selectGroupList() throws DAOException {
         ArrayList<GroupDTO> groups = new ArrayList<>();
 
-        result = executeQuery("SELECT `group_id`, `name` FROM `group` WHERE `name` LIKE '%e%' ORDER BY `name` ASC");
+        //result = executeQuery("SELECT `group_id`, `name` FROM `group` WHERE `name` LIKE '%e%' ORDER BY `name` ASC");
+        result = executeQuery("SELECT * FROM `group` ORDER BY `name` ASC");
 
         while(nextDataSet(result)) {
             groups.add(getGroupDTO(result));
         }
         //closeConnection();
-
+        closeResult(result);
+        
         return groups;
     }
 
     @Override
     public ArrayList<GroupDTO> searchGroupList(String search_pattern) throws DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        ArrayList<GroupDTO> groups = new ArrayList<>();
+
+        result = executeQuery("SELECT * FROM `group` WHERE `name` " + "LIKE '%"+search_pattern+"%' ORDER BY `name` ASC");
+
+        while(nextDataSet(result)) {
+            groups.add(getGroupDTO(result));
+        }
+        
+        closeResult(result);
+
+        return groups;
     }
 
     @Override
@@ -51,9 +62,12 @@ public class MySQLGroupsDAO implements GroupsDAO {
         ArrayList<ContactDTO> contacts;
         GroupDTO group =null;
 
-        result = executeQuery("SELECT `group_id`, `name` FROM `group` WHERE `group_id`="+group_id);
+        //result = executeQuery("SELECT `group_id`, `name` FROM `group` WHERE `group_id`="+group_id);
+        result = executeQuery("SELECT * FROM `group` WHERE `group_id`="+group_id);
         nextDataSet(result);
         group = getGroupDTO(result);
+        
+        closeResult(result);
         
         contacts = selectContactsFromGroup(group.group_id);
         group.group_contacts = contacts;
@@ -65,17 +79,36 @@ public class MySQLGroupsDAO implements GroupsDAO {
 
     @Override
     public int insertGroup(GroupDTO insert_group) throws DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int id;
+    	
+    	if (insert_group.group_id != 0)
+            throw new DAOException("Group id is allready set");
+    	
+    	id = executeInsert("INSERT INTO `group`(name)" +
+                "VALUE('"+insert_group.group_name+"')");
+    	
+    	//insert_group.group_id = id;
+    	
+    	return id;
     }
 
     @Override
     public boolean updateGroup(GroupDTO update_group) throws DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (update_group.group_id <= 0)
+            throw new DAOException("Group id is missed");
+
+        executeUpdate("UPDATE `group` SET name='"+update_group.group_name+"' " +"WHERE group_id="+update_group.group_id);
+        
+        return true;
     }
 
     @Override
     public boolean deleteGroup(int group_id) throws DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+         executeUpdate("DELETE `group`.*, `user2group`.* FROM `group` " +
+        		"LEFT JOIN `user2group` ON `group`.`group_id` = `user2group`.`group_id` " +
+        		"WHERE `group`.`group_id`="+group_id);
+        
+        return true;
     }
 
     @Override
@@ -83,29 +116,32 @@ public class MySQLGroupsDAO implements GroupsDAO {
         ArrayList<ContactDTO> contacts = new ArrayList<>();
         
         result = executeQuery("SELECT u.* FROM `user` AS u, `user2group` AS c WHERE c.group_id = "+group_id+" AND u.user_id = c.user_id ORDER BY u.prename ASC, u.lastname ASC");
-         
-//        SELECT u . *
-//FROM `user` AS u, `user2group` AS c
-//WHERE c.group_id =1
-//AND u.user_id = c.user_id
-//ORDER BY u.prename ASC , u.lastname ASC
         
         while(nextDataSet(result)) {
             contacts.add(getContactDTO(result));
         }
         //closeConnection();
+        closeResult(result);
         
         return contacts;
     }
 
     @Override
     public boolean addGroupToContact(int group_id, int contact_id) throws DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        deleteGroupFromContact(group_id, contact_id);
+        executeUpdate("INSERT INTO user2group(user_id, group_id)" +
+        			"VALUES("+Integer.toString(contact_id)+", "+Integer.toString(group_id)+")");
+    	
+        return true;
     }
 
     @Override
     public boolean deleteGroupFromContact(int group_id, int contact_id) throws DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        executeUpdate("DELETE FROM user2group " +
+        		"WHERE user_id="+contact_id+" " +
+        				"AND group_id="+group_id);
+        
+        return true;
     }
 
     
@@ -154,6 +190,42 @@ public class MySQLGroupsDAO implements GroupsDAO {
             throw new DAOException("Query string is incorrect");
         }
     }
+    
+    
+    
+    /**
+     * Neuer Datensatz zu Datenbank hinzufuegen
+     * @param query
+     * @return
+     * @throws DAOException 
+     */
+    private int executeInsert(String query) throws DAOException {
+        PreparedStatement statement;
+        //Statement statement;
+        ResultSet generatedKeys;
+        int key = 0;
+
+        try {
+            statement = getConnection().prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
+            statement.executeUpdate();
+
+            /* Key ermitteln */
+            /** @TODO EXCEPTION java.sql.SQLException: Generated keys not requested. You need to specify Statement.RETURN_GENERATED_KEYS to Statement.executeUpdate() or Connection.prepareStatement().*/
+            generatedKeys = statement.getGeneratedKeys();
+            if(generatedKeys.next()){
+                key = generatedKeys.getInt(1);    
+            }
+
+            statement.close();
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new DAOException("Cannot insert datas into the database");
+        }
+
+        return key;
+    }
+    
     /**
      * Kontrolle ob noch Daten im Set vorhanden sind
      * @param result
@@ -197,6 +269,16 @@ public class MySQLGroupsDAO implements GroupsDAO {
         } catch (SQLException ex) {
             ex.printStackTrace();
             throw new DAOException("Can't close connection");
+        }
+    }
+    
+    
+    private void closeResult(ResultSet result) throws DAOException {
+    	try {
+            result.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DAOException("Result closeing error");
         }
     }
     
