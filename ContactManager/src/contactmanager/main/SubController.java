@@ -1,6 +1,7 @@
 
 package contactmanager.main;
 
+import contactmanager.main.dao.DAOFactory;
 import contactmanager.main.frame.MainController;
 
 /**
@@ -10,6 +11,8 @@ import contactmanager.main.frame.MainController;
  */
 public interface SubController {
     
-    public MainController getMainController();
+    //public MainController getMainController();
+    public void updateData();
+    public Object getDAO();
     
 }
