@@ -2,7 +2,9 @@
 package contactmanager.main.groups;
 
 import contactmanager.main.AbstractController;
+import contactmanager.main.AbstractView;
 import contactmanager.main.SubController;
+import contactmanager.main.dao.DAOFactory;
 import contactmanager.main.frame.MainController;
 
 /**
@@ -34,35 +36,52 @@ public final class GroupsController extends AbstractController implements SubCon
         groups_model = new GroupsModel(this);
         addModel(groups_model);
         
-        /* Daten von Datenbank abfragen */
-        /** @TODO erste wenn DB funktioniert getGroupList(); */
-        getGroupList();
-        
         /* Mail-Client kontrollieren und View entsprechend anpassen */
-        setMessageState();
+        //setMessageState();
     }
  
+    /***************************************************************************
+     * MainController-> SubController Methoden
+     **************************************************************************/
+    
+    /**
+     * Aktuelle Datensaetze von der Datenbank holen
+     */
+    @Override
+    public void updateData() {
+        System.out.println("Groups UPDATE"); 
+        groups_model.getGroupList();
+    }
     
     
     /***************************************************************************
      * Model/View -> MainController Methoden
      **************************************************************************/
     
-    @Override
-    public MainController getMainController() {
-        return this.main_controller;
+    /**
+     * View zu Frame hinzufuegen
+     * @param title
+     * @param view 
+     * @todo evtl in AbstractController einbauen!
+     */
+    public void addViewToFrame(String title, AbstractView view) {
+        this.main_controller.addTabToMainFrame(title, view);
     }
     
+    /**
+     * Spezifische DAO erstellen
+     * @return GroupsDAO
+     * @todo evtl in AbstractController einbauen
+     */
+    @Override
+    public Object getDAO() {
+        return this.main_controller.getDAOFactory().getGroupsDAO();
+    }
     
     
     /***************************************************************************
-     * GUI -> Controller Methoden
+     * View -> Controller Methoden
      **************************************************************************/
-    
-    public void getGroupList() {
-        groups_model.getGroupList();
-    }
-    
     
     /**
      * Infromationen zu einer Gruppe
@@ -77,8 +96,9 @@ public final class GroupsController extends AbstractController implements SubCon
      * Neue Gruppe hinzufuegen
      */
     public void addGroup() {
+        
+        groups_view.addNewGroupToList();
         groups_view.setDetailToDefault();
-        groups_view.deselectGroupList();
     }
     
     
@@ -87,8 +107,8 @@ public final class GroupsController extends AbstractController implements SubCon
      * @param group Gruppen Data Transfer Objekt
      */
     public void removeGroup(GroupDTO group) {
-        groups_model.removeGroup(group);
-        groups_view.deselectGroupList();
+        if(group.group_id > 0)
+            groups_model.removeGroup(group);
     }
     
     
@@ -99,13 +119,34 @@ public final class GroupsController extends AbstractController implements SubCon
     public void saveGroup(GroupDTO group) {
         
         /* Neue Gruppe erstellen */
-        if(group.group_id < 0)
+        if(group.group_id < 1)
             groups_model.addGroup(group);
         /* Gruppe aktualisieren */
         else
             groups_model.saveGroup(group);
     }
     
+    
+    /**
+     * Suche angewaehlt
+     * @param text aktueller eingetragener Gruppen-Name
+     */
+    public void focusGainedSearchText(String text) {
+        System.out.println("FOCUS SEARCH");
+        if(text.compareTo(GroupsView.GROUP_TAB_DEFAULT_SEARCH_TEXT) == 0) 
+            groups_view.selectSearchText();
+    }
+    
+    
+    /**
+     * Suche abgewaehlt
+     * @param aktueller eingetragener Gruppen-Name
+     */
+    public void focusLostSearchText(String text) {
+        
+        if(text.compareTo(GroupsView.GROUP_TAB_DEFAULT_SEARCH_TEXT) == 0)
+            groups_view.deselectSearchText();
+    }
     
     /**
      * Nach Gruppen suchen
@@ -158,23 +199,37 @@ public final class GroupsController extends AbstractController implements SubCon
     
     /**
      * Name der Gruppe wurde geaendert
-     * @param text Gruppen-Name
+     * @param oldname alter Gruppen-Name
+     * @param newname neuer Gruppen-Name
+     * @TODO Noch, wenn vorhanden, Gruppen DTO mitteilen
      */
-    public void changeGroupName(String text) {
-        if(text.compareTo(GroupsView.GROUP_TAB_DEFAULT_NAME_TEXT) == 0)
+    public void changeGroupName(String group_newname, String group_oldname, int group_id) {
+        if(group_newname == null || group_newname.equals("")|| group_newname.equals(group_oldname)) {
+            //groups_view.addNewGroupToList();
             groups_view.enableSaveButton(false);
-        else
+        } else {
             groups_view.enableSaveButton(true);
-    }
-    
-    public void setMessageState() {
-        if(main_controller.getEmailClientStatus())
-            groups_view.enableMessageButton(true);
-        else
-            groups_view.enableMessageButton(false);
+            groups_view.updateGroupToList(group_newname, group_id);
+        }
     }
     
     
+    /**
+     * Email-Moeglichkeit kontrollieren
+     */
+    public boolean getMessageState() {
+        return main_controller.getEmailClientStatus();
+//        if(main_controller.getEmailClientStatus())
+//            groups_view.enableMessageButton(true);
+//        else
+//            groups_view.enableMessageButton(false);
+    }
+    
+    
+    
+    /***************************************************************************
+     * Model -> Controller Methoden
+     **************************************************************************/
 }
 
     
