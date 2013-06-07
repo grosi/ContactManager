@@ -41,9 +41,19 @@ public class ContactsController extends AbstractController implements ContactsIn
      * Model/View -> MainController Methoden
      **************************************************************************/
     
-    @Override
+   
     public MainController getMainController() {
         return this.mainController;
+    }
+
+    @Override
+    public void updateData() {
+        System.out.println("UPDATE CONTACTS");
+    }
+
+    @Override
+    public Object getDAO() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
     
