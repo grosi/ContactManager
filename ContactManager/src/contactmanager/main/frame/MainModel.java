@@ -62,8 +62,15 @@ public class MainModel extends AbstractModel implements MainInterface {
     /**
      * Referenz auf DAO Factory
      * @return Referenz
+     * @todo Testen
      */
     public DAOFactory getDAOFactory() {
+        
+        try {
+            this.daofactory = DAOFactory.getDAOFactory(DAOFactory.MySQL);
+        } catch (DAOException ex) {
+            System.err.println("Datenbank nicht erreichtbar");
+        }
         return this.daofactory;
     }
     
