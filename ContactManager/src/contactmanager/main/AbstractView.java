@@ -17,8 +17,13 @@ public abstract class AbstractView extends JPanel implements PropertyChangeEvent
         this.mainFrame = mainFrame;
     }
     
+    public AbstractView() {
+        this.mainFrame = null;
+    }
+    
+    
     /**
-     * 
+     *  Methode fuer das Initialisiern der Grafikkomponenten 
      */
     protected abstract void initComponents();
     
