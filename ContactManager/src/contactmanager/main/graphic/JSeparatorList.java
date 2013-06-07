@@ -56,29 +56,33 @@ public class JSeparatorList extends JList{
         //this.get
     }
     
-    
+   
     /**
      * Fuegt ein neues Listenelement hinzu oder aktualisiert ein bestehendes
      * @param text
      * @param id
      */
-    public boolean addListMember(String text, int id) {
+    public ListMember addListMember(String text, int id) {
      
-        ListMember newlistmember = new ListMember(text, id);
-     
+        
+        
         /* Falls Eintrag schon vorhanden -> updaten */
-        if(this.listmember.contains(newlistmember) == true) {
-            int index = this.listmember.indexOf(newlistmember);
-            newlistmember = this.listmember.get(index);
-            newlistmember.setText(text);
-            this.listmember.set(index, newlistmember);
+        //if(this.listmember.contains(newlistmember) == true) {
+        ListMember member_exists = containsListMember(id);
+        if(member_exists != null) {
+            int index = this.listmember.indexOf(member_exists);
+            //member_exists = this.listmember.get(index);
+            member_exists.setText(text);
+            this.listmember.set(index, member_exists);
             
             System.out.println("ListMember schon vorhanden -> Update"); /**@DEBUG */
             
-            return true;
+            return member_exists;
         /* Neuer Eintrag hinzufuegen */
         } else {
-            return this.listmember.add(newlistmember);
+            ListMember newlistmember = new ListMember(text, id);
+            this.listmember.add(newlistmember);
+            return newlistmember;
         }  
     }
     
@@ -87,19 +91,19 @@ public class JSeparatorList extends JList{
      * Loescht ein Listenelement anhand einer ID
      * @param id
      */
-    public boolean removeListMember(int id) {
-        
-        ListMember removelistmember = new ListMember(id);
+    public ListMember removeListMember(int id) {
         
         /* Falls Eintrag vorhanden -> loeschen */
-        if(this.listmember.contains(removelistmember) == true) {
-            int index = this.listmember.indexOf(removelistmember);
-            this.listmember.remove(index);
+        ListMember member_exists = containsListMember(id);
+        if(member_exists != null) {
+//            listmember.re
+//            int index = this.listmember.indexOf(removelistmember);
+            this.listmember.remove(member_exists);
             System.out.println("Eintrag geloescht"); /**@DEBUG */
-            return true;
+            return member_exists;
         } else {
             System.out.println("Eintrag nicht vorhanden"); /**@DEBUG */
-            return false;
+            return null;
         }
         
     }
@@ -109,8 +113,13 @@ public class JSeparatorList extends JList{
      * Loescht ein Listenelemts anhand des Index
      * @param index Index eines Listenelementes
      */
-    public void removeListMemberOfIndex(int index) {
-        this.listmember.remove(index);
+    public ListMember removeListMemberOfIndex(int index) {
+        //this.listmember_separator.
+        Object index_object = this.listmember_separator.get(index);
+        int member_index = this.listmember.indexOf(index_object);
+        ListMember member = this.listmember.get(member_index);
+        this.listmember.remove(member);
+        return member;
     }
     
     
@@ -119,20 +128,40 @@ public class JSeparatorList extends JList{
      * @param index Index eines Listenelementes
      * @return ID des Listenelementes
      */
-    public int getListMemberOfIndex(int index) {
-        return ((ListMember)listmember_separator.get(index)).getID();  
+    public ListMember getListMemberOfIndex(int index) {
+        Object member = listmember_separator.get(index);
+        int listmember_index=listmember.indexOf(member);
+        return listmember.get(listmember_index);
+    }
+    
+    
+    public int getListMemberIndex(ListMember member) {
+        
+        return listmember_separator.indexOf(member);
     }
     
     
     /**
-     * Gibt die aktuelle Anzahl an Listenelemente zurueck
+     * Gibt die aktuelle Groesse der Liste zurueck
      * @return
      */
     public int getListSize() {
-        return listmember.size();
+        return listmember_separator.size();
         //return listmember_separator.size();
     }
     
+    public int getListMemberSize() {
+        return listmember.size();
+    }
+    
+
+    public ListMember containsListMember(int id) {
+        for(ListMember member : listmember) {
+            if(member.getID() == id)
+                return member;
+        }
+        return null;
+    }
     
     
     
