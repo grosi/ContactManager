@@ -120,13 +120,14 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
      * @param controller
      */
     public ContactsView(ContactsController controller) {
-        super(controller.getMainController().getMainFrame());
-        
+        super();
         this.controller = controller;
         
+        /* Alle Komponente Initialisieren */
         initComponents();
 
-        mainFrame.addTab(ContactsController.CONTACTS_TITLE, this);
+        /* Kontakt Tab zu Frame hinzufuegen */
+        this.controller.addViewToFrame(CONTACTS_TITLE, this);
     }
 
     
