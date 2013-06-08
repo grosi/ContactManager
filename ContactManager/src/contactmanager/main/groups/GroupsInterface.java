@@ -9,6 +9,7 @@ package contactmanager.main.groups;
 public interface GroupsInterface {
     
     /* Allgemeine Angaben */
+    public static final int GROUP_DEFAULT_ID = 0;
     public static final String GROUPS_TITLE = "Gruppen";
     
     /* Property Changes */

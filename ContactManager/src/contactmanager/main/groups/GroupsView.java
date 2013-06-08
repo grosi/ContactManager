@@ -37,8 +37,10 @@ import net.miginfocom.swing.MigLayout;
  */
 public final class GroupsView extends AbstractView implements GraphicDesign, GroupsInterface{
     
+    /* Controller */
     private GroupsController controller;
     
+    /* GUI */
     /* Linke Spalte */
     private JScrollPane groupoverview_scrollpane;
     private JSeparatorList groupoverview_separatorlist;
@@ -64,17 +66,19 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
     private JButton remove_button;
     private JButton save_button;
     private JButton message_button;
-
-
     
+    /* Konstanten */
+    public static final String GROUP_ADD_GROUP = "ADD";
+    public static final String GROUP_REMOVE_GROUP_WITH_ID = "REMOVE_ID";
+    public static final String GROUP_REMOVE_GROUP_WITH_INDEX = "REMOVE_INDEX";
+
+
     /**
      * View default Konstruktor
      * @param controller
      */
     public GroupsView(GroupsController controller) {
-        
         super();
-        //super(controller.getMainController().getMainFrame());
         this.controller = controller;
         
         /* Alle Komponente Initialisieren */
@@ -82,14 +86,12 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
 
         /* Gruppen Tab zu Frame hinzufuegen */
         this.controller.addViewToFrame(GROUPS_TITLE, this);
-        //mainFrame.addTab(GROUPS_TITLE, this);
     }
     
     
-    
-    /**
+    /***************************************************************************
      * Alle Grafikkomponenten zeichnen und anordnen
-     */
+     **************************************************************************/
     @Override
     protected void initComponents() {
         
@@ -290,45 +292,38 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
     }                    
 
                                    
-    
-    
     /***************************************************************************
      * View -> Controller
+     * Methoden werden direkt von Listener der Grafikelementen angesprochen
      **************************************************************************/
-    
+    /**
+     * Hinzufuegen Button
+     * @param ae 
+     */
     private void addButtonActionPerformed(ActionEvent ae) {
         controller.addGroup();
     }
     
+    /**
+     * Loeschen Button
+     * @param ae 
+     */
     private void removeButtonActionPerformed(ActionEvent ae) {
-
-        int index = groupoverview_separatorlist.getSelectedIndex();
-        
-        if(index >=0 ) {
-            GroupDTO group = new GroupDTO();
-            ListMember listmember = groupoverview_separatorlist.getListMemberOfIndex(index);
-            group.group_id = listmember.getID();
-            group.group_name = listmember.getText();
-            controller.removeGroup(group);
-        }
-        
-        
-        
+        controller.removeGroup();  
     }
 
+    /**
+     * Speichern Button
+     * @param ae 
+     */
     private void saveButtonActionPerformed(ActionEvent ae) {
-        int index = groupoverview_separatorlist.getSelectedIndex();
-        GroupDTO group = new GroupDTO();
-        
-        /* Gruppe existiert */
-        
-            ListMember listmember = groupoverview_separatorlist.getListMemberOfIndex(index);
-            group.group_name = listmember.getText();
-            group.group_id = listmember.getID();
-            controller.saveGroup(group);
-        
+        controller.saveGroup();  
     }
 
+    /**
+     * Nachrichten Button
+     * @param ae 
+     */
     private void messageButtonActionPerformed(ActionEvent ae) {
         List<ListMember> selected_items = groupoverview_separatorlist.getSelectedValuesList();
         int size = selected_items.size();
@@ -341,168 +336,252 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
         }   
     }
     
+    /**
+     * Such-Textfeld selektiert
+     * @param fe 
+     */
     private void searchTextFocusGained(FocusEvent fe) {
-        controller.focusGainedSearchText(search_textfield.getText());
+        controller.searchGroupFocusGained();
     }
     
+    /**
+     * Such-Textfeld deselektiert
+     * @param fe 
+     */
     private void searchTextFocusLost(FocusEvent fe) {
-        controller.focusLostSearchText(search_textfield.getText());
+        controller.searchGroupFocusLost();
     }
     
-    //TODO
+    /**
+     * Such-Textfeld Eintrag geaendert
+     * @param fe 
+     */
     private void searchTextChange(DocumentEvent de) {
-        controller.searchGroup(search_textfield.getText());
+        controller.searchGroup();
     }
     
+    /**
+     * Gruppenliste wurde veraendert
+     * @param lse 
+     */
     private void groupListValueChanged(ListSelectionEvent lse) {
-        int index = groupoverview_separatorlist.getSelectedIndex();
-        
-        /* Nur wenn eine Gruppe selektiert ist Daten von DB holen */
-        System.out.println("INDEX: "+index);
-        System.out.println("SIZE: "+groupoverview_separatorlist.getListSize());
-        if(index > 0 && index != groupoverview_separatorlist.getListSize()) {
-            ListMember group_info = groupoverview_separatorlist.getListMemberOfIndex(index);
-            if(group_info.getID() != 0) {
-                
-                /* Ungespeicherte Eintraege loeschen */
-                if(groupoverview_separatorlist.containsListMember(0) != null) {
-                    groupoverview_separatorlist.removeListMember(0);
-                }
-                
-                GroupDTO group = new GroupDTO();
-                group.group_id = group_info.getID();
-                group.group_name = group_info.getText();
-                controller.getGroup(group);
-            }
-        }
+        controller.getGroup();
     }
     
+    /**
+     * Gruppennamen-Textfeld selektiert
+     * @param fe 
+     */
     private void groupnameTextFocusGained(FocusEvent fe) {
-        controller.focusGainedGroupName(detail_static_name_textfield.getText());
+        controller.nameGroupFocusGained();
     }
     
+    
+    /**
+     * Gruppennamen-Textfeld deselektiert
+     * @param fe 
+     */
     private void groupnameTextFocusLost(FocusEvent fe) {
-        controller.focusLostGroupName(detail_static_name_textfield.getText());
+        controller.nameGroupFocusLost();
     }
     
+    /**
+     * Gruppennamen-Textfeld geaendert
+     * @param de 
+     */
     private void groupnameTextChange(DocumentEvent de) {
-        int index = groupoverview_separatorlist.getSelectedIndex();
-        ListMember group_info;
-        
-        /* Kontrolle ob ein Eintrag selektiert ist */
-        if(index < 0) {
-            controller.changeGroupName(null, null, 0);
-        } else {
-            group_info = groupoverview_separatorlist.getListMemberOfIndex(groupoverview_separatorlist.getSelectedIndex());
-            controller.changeGroupName(detail_static_name_textfield.getText(), group_info.getText(), group_info.getID());
-        }
-            
-        
+        controller.nameGroupChange();  
     }
     
     
     /***************************************************************************
      * Controller -> View
+     * setter und getter Methoden, die dem Controller das Steuern ermoeglichen
      **************************************************************************/
+    /**
+     * Index der selektierten Gruppe der Uebersichtsliste
+     * @return Index: -1 wenn nichts selektiert ist 
+     */
+    public int getSelectedGroupIndex() {
+        return this.groupoverview_separatorlist.getSelectedIndex();
+    }
     
     /**
-     * Die Detail-Spalte auf Default zuruecksetzen
+     * Gruppe mit dem angegebenen Index selektieren
+     * @param index Gruppen-Index
      */
-    public void setDetailToDefault() {
-        /*Nur zuruecksetzen wenn noch kein neuer KOntakt angelegt wurde */
-        if(groupoverview_separatorlist.containsListMember(0) != null) {
-            detail_static_name_textfield.setText(GROUP_TAB_DEFAULT_NAME_TEXT);
-            int size = detail_member_separatorlist.getListMemberSize();      
-
-            /* Alle Elemente der Liste loeschen */
-            for(int i = 0; i < size; i++)    
-                detail_member_separatorlist.removeListMemberOfIndex(1);
-            enableSaveButton(false);
+    public void setSelectedGroupIndex(int index) {
+        this.groupoverview_separatorlist.setSelectedIndex(index);
+    }
+    
+    /**
+     * ID einer Gruppe in der Uebersichtsliste
+     * @param index Index der Gruppe in der Liste
+     * @return Gruppen ID
+     */
+    public int getGroupIdOfIndex(int index) {
+        ListMember member = this.groupoverview_separatorlist.getListMemberOfIndex(index);
+        return member.getID();
+    }
+    
+    /**
+     * Name einer Gruppe in der Uebersichtsliste
+     * @param index Index der Gruppe in der Liste
+     * @return Gruppen-Name
+     */
+    public String getGroupNameOfIndex(int index) {
+        ListMember member = this.groupoverview_separatorlist.getListMemberOfIndex(index);
+        return member.getText();
+    }
+    
+    /**
+     * Aktueller Name der ausgewaehlten Gruppe
+     * @return Gruppen-Name
+     */
+    public String getGroupName() {
+        return this.detail_static_name_textfield.getText();
+    }
+    
+    /**
+     * Gruppen-Namen temporaer aendern
+     * @param group_name Gruppen-Namen
+     */
+    public void setGroupName(String group_name) {
+        this.detail_static_name_textfield.setText(group_name);
+    }
+    
+    /**
+     * Gruppen Uebersichtsliste anpassen
+     * @param group_id_index Index oder ID der zu aendernden Gruppe
+     * @param group_name Gruppen Name
+     * @param mode Art der Aenderung
+     */
+    public void setGroupList(int group_id_index, String group_name, String mode) {
+        ListMember member;
+        switch(mode) {
+            case GROUP_ADD_GROUP:
+                member = this.groupoverview_separatorlist.addListMember(group_name, group_id_index);
+                setSelectedGroupIndex(this.groupoverview_separatorlist.getListMemberIndex(member)); //TODO unschoen!!!
+                break;
+            case GROUP_REMOVE_GROUP_WITH_ID:
+                this.groupoverview_separatorlist.removeListMember(group_id_index);
+                break;
+            case GROUP_REMOVE_GROUP_WITH_INDEX:
+                this.groupoverview_separatorlist.removeListMemberOfIndex(group_id_index);
+                break;
         }
     }
     
     /**
-     * Gesamter Gruppen-Name selektieren
+     * Gruppen Ubersichtliste leeren
      */
-    public void selectGroupName() {
-        detail_static_name_textfield.select(0, detail_static_name_textfield.getText().length());
-    }
-    
-    
-    /**
-     * Gesamter Gruppen-Name deselektieren
-     */
-    public void deselectGroupName() {
-        detail_static_name_textfield.select(0, 0);
-    }
-    
-    
-    /**
-     * Gesamte Suche selektieren
-     */
-    public void selectSearchText() {
-        System.out.println("SELECT");
-        search_textfield.select(0, search_textfield.getText().length());
-    }
-    
-    
-    /**
-     * Gesamte Suche deselektieren
-     */
-    public void deselectSearchText() {
-        System.out.println("DESELECT");
-        search_textfield.select(0, 0);
+    public void setGroupListEmpty() {
+        int group_quantity;
         
-        if(search_textfield.getText().equals("")) {
-            search_textfield.setText(GROUP_TAB_DEFAULT_SEARCH_TEXT);
+        group_quantity = getGroupQuantity();
+        
+        /* Alle Elemente der Liste zuerst loeschen */
+        for(int i = 0; i < group_quantity; i++){    
+            setGroupList(1, "", GROUP_REMOVE_GROUP_WITH_INDEX);
+            //groupoverview_separatorlist.removeListMemberOfIndex(1);
         }
     }
     
+    
+    /**
+     * Kontakt Ubersichtliste leeren
+     */
+    public void setContactListEmpty() {
+        int contact_quantity;
+        
+        contact_quantity = detail_member_separatorlist.getListMemberSize();      
+
+        /* Alle Elemente der Liste loeschen */
+        for(int i = 0; i < contact_quantity; i++)    
+            detail_member_separatorlist.removeListMemberOfIndex(1);
+    }
+    
+    /**
+     * Kontrolle ob eine Gruppe vorhanden ist anhand der Gruppen-ID
+     * @param group_id Gruppen-ID
+     * @return Gruppe vorhanden: true; Gruppe nicht vorhanden: false
+     */
+    public boolean getGroupState(int group_id) {
+        if(this.groupoverview_separatorlist.containsListMember(group_id) == null)
+            return false;
+        else
+            return true;
+    }
+    
+    /**
+     * Groesse der Gruppen-Ubersichtsliste 
+     */
+    public int getGroupListSize() {
+        return this.groupoverview_separatorlist.getListSize();
+    }
+    
+    /**
+     * Anzahl vorhanden Gruppen
+     */
+    public int getGroupQuantity() {
+        return this.groupoverview_separatorlist.getListMemberSize();
+    }
+    
+    /**
+     * Suche-Text
+     * @return Such-Text
+     */
+    public String getSearchText() {
+        return this.search_textfield.getText();
+    }
+    
+    /**
+     * Suche-Text setzen
+     * @param text Suche-Text
+     */
+    public void setSearchText(String text) {
+        this.search_textfield.setText(text);
+    }
+    
+    /**
+     * Suche selektieren
+     * @param first Erster Buchstaben des Strings 
+     * @param last Letzter Buchstaben des Strings
+     */
+    public void setSearchSelection(int first, int last) {
+        search_textfield.select(first, last);
+    }
+    
+     /**
+     * Gruppen-Namen selektieren
+     * @param first Erster Buchstaben des Strings 
+     * @param last Letzter Buchstaben des Strings
+     */
+    public void setGroupNameSelection(int first, int last) {
+        detail_static_name_textfield.select(first, last);
+    }
     
     /**
      * Save-Button aktiviern oder deaktivieren
-     * @param state
+     * @param state true: Speichern moeglich; false: Speichern nicht moeglich
      */
-    public void enableSaveButton(boolean state) {
-        save_button.setEnabled(state);
+    public void setSaveButtonState(boolean state) {
+        this.save_button.setEnabled(state);
     }
-    
     
     /**
      * Message-Button aktiviern oder deaktivieren
      * @param state
      */
-    public void enableMessageButton(boolean state) {
+    public void setMessageButtonState(boolean state) {
         message_button.setEnabled(state);
     }
+   
     
-    
-    /**
-     * Remove-Button aktiviern oder deaktivieren
-     * @param state
-     */
-    public void enableRemoveButton(boolean state) {
-        remove_button.setEnabled(state);
-    }
-    
-    
-    /**
-     * Fuegt ein neue Gruppe zur Gruppenliste hinzu
-     */
-    public void addNewGroupToList() {
-        ListMember member = groupoverview_separatorlist.addListMember(GROUP_TAB_DEFAULT_NAME_TEXT, 0);
-        groupoverview_separatorlist.setSelectedIndex(groupoverview_separatorlist.getListMemberIndex(member));
-    }
-    
-    
-    //TODO llöst fehler aus!!!!!!!!!!! java.lang.IllegalStateException: Attempt to mutate in notification
-    public void updateGroupToList(String group_name, int group_id) {
-        ListMember member = groupoverview_separatorlist.addListMember(group_name, group_id);
-        groupoverview_separatorlist.setSelectedIndex(groupoverview_separatorlist.getListMemberIndex(member));
-    }
     
     /***************************************************************************
      * Model -> View
+     * Ausgeloeste Events des Modells, welche das View ueber Aenderungen informieren
      **************************************************************************/
     /**
      * Aenderungen aus dem Model in View uebernehmen
@@ -513,60 +592,60 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
         switch(evt.getPropertyName()) {
             case GROUP_LIST_SELECT_EVENT:    
             case GROUP_SEARCH_EVENT:
-                int groupoverview_size = groupoverview_separatorlist.getListMemberSize();      
-        
-                /* Alle Elemente der Liste zuerst loeschen */
-                for(int i = 0; i < groupoverview_size; i++){    
-                    groupoverview_separatorlist.removeListMemberOfIndex(1);
-                    System.out.println("REMOVE Group");
-                }
-                
+
                 if(evt.getNewValue() != null) {
-                    /* Neu Elemente hinzufuegen */
-                    for(GroupDTO group : (ArrayList<GroupDTO>)evt.getNewValue()) {
-                        groupoverview_separatorlist.addListMember(group.group_name, group.group_id);
-                        System.out.println("ADD Group");
-                    }
+                    setGroupListEmpty();
+                
+                    /* Bei leerer Gruppen Ubersichtsliste, Details-Ansicht leer lassen */
+                    if(((ArrayList<GroupDTO>)evt.getNewValue()).size() != 0)
+                        /* Neu Elemente hinzufuegen */
+                        for(GroupDTO group : (ArrayList<GroupDTO>)evt.getNewValue()) 
+                            setGroupList(group.group_id, group.group_name, GROUP_ADD_GROUP);
+                    else {
+                        /* Details-ansicht leer */
+                        setGroupName(GROUP_TAB_DEFAULT_NAME_TEXT);
+                        setContactListEmpty();
+                    }   
                 }
                 
                 /* Falls kein Eintrag selektiert ist, den ersten selektieren */
-                if(groupoverview_separatorlist.getSelectedIndex() < 0 && groupoverview_separatorlist.getListMemberSize() > 0)
-                    groupoverview_separatorlist.setSelectedIndex(1);
-             
-                
+                controller.selectGroup();
                 break;
                 
+                
             case GROUP_SELECT_EVENT:
-                int groupmember_size = detail_member_separatorlist.getListMemberSize();
-                
-                /* Alle Elemente der Liste zuerst loeschen */
-                for(int i = 0; i < groupmember_size; i++)    
-                    detail_member_separatorlist.removeListMemberOfIndex(1);
-                
+
                 if(evt.getNewValue() != null) {
+                    setContactListEmpty();
                     
-                    detail_static_name_textfield.setText(((GroupDTO)evt.getNewValue()).group_name);
+                    setGroupName(((GroupDTO)evt.getNewValue()).group_name);
+                    //detail_static_name_textfield.setText(((GroupDTO)evt.getNewValue()).group_name);
                     
                     /* Neu Elemente hinzufuegen */
+                    //TODO Methode wie setGroupList erstellen 
                     for(ContactDTO groupmember : ((GroupDTO)evt.getNewValue()).group_contacts) {
                         detail_member_separatorlist.addListMember(groupmember.user_lastname+" "+groupmember.user_prename,
                                 groupmember.user_id);
                     }
                     
                     /* Falls Gruppenmitglieder vorhanden sind, Senden ermoeglichen */
+                    //TODO
                     if(detail_member_separatorlist.getListMemberSize() > 0)
-                        enableMessageButton(true);
+                        setMessageButtonState(true);
                     else
-                        enableMessageButton(false);
+                        setMessageButtonState(false);
                 } else {
-                    detail_static_name_textfield.setText(GROUP_TAB_DEFAULT_NAME_TEXT);
+                    setGroupName(GROUP_TAB_DEFAULT_NAME_TEXT);
                 }
                 break;
+             
                 
             case GROUP_INSERT_EVENT:
                 if(evt.getNewValue() != null) {
-                    groupoverview_separatorlist.removeListMember(0);
+                    setGroupList(GROUP_DEFAULT_ID, "", GROUP_REMOVE_GROUP_WITH_ID);
                 }
+                
+                
             case GROUP_UPDATE_EVENT:
                 
                 if(evt.getNewValue() != null) {
@@ -577,9 +656,10 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
                     groupoverview_separatorlist.setSelectedIndex(groupoverview_separatorlist.getListMemberIndex(member));
                     
                     /* Gespeichert -> Speichern nicht mehr moeglich */
-                    enableSaveButton(false);
+                    setSaveButtonState(false);
                 }
                 break;
+                
                 
             case GROUP_DELETE_EVENT:
                 
@@ -588,8 +668,7 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
                     groupoverview_separatorlist.removeListMember(((GroupDTO)evt.getNewValue()).group_id);
                     
                     /* Falls kein Eintrag selektiert ist, den ersten selektieren */
-                    if(groupoverview_separatorlist.getSelectedIndex() < 0 && groupoverview_separatorlist.getListMemberSize() > 0)
-                        groupoverview_separatorlist.setSelectedIndex(1);
+                    controller.selectGroup();
                 }
                 
                 break;

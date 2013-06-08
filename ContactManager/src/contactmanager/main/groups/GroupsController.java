@@ -4,7 +4,6 @@ package contactmanager.main.groups;
 import contactmanager.main.AbstractController;
 import contactmanager.main.AbstractView;
 import contactmanager.main.SubController;
-import contactmanager.main.dao.DAOFactory;
 import contactmanager.main.frame.MainController;
 
 /**
@@ -12,7 +11,7 @@ import contactmanager.main.frame.MainController;
  * @version 0.1
  * @since 02.05.2013
  */
-public final class GroupsController extends AbstractController implements SubController {
+public final class GroupsController extends AbstractController implements SubController, GroupsInterface {
     
     private MainController main_controller;
 
@@ -35,11 +34,9 @@ public final class GroupsController extends AbstractController implements SubCon
         /* Modelle eintragen (diejenigen die Views aktualisieren sollen*/
         groups_model = new GroupsModel(this);
         addModel(groups_model);
-        
-        /* Mail-Client kontrollieren und View entsprechend anpassen */
-        //setMessageState();
     }
  
+    
     /***************************************************************************
      * MainController-> SubController Methoden
      **************************************************************************/
@@ -49,7 +46,6 @@ public final class GroupsController extends AbstractController implements SubCon
      */
     @Override
     public void updateData() {
-        System.out.println("Groups UPDATE"); 
         groups_model.getGroupList();
     }
     
@@ -84,11 +80,36 @@ public final class GroupsController extends AbstractController implements SubCon
      **************************************************************************/
     
     /**
-     * Infromationen zu einer Gruppe
-     * @param group Gruppen Data Transfer Objekt
+     * Informationen zu einer Gruppe
      */
-    public void getGroup(GroupDTO group) {
-        groups_model.getGroup(group);
+    public void getGroup() {
+        int index;
+        int list_size;
+        GroupDTO group;
+        int group_id;
+        String group_name;
+        
+        index = groups_view.getSelectedGroupIndex(); //Selektierte Gruppe in der Ubersichtsliste
+        list_size = groups_view.getGroupListSize(); //Groesse der Uerbsichtsliste
+        
+        /* Kontrolle ob die Selektion noch moeglich ist */
+        if(index > 0 && index != list_size) {
+            group_id = groups_view.getGroupIdOfIndex(index);
+            group_name = groups_view.getGroupNameOfIndex(index);
+            
+            /* Nur gespeicherte Gruppen abfragen */
+            if(group_id != GROUP_DEFAULT_ID) {
+                group = getGroupDTO();
+                group.group_id = group_id;
+                group.group_name = group_name;
+                
+                /* Ungespeicherte Gruppen loeschen */
+                if(groups_view.getGroupState(GROUP_DEFAULT_ID) == true)
+                    groups_view.setGroupList(GROUP_DEFAULT_ID, group_name, GroupsView.GROUP_REMOVE_GROUP_WITH_ID);
+                
+                groups_model.getGroup(group);
+            } 
+        }
     }
     
     
@@ -97,18 +118,48 @@ public final class GroupsController extends AbstractController implements SubCon
      */
     public void addGroup() {
         
-        groups_view.addNewGroupToList();
-        groups_view.setDetailToDefault();
+        /* Platzhalter in Gruppen-Ubersichtliste */
+        groups_view.setGroupList(GROUP_DEFAULT_ID, GroupsView.GROUP_TAB_DEFAULT_NAME_TEXT, GroupsView.GROUP_ADD_GROUP);
+        
+        /* Detailsansicht zuruecksetzen */
+        groups_view.setGroupName(GroupsView.GROUP_TAB_DEFAULT_NAME_TEXT);
+        groups_view.setContactListEmpty();
+
+        groups_view.setSaveButtonState(false);
     }
     
     
     /**
      * Gruppe loeschen
-     * @param group Gruppen Data Transfer Objekt
      */
-    public void removeGroup(GroupDTO group) {
-        if(group.group_id > 0)
+    public void removeGroup() {
+        GroupDTO group;
+        int group_id;
+        String group_name;
+        int index;
+        
+        /* Selektierte Gruppe */
+        index = groups_view.getSelectedGroupIndex();
+        
+        /* Kein Eintrag in Uebersicht selektiert */
+        if(index == -1)
+            return;
+        
+        group_id = groups_view.getGroupIdOfIndex(index);
+        group_name = groups_view.getGroupNameOfIndex(index);
+        
+        /* Ungespeicherte Gruppe */
+        if(group_id == GROUP_DEFAULT_ID) {
+            groups_view.setGroupList(group_id, group_name, GroupsView.GROUP_REMOVE_GROUP_WITH_ID);
+            selectGroup();
+        }
+        /* Gespeicherte Gruppe */    
+        else {
+            group = getGroupDTO();
+            group.group_id = group_id;
+            group.group_name = group_name;
             groups_model.removeGroup(group);
+        }
     }
     
     
@@ -116,44 +167,71 @@ public final class GroupsController extends AbstractController implements SubCon
      * Gruppe speichern
      * @param group Gruppen Data Transfer Objekt
      */
-    public void saveGroup(GroupDTO group) {
+    public void saveGroup() {
+        GroupDTO group;
+        int group_id;
+        String group_name;
+        int index;
         
-        /* Neue Gruppe erstellen */
-        if(group.group_id < 1)
+        /* Selektierte Gruppe */
+        index = groups_view.getSelectedGroupIndex();
+        
+        /* Kein Eintrag in Uebersicht selektiert */
+        if(index == -1)
+            return;
+        
+        group_id = groups_view.getGroupIdOfIndex(index);
+        group_name = groups_view.getGroupNameOfIndex(index);
+        group = getGroupDTO();
+        group.group_id = group_id;
+        group.group_name = group_name;
+        
+        /* Gruppe existiert noch nicht in Datenbank */
+        if(group_id == GROUP_DEFAULT_ID)
             groups_model.addGroup(group);
-        /* Gruppe aktualisieren */
-        else
+        /* Gespeicherte Gruppe */    
+        else 
             groups_model.saveGroup(group);
     }
     
     
     /**
      * Suche angewaehlt
-     * @param text aktueller eingetragener Gruppen-Name
      */
-    public void focusGainedSearchText(String text) {
-        System.out.println("FOCUS SEARCH");
-        if(text.compareTo(GroupsView.GROUP_TAB_DEFAULT_SEARCH_TEXT) == 0) 
-            groups_view.selectSearchText();
+    public void searchGroupFocusGained() {
+        String text;
+        
+        text = groups_view.getSearchText();
+        
+        /* Falls noch keine Anpassungen vorherrschen, alles markieren */
+        if(text.equals(GroupsView.GROUP_TAB_DEFAULT_SEARCH_TEXT) == true)
+            groups_view.setSearchSelection(0, text.length());
     }
     
     
     /**
      * Suche abgewaehlt
-     * @param aktueller eingetragener Gruppen-Name
      */
-    public void focusLostSearchText(String text) {
+    public void searchGroupFocusLost() {
         
-        if(text.compareTo(GroupsView.GROUP_TAB_DEFAULT_SEARCH_TEXT) == 0)
-            groups_view.deselectSearchText();
+        groups_view.setSearchSelection(0, 0); //Nichts Selektieren
+        
+        /* Wenn die Eingabemaske leer ist, Standardtext einblenden */
+        if(groups_view.getSearchText().equals(""))
+            groups_view.setSearchText(GroupsView.GROUP_TAB_DEFAULT_SEARCH_TEXT);
     }
     
     /**
      * Nach Gruppen suchen
-     * @param text
      */
-    public void searchGroup(String text) {
-        groups_model.searchGroup(text);
+    public void searchGroup() {
+        String text;
+        
+        text = groups_view.getSearchText(); //Suchmuster
+        
+        /* Nur suchen, wenn nicht der Standardtext steht */
+        if(text.equals(GroupsView.GROUP_TAB_DEFAULT_SEARCH_TEXT) == false)
+            groups_model.searchGroup(text);
     }
     
     
@@ -177,40 +255,69 @@ public final class GroupsController extends AbstractController implements SubCon
     
     /**
      * Gruppen-Name angewaehlt
-     * @param text aktueller eingetragener Gruppen-Name
      */
-    public void focusGainedGroupName(String text) {
+    public void nameGroupFocusGained() {
+        String group_name;
         
-        if(text.compareTo(GroupsView.GROUP_TAB_DEFAULT_NAME_TEXT) == 0) 
-            groups_view.selectGroupName();
+        group_name = groups_view.getGroupName();
+        
+        if(group_name.equals(GroupsView.GROUP_TAB_DEFAULT_NAME_TEXT) == true) 
+            groups_view.setGroupNameSelection(0, group_name.length());
     }
     
     
     /**
      * Gruppen-Name abgewaehlt
-     * @param aktueller eingetragener Gruppen-Name
      */
-    public void focusLostGroupName(String text) {
-        
-        if(text.compareTo(GroupsView.GROUP_TAB_DEFAULT_NAME_TEXT) == 0)
-            groups_view.deselectGroupName();
+    public void nameGroupFocusLost() {
+        groups_view.setGroupNameSelection(0,0);
     }
     
     
     /**
-     * Name der Gruppe wurde geaendert
+     * Name der Gruppe wurde geaendert -> Kontrolle ob Sicherung moeglich
      * @param oldname alter Gruppen-Name
      * @param newname neuer Gruppen-Name
-     * @TODO Noch, wenn vorhanden, Gruppen DTO mitteilen
+     * @TODO Alter Gruppen-Namen evtl. von der Datenbank holen
      */
-    public void changeGroupName(String group_newname, String group_oldname, int group_id) {
-        if(group_newname == null || group_newname.equals("")|| group_newname.equals(group_oldname)) {
-            //groups_view.addNewGroupToList();
-            groups_view.enableSaveButton(false);
-        } else {
-            groups_view.enableSaveButton(true);
-            groups_view.updateGroupToList(group_newname, group_id);
-        }
+    public void nameGroupChange() {
+        int index;
+        int list_size;
+        int group_id;
+        String group_name_old;
+        String group_name_new;
+        
+        /* Informationen holen */
+        index = groups_view.getSelectedGroupIndex();
+        list_size = groups_view.getGroupListSize();
+       
+        /* Gruppenliste nur aendern wenn die Pausabilitaeten erfuellt sind */
+        if(index > 0 && index != list_size) {
+                group_name_new = groups_view.getGroupName();
+                group_name_old = groups_view.getGroupNameOfIndex(index);
+                group_id = groups_view.getGroupIdOfIndex(index);
+                
+                if(group_name_new.equals("") == false && group_name_new.equals(group_name_old) == false) {//&& 
+                    groups_view.setGroupList(group_id, group_name_new, GroupsView.GROUP_ADD_GROUP);
+                    groups_view.setSaveButtonState(true);
+                } else {
+                    groups_view.setSaveButtonState(false);
+                }
+        } 
+    }
+    
+    
+    /**
+     * Erste Gruppe in Ubersichtsliste selektieren
+     */
+    public void selectGroup() {
+        int group_quantity;
+ 
+        group_quantity = groups_view.getGroupQuantity();
+        
+        /* Falls die Liste nicht leer ist, erster Eintrag selektieren */
+        if(group_quantity > 0)
+            groups_view.setSelectedGroupIndex(1);
     }
     
     
@@ -219,17 +326,20 @@ public final class GroupsController extends AbstractController implements SubCon
      */
     public boolean getMessageState() {
         return main_controller.getEmailClientStatus();
-//        if(main_controller.getEmailClientStatus())
-//            groups_view.enableMessageButton(true);
-//        else
-//            groups_view.enableMessageButton(false);
     }
     
     
     
     /***************************************************************************
-     * Model -> Controller Methoden
+     * Controller Methoden
      **************************************************************************/
+    /**
+     * Erzeugt ein Transfer Objekt
+     * @return Transfer Objekt
+     */
+    private GroupDTO getGroupDTO() {
+        return new GroupDTO();
+    }
 }
 
     
