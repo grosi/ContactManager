@@ -16,15 +16,14 @@ import java.util.ArrayList;
  */
 public class MainController extends AbstractController implements MainInterface {
 
+    /* View */
     private MainFrame main_frame;
+    
+    /* Modell */
     private MainModel main_model;
 
-    /** Subcontroller */
+    /* Subcontroller */
     private ArrayList<SubController> sub_controller;
-    private ContactsController contacts_controller;
-    private GroupsController groups_controller;
-
-    private boolean email_client_available;
 
     public MainController() {
 
@@ -38,26 +37,18 @@ public class MainController extends AbstractController implements MainInterface 
         main_frame = new MainFrame(this);
         addView(main_frame);
 
-        /* E-Mail Client ueberpruefen */
-        //email_client_available = main_model.checkMailClient();
-
-        /* Datenbank oeffnen */
-        //main_model.createDAOFactory();
-
         /* Alle SubController */
-        this.contacts_controller = new ContactsController(this);
-        this.groups_controller = new GroupsController(this);
-
-        //@todo code aufraeumen
         sub_controller = new ArrayList<>();
-        sub_controller.add(this.contacts_controller);
-        sub_controller.add(this.groups_controller);
+        sub_controller.add(new ContactsController(this));
+        sub_controller.add(new GroupsController(this));
+        
+        updataData();
     }
 
+    
     /***************************************************************************
      * Subcontroller Methoden
      **************************************************************************/
-
     /**
      * Gibt Referenz auf das Hauptfenster zurueck
      * @return
@@ -119,11 +110,10 @@ public class MainController extends AbstractController implements MainInterface 
      */
     public void changeTabSelection(String tabName) {
         main_model.tabChange(tabName);
-        if(sub_controller != null) {
-            for(SubController controller : sub_controller) {
-                controller.updateData();
-            }
-        }
+        
+        /* Daten aller SubController aktualisieren */
+        if(sub_controller != null) 
+            updataData();
         System.err.println("changeTabSelection");
     }
 
@@ -133,6 +123,18 @@ public class MainController extends AbstractController implements MainInterface 
      */
     public void closeApplication() {
         main_model.closeApplication();
+    }
+    
+    
+    /***************************************************************************
+     * Controller Methoden
+     **************************************************************************/
+    /**
+     * Daten der SubController aktualisieren
+     */
+    public final void updataData() {
+        for(SubController controller : sub_controller)
+            controller.updateData();
     }
 
 }
