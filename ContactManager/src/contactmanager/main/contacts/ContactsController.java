@@ -13,7 +13,7 @@ import contactmanager.main.SubController;
  */
 public class ContactsController extends AbstractController implements ContactsInterface, SubController {
     
-    private MainController mainController;
+    private MainController main_controller;
 
     /* Modelle */
     private ContactsModel contactsModel;
@@ -24,7 +24,7 @@ public class ContactsController extends AbstractController implements ContactsIn
     public ContactsController(MainController mainController) {
         super();
         
-        this.mainController = mainController;
+        this.main_controller = mainController;
         
         /* Modelle eintragen (diejenigen die Views aktualisieren sollen*/
         contactsModel = new ContactsModel(this);
@@ -36,24 +36,39 @@ public class ContactsController extends AbstractController implements ContactsIn
     }
  
     
+    /***************************************************************************
+     * MainController-> SubController Methoden
+     **************************************************************************/
+    /**
+     * Aktuelle Datensaetze von der Datenbank holen
+     */
+    @Override
+    public void updateData() {
+        System.out.println("UPDATE CONTACTS");
+    }
     
     /***************************************************************************
      * Model/View -> MainController Methoden
      **************************************************************************/
     
-   
-    public MainController getMainController() {
-        return this.mainController;
+    /**
+     * View zu Frame hinzufuegen
+     * @param title
+     * @param view 
+     * @todo evtl in AbstractController einbauen!
+     */
+    public void addViewToFrame(String title, AbstractView view) {
+        this.main_controller.addTabToMainFrame(title, view);
     }
-
-    @Override
-    public void updateData() {
-        System.out.println("UPDATE CONTACTS");
-    }
-
+    
+    /**
+     * Spezifische DAO erstellen
+     * @return GroupsDAO
+     * @todo evtl in AbstractController einbauen
+     */
     @Override
     public Object getDAO() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.main_controller.getDAOFactory().getContactsDAO();
     }
     
     
