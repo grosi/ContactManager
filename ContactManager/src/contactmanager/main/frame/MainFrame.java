@@ -7,6 +7,8 @@ import java.awt.Dimension;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.beans.PropertyChangeEvent;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
@@ -32,7 +34,12 @@ public final class MainFrame extends AbstractFrame implements GraphicDesign, Mai
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException e) {
-            /**@TODO */
+            try {
+                System.err.println("No Look an Feel for your OS");
+                UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+            } catch (    ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
+                System.err.println("Setup Look and Feel crashed");
+            }
         }
 
         //Tabs
@@ -49,15 +56,9 @@ public final class MainFrame extends AbstractFrame implements GraphicDesign, Mai
        
         
         //Hauptfenster 
-        //tabPane.add("<html><body leftmargin=15 topmargin=8 marginwidth=15 marginheight=5>Test</body></html>",new JPanel());
-        
-       // this.setLayout(new FlowLayout(FlowLayout.CENTER));
         this.add(tabPane);
-        
-        this.setSize(1000, 600);
         this.setMinimumSize(new Dimension(FRAME_MIN_WIDTH, FRAME_MIN_HEIGHT));
         this.setResizable(true);
-        //this.setBounds(200, 200, 500, 100);
         this.setVisible(true);
         
         
@@ -176,7 +177,6 @@ public final class MainFrame extends AbstractFrame implements GraphicDesign, Mai
     public void modelPropertyChange(PropertyChangeEvent evt) {
         switch (evt.getPropertyName()) {
             case CURRENT_TAB_CHANGED_EVENT:
-                System.out.println("EVENT");
                 this.setTitle(evt.getNewValue().toString());
                 break;
             default:
