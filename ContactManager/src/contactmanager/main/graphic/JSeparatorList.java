@@ -147,14 +147,22 @@ public class JSeparatorList extends JList{
      */
     public int getListSize() {
         return listmember_separator.size();
-        //return listmember_separator.size();
     }
     
+    /**
+     * Aktuelle Anzahl der Listeneintraege ohne Separatoren
+     * @return 
+     */
     public int getListMemberSize() {
         return listmember.size();
     }
     
-
+    
+    /**
+     * Prueft ob ein Listeneintrag mit einer bestimmt ID bereits existiert
+     * @param id zu kontrollierende ID
+     * @return Referenz auf den Listeneintrag, wenn vorhanden. Ansonsten null
+     */
     public ListMember containsListMember(int id) {
         for(ListMember member : listmember) {
             if(member.getID() == id)
