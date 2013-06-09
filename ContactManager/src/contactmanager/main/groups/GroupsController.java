@@ -83,7 +83,6 @@ public final class GroupsController extends AbstractController implements SubCon
      * Informationen zu einer Gruppe
      */
     public void getGroup() {
-        System.out.println("GET");
         int index;
         int list_size;
         GroupDTO group;
