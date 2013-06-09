@@ -2,6 +2,7 @@
 package contactmanager.main;
 
 import contactmanager.main.frame.MainFrame;
+import java.awt.Cursor;
 import javax.swing.JPanel;
 
 /**
@@ -26,6 +27,17 @@ public abstract class AbstractView extends JPanel implements PropertyChangeEvent
      *  Methode fuer das Initialisiern der Grafikkomponenten 
      */
     protected abstract void initComponents();
+    
+    /**
+     * Mauszeiger aendern
+     * @param state true: Sanduhr; false: Standard
+     */
+    public void setMouseWaitCursor(boolean state) {
+        if(state == true)
+            this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        else
+            this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+    }
     
 }
 
