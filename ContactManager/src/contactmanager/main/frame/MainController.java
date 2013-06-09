@@ -5,9 +5,12 @@ import contactmanager.main.contacts.ContactsController;
 import contactmanager.main.AbstractController;
 import contactmanager.main.AbstractView;
 import contactmanager.main.SubController;
+import contactmanager.main.dao.DAOException;
 import contactmanager.main.dao.DAOFactory;
 import contactmanager.main.groups.GroupsController;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author Simon Grossenbacher
@@ -47,7 +50,7 @@ public class MainController extends AbstractController implements MainInterface 
 
     
     /***************************************************************************
-     * Subcontroller Methoden
+     * SubController -> MainController Methoden
      **************************************************************************/
     /**
      * Gibt Referenz auf das Hauptfenster zurueck
@@ -66,7 +69,7 @@ public class MainController extends AbstractController implements MainInterface 
      * @todo Testen!!!
      */
     public void addTabToMainFrame(String name, AbstractView view) {
-        main_frame.addTab(name, view);
+        main_frame.setTab(name, view);
     }
 
 
@@ -75,7 +78,14 @@ public class MainController extends AbstractController implements MainInterface 
      * @return Referenz
      */
     public DAOFactory getDAOFactory() {
-        return main_model.getDAOFactory();
+        DAOFactory daofactory = null;
+        try {
+            daofactory = main_model.getDAOFactory();
+        } catch (DAOException ex) {
+            setStatusBar("Datenbank nicht erreichbar");
+        } finally {
+            return daofactory;
+        }
     }
 
 
@@ -85,7 +95,6 @@ public class MainController extends AbstractController implements MainInterface 
      */
     public boolean getEmailClientStatus() {
         return main_model.checkMailClient();
-        //return email_client_available;
     }
 
 
@@ -96,6 +105,15 @@ public class MainController extends AbstractController implements MainInterface 
      */
     public boolean sendEmail(String email) {
         return main_model.sendMail(email);
+    }
+    
+    
+    /**
+     * Status schreiben
+     * @param text Status-Text
+     */
+    public void setStatusBar(String text) {
+        main_frame.setStatusBar(text);
     }
 
 
@@ -110,11 +128,12 @@ public class MainController extends AbstractController implements MainInterface 
      */
     public void changeTabSelection(String tabName) {
         main_model.tabChange(tabName);
+        setStatusBar(tabName + " Tab ausgewaehlt");
         
         /* Daten aller SubController aktualisieren */
         if(sub_controller != null) 
             updataData();
-        System.err.println("changeTabSelection");
+        
     }
 
 
