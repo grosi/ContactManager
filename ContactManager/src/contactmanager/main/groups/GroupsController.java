@@ -83,6 +83,7 @@ public final class GroupsController extends AbstractController implements SubCon
      * Informationen zu einer Gruppe
      */
     public void getGroup() {
+        System.out.println("GET");
         int index;
         int list_size;
         GroupDTO group;
@@ -107,8 +108,12 @@ public final class GroupsController extends AbstractController implements SubCon
                 if(groups_view.getGroupState(GROUP_DEFAULT_ID) == true)
                     groups_view.setGroupList(GROUP_DEFAULT_ID, group_name, GroupsView.GROUP_REMOVE_GROUP_WITH_ID);
                 
+                groups_view.setMouseWaitCursor(true);
                 groups_model.getGroup(group);
-            } 
+                groups_view.setMouseWaitCursor(false);
+            } else {
+                groups_view.setMessageButtonState(false);
+            }
         }
     }
     
@@ -158,7 +163,9 @@ public final class GroupsController extends AbstractController implements SubCon
             group = getGroupDTO();
             group.group_id = group_id;
             group.group_name = group_name;
+            groups_view.setMouseWaitCursor(true);
             groups_model.removeGroup(group);
+            groups_view.setMouseWaitCursor(false);
         }
     }
     
@@ -187,11 +194,13 @@ public final class GroupsController extends AbstractController implements SubCon
         group.group_name = group_name;
         
         /* Gruppe existiert noch nicht in Datenbank */
-        if(group_id == GROUP_DEFAULT_ID)
+        groups_view.setMouseWaitCursor(true);
+        if(group_id == GROUP_DEFAULT_ID) 
             groups_model.addGroup(group);
         /* Gespeicherte Gruppe */    
         else 
             groups_model.saveGroup(group);
+        groups_view.setMouseWaitCursor(false);
     }
     
     
@@ -230,8 +239,11 @@ public final class GroupsController extends AbstractController implements SubCon
         text = groups_view.getSearchText(); //Suchmuster
         
         /* Nur suchen, wenn nicht der Standardtext steht */
-        if(text.equals(GroupsView.GROUP_TAB_DEFAULT_SEARCH_TEXT) == false)
+        if(text.equals(GroupsView.GROUP_TAB_DEFAULT_SEARCH_TEXT) == false) {
+            groups_view.setMouseWaitCursor(true);
             groups_model.searchGroup(text);
+            groups_view.setMouseWaitCursor(false);
+        }
     }
     
     
@@ -239,18 +251,35 @@ public final class GroupsController extends AbstractController implements SubCon
      * Nachricht an alle Gruppen-Mitglieder senden
      * @param group Gruppen Data Transfer Objekt
      */
-    public void sendMessage(GroupDTO group) {
-        groups_model.sendMessage(group);
+    public void sendMessage() {
+        int index;
+        int list_size;
+        GroupDTO group;
+        int group_id;
+        String group_name;
+        
+        index = groups_view.getSelectedGroupIndex(); //Selektierte Gruppe in der Ubersichtsliste
+        list_size = groups_view.getGroupListSize(); //Groesse der Uerbsichtsliste
+        
+        if(getEmailClientState() == true) {
+        /* Kontrolle ob die Selektion noch moeglich ist */
+        if(index > 0 && index != list_size) {
+            group_id = groups_view.getGroupIdOfIndex(index);
+            group_name = groups_view.getGroupNameOfIndex(index);
+            
+            /* Nur gespeicherte Gruppen abfragen */
+            if(group_id != GROUP_DEFAULT_ID) {
+                group = getGroupDTO();
+                group.group_id = group_id;
+                group.group_name = group_name;
+                groups_model.sendMessage(group);
+            }
+        }
+        }
     }
     
     
-    /**
-     * Nachricht an entsprechende Empfaenger schreiben
-     * @param email E-Mail Adressen
-     */
-    public void sendMessage(String email) {
-        main_controller.sendEmail(email);
-    }
+    
     
     
     /**
@@ -324,10 +353,17 @@ public final class GroupsController extends AbstractController implements SubCon
     /**
      * Email-Moeglichkeit kontrollieren
      */
-    public boolean getMessageState() {
+    public boolean getEmailClientState() {
         return main_controller.getEmailClientStatus();
     }
     
+    /**
+     * Nachricht an entsprechende Empfaenger schreiben
+     * @param email E-Mail Adressen
+     */
+    public void sendEmail(String email) {
+        main_controller.sendEmail(email);
+    }
     
     
     /***************************************************************************
