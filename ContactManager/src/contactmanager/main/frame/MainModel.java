@@ -50,13 +50,13 @@ public class MainModel extends AbstractModel implements MainInterface {
     /**
      * MySQL Factory instanzieren
      */
-    public void createDAOFactory() {
-        try {
-            this.daofactory = DAOFactory.getDAOFactory(DAOFactory.MySQL);
-        } catch (DAOException ex) {
-            System.err.println("Datenbank nicht erreichtbar");
-        }
-    }
+//    public void createDAOFactory() {
+//        try {
+//            this.daofactory = DAOFactory.getDAOFactory(DAOFactory.MySQL);
+//        } catch (DAOException ex) {
+//            System.err.println("Datenbank nicht erreichtbar");
+//        }
+//    }
     
     
     /**
@@ -64,14 +64,15 @@ public class MainModel extends AbstractModel implements MainInterface {
      * @return Referenz
      * @todo Testen
      */
-    public DAOFactory getDAOFactory() {
+    public DAOFactory getDAOFactory() throws DAOException{
         
-        try {
-            this.daofactory = DAOFactory.getDAOFactory(DAOFactory.MySQL);
-        } catch (DAOException ex) {
-            System.err.println("Datenbank nicht erreichtbar");
-        }
-        return this.daofactory;
+        return DAOFactory.getDAOFactory(DAOFactory.MySQL);
+//        try {
+//            this.daofactory = DAOFactory.getDAOFactory(DAOFactory.MySQL);
+//        } catch (DAOException ex) {
+//            System.err.println("Datenbank nicht erreichtbar");
+//        }
+//        return this.daofactory;
     }
     
     
