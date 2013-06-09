@@ -46,13 +46,14 @@ public final class GroupsModel extends AbstractModel implements GroupsInterface 
      * @param group Gruppen Data Transfer Objekt
      */
     public void getGroup(GroupDTO group) {
+        GroupDTO group_db;
         try {
-            group = groupsdao.selectGroup(group.group_id);
+            group_db = groupsdao.selectGroup(group.group_id);
         } catch (DAOException ex) {
-            group = null;
+            group_db = null;
         }
-        
-        firePropertyChange(GROUP_SELECT_EVENT, null, group);
+   
+        firePropertyChange(GROUP_SELECT_EVENT, group, group_db);
     }
     
     
@@ -124,17 +125,16 @@ public final class GroupsModel extends AbstractModel implements GroupsInterface 
      * @TODO E-Mail Prioritaeten beruecksichtigen
      */
     public void sendMessage(GroupDTO group) {
+        String receiver = "";
+        ArrayList<ContactDTO.ContactEmail> email; 
         
         try {
-            String email = null;
-            group = groupsdao.selectGroup(group.group_id);
+            email = groupsdao.selectEmailAddressFromGroup(group.group_id);
             
-            for(ContactDTO groupmember : group.group_contacts) {
-                if(groupmember.contact_email.get(0) != null)
-                    email += groupmember.contact_email.get(0).email_adress;
-            }
+            for(ContactDTO.ContactEmail email_adress : email)
+                 receiver += email_adress.email_adress + ",";
             
-            controller.sendMessage(email);
+            controller.sendEmail(receiver);
         } catch (DAOException ex) {
             
         }
