@@ -35,6 +35,11 @@ public class ContactDTO {
         public int email_priority;
 
         /**
+         * Konstruktor
+         */
+        public ContactEmail(){}
+        
+        /**
          * Konstruktor zum anlegen neuer Email-Adressen
          * @param email_adress
          * @param email_type
@@ -62,6 +67,11 @@ public class ContactDTO {
         public int adress_id;
         public int adress_priority;
 
+        /**
+         * Konstruktor
+         */
+        public ContactAdress(){}
+        
         /**
          * Konstruktor zum anlegen neuer Adresse
          * @param adress_street
@@ -93,6 +103,11 @@ public class ContactDTO {
         public int phone_id;
         public int phone_priority;
 
+        /**
+         * Konstruktor
+         */
+        public ContactPhone(){}
+        
         /**
          * Konstruktor zum anlegen neuer Telefon-Nummern
          * @param phone_number
