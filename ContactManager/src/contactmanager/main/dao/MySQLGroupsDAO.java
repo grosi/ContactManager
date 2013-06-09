@@ -144,13 +144,36 @@ public class MySQLGroupsDAO implements GroupsDAO {
         return true;
     }
 
-    
+    @Override
+    public ArrayList<ContactDTO.ContactEmail> selectEmailAddressFromGroup(int group_id) throws DAOException {
+        ArrayList<ContactDTO.ContactEmail> emails = new ArrayList<>();
+        ContactDTO.ContactEmail line;
 
+        result = executeQuery("SELECT * FROM user_email INNER JOIN user2group " +
+        		"WHERE user2group.group_id="+Integer.toString(group_id)+" " +
+        				"&& user_email.user_id=user2group.user_id && user_email.priority=1");
+
+        while(nextDataSet(result)) {
+            line = new ContactDTO().new ContactEmail();
+        	
+            try {
+                line.email_id = result.getInt("email_id");
+                line.email_type = result.getString("type");
+                line.email_adress = result.getString("email");
+                line.email_priority = result.getInt("priority");
+            } catch (SQLException e) {
+                e.printStackTrace();
+                throw new DAOException("Colum does not Exists!");
+            }
+
+            emails.add(line);
+        }
+        
+        closeResult(result);
+
+        return emails;
+    }
    
-
-
-    
-    
 
     /***************************************************************************
      * Private Methoden fuer Datenbankzugriff
