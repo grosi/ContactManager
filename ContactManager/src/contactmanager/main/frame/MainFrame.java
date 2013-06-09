@@ -3,6 +3,7 @@ package contactmanager.main.frame;
 import contactmanager.main.AbstractFrame;
 import contactmanager.main.graphic.GraphicDesign;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
@@ -116,6 +117,16 @@ public final class MainFrame extends AbstractFrame implements GraphicDesign, Mai
     }
     
     
+    /**
+     * Mauszeiger aendern
+     * @param state true: Sanduhr; false: Standard
+     */
+    public void setMouseWaitCursor(boolean state) {
+        if(state == true)
+            this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        else
+            this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+    }
     
     /***************************************************************************
      * View -> Controller
