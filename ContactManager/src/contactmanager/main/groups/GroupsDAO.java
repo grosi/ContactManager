@@ -26,5 +26,5 @@ public interface GroupsDAO {
     public ArrayList<ContactDTO> selectContactsFromGroup(int group_id) throws DAOException;
     public boolean addGroupToContact(int group_id, int contact_id) throws DAOException;
     public boolean deleteGroupFromContact(int group_id, int contact_id) throws DAOException;
-    
+    public ArrayList<ContactDTO.ContactEmail> selectEmailAddressFromGroup(int group_id) throws DAOException;
 }
