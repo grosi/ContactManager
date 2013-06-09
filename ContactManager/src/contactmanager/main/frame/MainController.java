@@ -133,8 +133,12 @@ public class MainController extends AbstractController implements MainInterface 
      * Daten der SubController aktualisieren
      */
     public final void updataData() {
+        main_frame.setMouseWaitCursor(true);
+        
         for(SubController controller : sub_controller)
             controller.updateData();
+        
+        main_frame.setMouseWaitCursor(false);
     }
 
 }
