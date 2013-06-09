@@ -2,18 +2,23 @@ package contactmanager.main.frame;
 
 import contactmanager.main.AbstractFrame;
 import contactmanager.main.graphic.GraphicDesign;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.beans.PropertyChangeEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.border.BevelBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -23,15 +28,35 @@ import javax.swing.event.ChangeListener;
  * @since 27.03.2013
  */
 public final class MainFrame extends AbstractFrame implements GraphicDesign, MainInterface {
-
-    private final MainController controller;
-    private final JTabbedPane tabPane;
+    
+    /* Controller */
+    private MainController controller;
+    
+    /* GUI */
+    private JTabbedPane tabPane;
+    private JLabel state_label;
     
     
+    /**
+     * View default Konstruktor
+     * @param controller
+     */
     public MainFrame(MainController controller) {
-        
+        super();
         this.controller = controller;
         
+        /* Alle Komponente Initialisieren */
+        initComponents();
+    }
+    
+    
+    
+    /***************************************************************************
+     * Alle Grafikkomponenten zeichnen und anordnen
+     **************************************************************************/
+    public void initComponents() {
+        
+        /* Look and Feel setzen */
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException e) {
@@ -43,10 +68,8 @@ public final class MainFrame extends AbstractFrame implements GraphicDesign, Mai
             }
         }
 
-        //Tabs
+        /* Tabs fuer die verschiedenen Views */
         tabPane = new JTabbedPane();
-        tabPane.setBackground(Color.yellow);
-        tabPane.setMinimumSize(new Dimension(150,150));
         tabPane.addChangeListener(new ChangeListener() {
 
             @Override
@@ -54,84 +77,33 @@ public final class MainFrame extends AbstractFrame implements GraphicDesign, Mai
                 tabPaneChangeEvent(ce);
             }
         });
-       
         
-        //Hauptfenster 
-        this.add(tabPane);
+        
+        /* Statusbar */
+        state_label = new JLabel();
+        state_label.setHorizontalAlignment(SwingConstants.RIGHT);
+        
+        
+        /* Frame */
+        this.setLayout(new BorderLayout());
+        this.add(tabPane, BorderLayout.CENTER);
+        this.add(state_label, BorderLayout.SOUTH);
         this.setMinimumSize(new Dimension(FRAME_MIN_WIDTH, FRAME_MIN_HEIGHT));
         this.setResizable(true);
         this.setVisible(true);
-        
-        
-        this.addWindowListener(new WindowListener() {
-
-            @Override
-            public void windowOpened(WindowEvent we) {
-                windowOpenedEvent(we);
-            }
-
+        this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent we) {
                 windowClosingEvent(we);
             }
-
-            @Override
-            public void windowClosed(WindowEvent we) {
-                windowClosedEvent(we);
-            }
-
-            @Override
-            public void windowIconified(WindowEvent we) {
-                windowIconifedEvent(we);
-            }
-
-            @Override
-            public void windowDeiconified(WindowEvent we) {
-                windowDeiconifedEvent(we);
-            }
-
-            @Override
-            public void windowActivated(WindowEvent we) {
-                windowActivatedEvent(we);
-            }
-
-            @Override
-            public void windowDeactivated(WindowEvent we) {
-                windowDeactivatedEvent(we);
-            }
         });
+
+        
     }
-    
-    /***************************************************************************
-     *  Methoden fuer Subviews
-     **************************************************************************/
-    
-    /**
-     * Weiterer Tab hinzufuegen
-     * @param panelName Name des Tabs
-     * @param panel Referenz auf Tab
-     * @TODO Groesse des Tabs beruecksichtigen
-     */
-    public void addTab(String panelName, JPanel panel) {
-        tabPane.add(panelName, panel);
-    }
-    
-    
-    /**
-     * Mauszeiger aendern
-     * @param state true: Sanduhr; false: Standard
-     */
-    public void setMouseWaitCursor(boolean state) {
-        if(state == true)
-            this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        else
-            this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-    }
-    
     /***************************************************************************
      * View -> Controller
+     * Methoden werden direkt von Listener der Grafikelementen angesprochen
      **************************************************************************/
-    
     /**
      * Anderer Tab wurde ausgewaehlt
      * @param ce 
@@ -144,42 +116,76 @@ public final class MainFrame extends AbstractFrame implements GraphicDesign, Mai
     }
     
 
-    private void windowOpenedEvent(WindowEvent we) {
-        System.out.println("Frame OPEN");
-        int index = tabPane.getSelectedIndex();
-        //controller.changeTabSelection(tabPane.getTitleAt(index));
-        /**@TODO */
-    }
+//    private void windowOpenedEvent(WindowEvent we) {
+//        int index = tabPane.getSelectedIndex();
+//        //controller.changeTabSelection(tabPane.getTitleAt(index));
+//        /**@TODO */
+//    }
     
     private void windowClosingEvent(WindowEvent we) {
         controller.closeApplication();
     }
     
-    private void windowClosedEvent(WindowEvent we) {
-        /**@TODO */
+//    private void windowClosedEvent(WindowEvent we) {
+//        /**@TODO */
+//    }
+//    
+//    private void windowIconifedEvent(WindowEvent we) {
+//        /**@TODO */ 
+//    }
+//    
+//    private void windowDeiconifedEvent(WindowEvent we) {
+//        /**@TODO */ 
+//    }
+//       
+//    private void windowActivatedEvent(WindowEvent we) {
+//        /**@TODO */ 
+//    }
+//    
+//    private void windowDeactivatedEvent(WindowEvent we) {
+//        /**@TODO */ 
+//    }
+    
+    
+    /***************************************************************************
+     * Controller -> View
+     * setter und getter Methoden, die dem Controller das Steuern ermoeglichen
+     **************************************************************************/
+    
+    /**
+     * Weiterer Tab hinzufuegen
+     * @param panelName Name des Tabs
+     * @param panel Referenz auf Tab
+     * @TODO Groesse des Tabs beruecksichtigen
+     */
+    public void setTab(String panelName, JPanel panel) {
+        this.tabPane.add(panelName, panel);
     }
     
-    private void windowIconifedEvent(WindowEvent we) {
-        /**@TODO */ 
+    /**
+     * Mauszeiger aendern
+     * @param state true: Sanduhr; false: Standard
+     */
+    public void setMouseWaitCursor(boolean state) {
+        if(state == true)
+            this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        else
+            this.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }
     
-    private void windowDeiconifedEvent(WindowEvent we) {
-        /**@TODO */ 
-    }
-       
-    private void windowActivatedEvent(WindowEvent we) {
-        /**@TODO */ 
-    }
     
-    private void windowDeactivatedEvent(WindowEvent we) {
-        /**@TODO */ 
+    /**
+     * Statusbar Text setzen
+     * @param text Status-Text
+     */
+    public void setStatusBar(String text) {
+        this.state_label.setText(text+"  ");
     }
-
 
     /***************************************************************************
      * Model -> View
+     * Ausgeloeste Events des Modells, welche das View ueber Aenderungen informieren
      **************************************************************************/
-    
     /**
      * Aenderungen aus dem Model in View uebernehmen
      * @param evt 
