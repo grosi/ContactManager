@@ -325,15 +325,16 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
      * @param ae 
      */
     private void messageButtonActionPerformed(ActionEvent ae) {
-        List<ListMember> selected_items = groupoverview_separatorlist.getSelectedValuesList();
-        int size = selected_items.size();
-        GroupDTO group = new GroupDTO();
-        
-        if(size >= 1) {
-            group.group_id = selected_items.get(0).getID();
-            group.group_name = detail_static_name_textfield.getText();
-            controller.sendMessage(group);
-        }   
+            controller.sendMessage();
+//        List<ListMember> selected_items = groupoverview_separatorlist.getSelectedValuesList();
+//        int size = selected_items.size();
+//        GroupDTO group = new GroupDTO();
+//        
+//        if(size >= 1) {
+//            group.group_id = selected_items.get(0).getID();
+//            group.group_name = detail_static_name_textfield.getText();
+//            controller.sendMessage(group);
+//        }   
     }
     
     /**
@@ -365,7 +366,9 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
      * @param lse 
      */
     private void groupListValueChanged(ListSelectionEvent lse) {
-        controller.getGroup();
+        /* Nur einmaliger Event erlauben */
+        if(lse.getValueIsAdjusting() == false)
+            controller.getGroup();
     }
     
     /**
@@ -618,7 +621,8 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
                 if(evt.getNewValue() != null) {
                     setContactListEmpty();
                     
-                    setGroupName(((GroupDTO)evt.getNewValue()).group_name);
+                    if(((GroupDTO)evt.getNewValue()).group_name.equals(((GroupDTO)evt.getOldValue()).group_name))
+                        setGroupName(((GroupDTO)evt.getNewValue()).group_name);
                     //detail_static_name_textfield.setText(((GroupDTO)evt.getNewValue()).group_name);
                     
                     /* Neu Elemente hinzufuegen */
