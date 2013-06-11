@@ -41,7 +41,7 @@ public class MySQLDAOFactory extends DAOFactory {
     
     
     public Connection getConnection() throws SQLException {
-        if(connection == null) {
+        if(connection == null || connection.isClosed()) {
             connection = DriverManager.getConnection(DBURL, USER, PW);
         }
         
