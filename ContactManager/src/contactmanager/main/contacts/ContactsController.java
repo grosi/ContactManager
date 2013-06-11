@@ -16,10 +16,10 @@ public class ContactsController extends AbstractController implements ContactsIn
     private MainController main_controller;
 
     /* Modelle */
-    private ContactsModel contactsModel;
+    private ContactsModel contacts_model;
     
     /* Views */
-    private AbstractView contactsView;
+    private ContactsView contacts_view;
     
     public ContactsController(MainController mainController) {
         super();
@@ -27,12 +27,12 @@ public class ContactsController extends AbstractController implements ContactsIn
         this.main_controller = mainController;
         
         /* Modelle eintragen (diejenigen die Views aktualisieren sollen*/
-        contactsModel = new ContactsModel(this);
-        addModel(contactsModel);
+        contacts_model = new ContactsModel(this);
+        addModel(contacts_model);
         
         /* Views eintragen -> werden durch Modelle aktualisiert */
-        contactsView = new ContactsView(this);
-        addView(contactsView);
+        contacts_view = new ContactsView(this);
+        addView(contacts_view);
     }
  
     
@@ -44,6 +44,7 @@ public class ContactsController extends AbstractController implements ContactsIn
      */
     @Override
     public void updateData() {
+        contacts_model.getContactList();
         System.out.println("UPDATE CONTACTS");
     }
     
@@ -73,7 +74,66 @@ public class ContactsController extends AbstractController implements ContactsIn
     
     
     /***************************************************************************
-     * GUI -> Model Methoden
+     * View -> Controller Methoden
      **************************************************************************/
+    
+    public void getContact() {
+        int index;
+        int list_size;
+        ContactDTO contact;
+        int contact_id;
+        String contact_listname;
+        
+        index = contacts_view.getSelectedContactIndex(); //Selektierte Gruppe in der Ubersichtsliste
+        list_size = contacts_view.getContactListSize(); //Groesse der Uerbsichtsliste
+        
+        /* Kontrolle ob die Selektion noch moeglich ist */
+        if(index > 0 && index != list_size) {
+            contact_id = contacts_view.getContactIdOfIndex(index);
+            contact_listname = contacts_view.getContactNameOfIndex(index);
+            
+            /* Nur gespeicherte Gruppen abfragen */
+            if(contact_id != CONTACT_DEFAULT_ID) {
+                contact = getContactDTO();
+                contact.user_id = contact_id;
+                contact.user_lastname = contact_listname;
+                
+                /* Ungespeicherte Gruppen loeschen */
+                if(contacts_view.getContactState(CONTACT_DEFAULT_ID) == true)
+                    contacts_view.setContactList(CONTACT_DEFAULT_ID, contact_listname, ContactsView.CONTACT_REMOVE_GROUP_WITH_ID);
+                
+                contacts_view.setMouseWaitCursor(true);
+                contacts_model.getContact(contact);
+                contacts_view.setMouseWaitCursor(false);
+            } else {
+                contacts_view.setMessageButtonState(false);
+            }
+        }
+    }
+    
+    
+    /**
+     * Erste Gruppe in Ubersichtsliste selektieren
+     */
+    public void selectGroup() {
+        int group_quantity;
  
+        group_quantity = contacts_view.getContactQuantity();
+        
+        /* Falls die Liste nicht leer ist, erster Eintrag selektieren */
+        if(group_quantity > 0)
+            contacts_view.setSelectedContactIndex(1);
+    }
+    
+    
+    /***************************************************************************
+     * Controller Methoden
+     **************************************************************************/
+    /**
+     * Erzeugt ein Transfer Objekt
+     * @return Transfer Objekt
+     */
+    private ContactDTO getContactDTO() {
+        return new ContactDTO();
+    }
 }
