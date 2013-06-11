@@ -25,6 +25,12 @@ public class ContactDTO {
     
     /* Telefon-Nummer */
     public ArrayList<ContactPhone> contact_phone;
+    
+    public ContactDTO() {
+        this.contact_email = new ArrayList<>();
+        this.contact_adress = new ArrayList<>();
+        this.contact_phone = new ArrayList<>();
+    }
 
     
     /* Email Angaben */
