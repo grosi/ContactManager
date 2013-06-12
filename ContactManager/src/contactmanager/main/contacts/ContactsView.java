@@ -113,8 +113,6 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
     private JButton detail_dynamic_addbutton_address;
     private JButton detail_dynamic_addbutton_phone;
     private ImageIcon detail_dynamic_imageicon_address;
-    private ImageIcon detail_dynamic_imageicon_phone;
-    private ImageIcon detail_dynamic_imageicon_email;
 
     
     /**
@@ -122,13 +120,14 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
      * @param controller
      */
     public ContactsView(ContactsController controller) {
-        super(controller.getMainController().getMainFrame());
-        
+        super();
         this.controller = controller;
         
+        /* Alle Komponente Initialisieren */
         initComponents();
 
-        mainFrame.addTab(ContactsController.CONTACTS_TITLE, this);
+        /* Kontakt Tab zu Frame hinzufuegen */
+        this.controller.addViewToFrame(CONTACTS_TITLE, this);
     }
 
     
@@ -258,9 +257,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
         detail_dynamic_panel_email.setBackground(Color.white);
         detail_dynamic_label_email = new JLabel(CONTACT_TAB_EMAIL_LABEL);
         detail_dynamic_separator_email = new JSeparator();
-        detail_dynamic_imageicon_email = new ImageIcon(IMAGES_FILEPATH+"add16x16.png");
-        detail_dynamic_addbutton = new JButton("      Hinzufügen");
-        detail_dynamic_addbutton.setIcon(detail_dynamic_imageicon_email);
+        detail_dynamic_addbutton = new JButton("add");
         detail_dynamic_panel_email.add(detail_dynamic_label_email, "cell 0 0");
         detail_dynamic_panel_email.add(detail_dynamic_separator_email, "wrap");
         detail_dynamic_panel_email.add(detail_dynamic_addbutton,"wrap");
@@ -270,7 +267,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
 
             @Override
             public void actionPerformed(ActionEvent ae) {
-                addEmail("E-Mail Adresse eingeben", "Default");
+                addEmail("E-Mail Adresse eingeben", "Private");
 //                email_adress.setText("E-Mail Adresse eingeben");
                 System.out.println("ADD");
             }
@@ -299,7 +296,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
 
             @Override
             public void actionPerformed(ActionEvent ae) {
-                addAddress("Strasse", "PLZ", "Stadt/Ort", "Land", "Default");
+                addAddress("street", "code", "city", "country", "Default");
 
                 System.out.println("ADD");
             }
@@ -313,9 +310,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
         detail_dynamic_panel_phone.setBackground(Color.white);
         detail_dynamic_label_phone = new JLabel(CONTACT_TAB_PHONE_LABEL);
         detail_dynamic_separator_phone = new JSeparator();
-        detail_dynamic_imageicon_phone = new ImageIcon(IMAGES_FILEPATH+"add16x16.png");
-        detail_dynamic_addbutton_phone = new JButton("      Hinzufügen");
-        detail_dynamic_addbutton_phone.setIcon(detail_dynamic_imageicon_phone);
+        detail_dynamic_addbutton_phone = new JButton("add");
         detail_dynamic_panel_phone.add(detail_dynamic_label_phone, "cell 0 0");
         detail_dynamic_panel_phone.add(detail_dynamic_separator_phone, "cell 1 0,wrap");
         detail_dynamic_panel_phone.add(detail_dynamic_addbutton_phone,"wrap");
@@ -377,7 +372,6 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
         String[] phone_types = {"Private", "Business"};
         JPanel phone_new = new JPanel(new MigLayout("wrap 4"));
         JComboBox phone_type = new JComboBox(phone_types);
-        phone_type.setSelectedItem(type);
         JTextField phone_nummer = new JTextField(phone);
         ImageIcon remove_image = new ImageIcon(IMAGES_FILEPATH+"remove16x16.png");
         JButton remove_phone = new JButton("Löschen");
@@ -425,6 +419,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
         for(Component c : all_components) {
            
             if(c instanceof JButton) {
+                phone_type.setSelectedIndex(1);
                 phone_new.add(phone_type);
                 phone_new.add(phone_nummer, " span 2");
                 detail_dynamic_panel_phone.add(phone_new, "span 2,growx,wrap");
@@ -497,7 +492,6 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
         String[] adress_types = {"Privat","Business", "Bill"};
         JPanel address_new = new JPanel(new MigLayout("","rel[]rel[]rel[]min",""));
         JComboBox address_type = new JComboBox(adress_types);
-        address_type.setSelectedItem("type");
         JTextField street_address = new JTextField(street);
         JTextField code_address = new JTextField(code);
         JTextField city_address = new JTextField(city);
@@ -590,6 +584,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
          for(Component c : all_components) {
            
             if(c instanceof JButton) {
+                address_type.setSelectedIndex(1);
                 address_new.add(address_type, "dock west");
                 address_new.add(street_address, "cell 0 0 10 1");
                 address_new.add(code_address, "cell 0 1");
@@ -691,7 +686,6 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
         String[] email_types = {"Private", "Business"};
         JPanel email_new = new JPanel(new MigLayout("wrap 4"));
         JComboBox email_type = new JComboBox(email_types);
-        email_type.setSelectedItem(type);
         JTextField email_adress = new JTextField(email);
         ImageIcon remove_image = new ImageIcon(IMAGES_FILEPATH+"remove16x16.png");
         JButton remove_email = new JButton("Löschen");
@@ -748,6 +742,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
         for(Component c : all_components) {
            
             if(c instanceof JButton) {
+                email_type.setSelectedIndex(1);
                 email_new.add(email_type);
                 email_new.add(email_adress, " span 2");
                 email_new.add(send_email);
@@ -868,18 +863,8 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
         
     }
    
-    public void enableSaveButton(boolean state) {
-        save_button.setEnabled(state);
-    }
+
     
-    
-    /**
-     * Message-Button aktiviern oder deaktivieren
-     * @param state
-     */
-    public void enableMessageButton(boolean state) {
-        message_button.setEnabled(state);
-    }  
      
      
      
