@@ -1,8 +1,8 @@
 
 package contactmanager.main.dao;
 
-import contactmanager.main.contacts.ContactsDAO;
 import contactmanager.main.contacts.ContactDTO;
+import contactmanager.main.contacts.ContactsDAO;
 import contactmanager.main.groups.GroupDTO;
 
 import java.sql.PreparedStatement;
