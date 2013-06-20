@@ -304,9 +304,6 @@ public final class GroupsController extends AbstractController implements SubCon
     
     /**
      * Name der Gruppe wurde geaendert -> Kontrolle ob Sicherung moeglich
-     * @param oldname alter Gruppen-Name
-     * @param newname neuer Gruppen-Name
-     * @TODO Alter Gruppen-Namen evtl. von der Datenbank holen
      */
     public void nameGroupChange() {
         int index;
