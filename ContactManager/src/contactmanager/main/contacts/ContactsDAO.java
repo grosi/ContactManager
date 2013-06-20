@@ -19,9 +19,24 @@ public interface ContactsDAO {
     
     /* Schnittstelle der einzelnen Kontakte */
     public ContactDTO selectContact(int contact_id) throws DAOException;
-    public boolean insertContact(ContactDTO insert_contact) throws DAOException;
+    public int insertContact(ContactDTO insert_contact) throws DAOException;
     public boolean updateContact(ContactDTO update_contact) throws DAOException;
     public boolean deleteContact(int contact_id) throws DAOException;
+    
+    /* Schnittstelle Email */
+    public void deleteContactEmail(int email_id) throws DAOException;
+    public void updateContactEmail(ContactDTO.ContactEmail email) throws DAOException;
+    public void insertContactEmail(int user_id, ContactDTO.ContactEmail email) throws DAOException;
+    
+    /* Schnittstelle Adresse */
+    public void insertContactAddress(int user_id, ContactDTO.ContactAdress adress) throws DAOException;
+    public void updateContactAddress(ContactDTO.ContactAdress adress) throws DAOException;
+    public void deleteContactAddress(int address_id) throws DAOException;
+    
+    /* Schnittstelle Telefon */
+    public void insertContactPhone(int user_id, ContactDTO.ContactPhone phone) throws DAOException;
+    public void updateContactPhone(ContactDTO.ContactPhone phone) throws DAOException;
+    public void deleteContactPhone(int phone_id) throws DAOException;
 
     /* Schnittstelle der Gruppenzugehoerigkeit */
     public ArrayList<GroupDTO> selectGroupsFromContact(int contact_id) throws DAOException;
