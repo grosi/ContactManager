@@ -101,28 +101,28 @@ public final class ContactsModel extends AbstractModel implements ContactsInterf
     public void saveContact(ContactDTO contact) {
         try {
             contactsdao.updateContact(contact);
-//            if(contact.contact_adress.size() > 0) {
-//                for(ContactDTO.ContactAdress address : contact.contact_adress) {
-//                    if(address.adress_id != CONTACT_DEFAULT_ID)
-//                        contactsdao.updateContactAddress(address);
-//                    else
-//                        contactsdao.insertContactAddress(contact.user_id, address);
-//                }
-//            }
-//            if(contact.contact_email.size() > 0)
-//                for(ContactDTO.ContactEmail email : contact.contact_email) {
-//                    if(email.email_id != CONTACT_DEFAULT_ID)
-//                        contactsdao.updateContactEmail(email);
-//                    else
-//                        contactsdao.insertContactEmail(contact.user_id, email);
-//                }
-//            if(contact.contact_phone.size() > 0)
-//                for(ContactDTO.ContactPhone phone : contact.contact_phone) {
-//                    if(phone.phone_id != CONTACT_DEFAULT_ID)
-//                        contactsdao.updateContactPhone(phone);
-//                    else
-//                        contactsdao.insertContactPhone(contact.user_id, phone);
-//                }
+            if(contact.contact_adress.size() > 0) {
+                for(ContactDTO.ContactAdress address : contact.contact_adress) {
+                    if(address.adress_id != CONTACT_DEFAULT_ID)
+                        contactsdao.updateContactAddress(address);
+                    else
+                        contactsdao.insertContactAddress(contact.user_id, address);
+                }
+            }
+            if(contact.contact_email.size() > 0)
+                for(ContactDTO.ContactEmail email : contact.contact_email) {
+                    if(email.email_id != CONTACT_DEFAULT_ID)
+                        contactsdao.updateContactEmail(email);
+                    else
+                        contactsdao.insertContactEmail(contact.user_id, email);
+                }
+            if(contact.contact_phone.size() > 0)
+                for(ContactDTO.ContactPhone phone : contact.contact_phone) {
+                    if(phone.phone_id != CONTACT_DEFAULT_ID)
+                        contactsdao.updateContactPhone(phone);
+                    else
+                        contactsdao.insertContactPhone(contact.user_id, phone);
+                }
         } catch (DAOException ex) {
             contact = null;
         }
