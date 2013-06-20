@@ -85,7 +85,7 @@ public class MySQLContactsDAO implements ContactsDAO {
     }
 
     @Override
-    public boolean insertContact(ContactDTO insertContact) throws DAOException {
+    public int insertContact(ContactDTO insertContact) throws DAOException {
     	int id;
     	
     	if (insertContact.user_id != 0)
@@ -96,9 +96,9 @@ public class MySQLContactsDAO implements ContactsDAO {
                             +insertContact.user_lastname+"'," +
                                             ""+insertContact.user_state+")");
     	
-    	insertContact.user_id = id;
+    	//insertContact.user_id = id;
     	
-    	return true;
+    	return id;
     }
 
     @Override
@@ -174,10 +174,12 @@ public class MySQLContactsDAO implements ContactsDAO {
 	
 	public void insertContactEmail(int user_id, ContactDTO.ContactEmail email) throws DAOException {
 		int key;
-		
-		key = executeInsert("INSERT INTO user_email(type, email, priority)" +
-				"VALUES('"+email.email_type+"', '"+email.email_adress+"', " +
-						""+Integer.toString(email.email_priority)+")");
+		          System.out.println("INSERT INTO user_email(type, email, priority, email_view, user_id)" +
+				" VALUES('"+email.email_type+"', '"+email.email_adress+"', " +
+						"'"+Integer.toString(email.email_priority)+"', " + "'"+user_id+"'" +")");
+		key = executeInsert("INSERT INTO user_email(type, email, priority, user_id)" +
+				" VALUES('"+email.email_type+"', '"+email.email_adress+"', " + "'BLA', " +
+						"'"+Integer.toString(email.email_priority)+"', " + "'"+user_id+"'" +")");
 		
 		email.email_id = key;
 	}
