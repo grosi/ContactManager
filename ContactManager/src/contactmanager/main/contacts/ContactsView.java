@@ -469,7 +469,14 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
     }
 
     private void messageButtonActionPerformed(ActionEvent ae) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        JTextField email;
+        String emailaddress;
+        if(email_text != null)
+        {
+         email = email_text.get(0);
+         emailaddress = email.getText();
+         controller.sendMessage(emailaddress);
+        }
     }
     
     private void searchTextActionPerformed(ActionEvent ae) {
@@ -507,6 +514,12 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
         controller.prenameContactChange();   
     }
     
+    private void contactsendEmailAcrionEvent(ActionEvent e) {
+        JButton button = (JButton)e.getSource();
+        int index = email_send_button.indexOf(button);
+        JTextField text = email_text.get(index);
+        controller.sendMessage(text.getText());
+    }
     
     /***************************************************************************
      * Controller -> View
@@ -1285,6 +1298,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
             @Override
             public void actionPerformed(ActionEvent ae) {
                 System.out.println("Email schreiben");
+                contactsendEmailAcrionEvent(ae);
             }
         });
         
