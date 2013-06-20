@@ -1,6 +1,10 @@
 package contactmanager.main.contacts;
 
 import contactmanager.main.AbstractView;
+import contactmanager.main.contacts.ContactDTO.ContactAdress;
+import contactmanager.main.contacts.ContactDTO.ContactEmail;
+import contactmanager.main.contacts.ContactDTO.ContactPhone;
+import static contactmanager.main.contacts.ContactsInterface.CONTACT_DEFAULT_ID;
 import contactmanager.main.graphic.GraphicDesign;
 import static contactmanager.main.graphic.GraphicDesign.GROUP_TAB_ADD_MNEMONIC;
 import static contactmanager.main.graphic.GraphicDesign.GROUP_TAB_DEFAULT_SEARCH_TEXT;
@@ -28,6 +32,8 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.beans.PropertyChangeEvent;
@@ -42,6 +48,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import net.miginfocom.swing.MigLayout;
@@ -93,6 +103,8 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
     private ArrayList<JComboBox> email_combo = new ArrayList<>();
     private ArrayList<JTextField> email_text = new ArrayList<>();
     private ArrayList<JPanel> email_panel = new ArrayList<>();
+    private ArrayList<Integer> email_id = new ArrayList<>();
+    
     
     private ArrayList<JButton> address_remove_button = new ArrayList<>();
     private ArrayList<JComboBox> address_combo = new ArrayList<>();
@@ -101,11 +113,13 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
     private ArrayList<JTextField> address_city = new ArrayList<>();
     private ArrayList<JTextField> address_country = new ArrayList<>();
     private ArrayList<JPanel> address_panel = new ArrayList<>();
+    private ArrayList<Integer> address_id = new ArrayList<>();
         
     private ArrayList<JButton> phone_remove_button = new ArrayList<>();
     private ArrayList<JComboBox> phone_combo = new ArrayList<>();
     private ArrayList<JTextField> phone_text = new ArrayList<>();
     private ArrayList<JPanel> phone_panel = new ArrayList<>();
+    private ArrayList<Integer> phone_id = new ArrayList<>();
     
 
     private JPanel detail_dynamic_panel_phone;
@@ -139,9 +153,9 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
 
     
     
-    /**
-     * Panel initialisieren
-     */
+    /***************************************************************************
+     * Alle Grafikkomponenten zeichnen und anordnen
+     **************************************************************************/
     @Override
     protected void initComponents() {
 
@@ -239,6 +253,35 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
         detail_static_label = new JLabel(CONTACT_TAB_NAME_LABEL);
         detail_static_separator = new JSeparator();
         detail_static_name_textfield = new JTextField(CONTACT_TAB_DEFAULT_NAME_TEXT);
+        detail_static_name_textfield.addFocusListener(new FocusListener() {
+
+            @Override
+            public void focusGained(FocusEvent e) {
+                contactnameTextFocusGained(e);
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                contactnameTextFocusLost(e);
+            }
+        });
+        detail_static_name_textfield.getDocument().addDocumentListener(new DocumentListener() {
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                contactnameTextChange(e);
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                contactnameTextChange(e);
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                contactnameTextChange(e);
+            }
+        });
         detail_static_panel_name.add(detail_static_label, "cell 0 0");
         detail_static_panel_name.add(detail_static_separator, "cell 1 0");
         detail_static_panel_name.add(detail_static_name_textfield, "cell 0 1 2 1,growx");
@@ -251,6 +294,35 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
         detail_static_label = new JLabel(CONTACT_TAB_PRENAME_LABEL);
         detail_static_separator = new JSeparator();
         detail_static_prename_textfield = new JTextField(CONTACT_TAB_DEFAULT_PRENAME_TEXT);
+        detail_static_prename_textfield.addFocusListener(new FocusListener() {
+
+            @Override
+            public void focusGained(FocusEvent e) {
+                contactprenameTextFocusGained(e);
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                contactprenameTextFocusLost(e);
+            }
+        });
+        detail_static_prename_textfield.getDocument().addDocumentListener(new DocumentListener() {
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                contactprenameTextChange(e);
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                contactprenameTextChange(e);
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                contactprenameTextChange(e);
+            }
+        });
         detail_static_panel_prename.add(detail_static_label, "cell 0 0");
         detail_static_panel_prename.add(detail_static_separator, "cell 1 0");
         detail_static_panel_prename.add(detail_static_prename_textfield, "cell 0 1 2 1,growx");
@@ -276,7 +348,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
 
             @Override
             public void actionPerformed(ActionEvent ae) {
-                addEmail("E-Mail Adresse eingeben", "Default");
+                addEmail("E-Mail Adresse eingeben", "Default",CONTACT_DEFAULT_ID);
 //                email_adress.setText("E-Mail Adresse eingeben");
                 System.out.println("ADD");
             }
@@ -305,7 +377,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
 
             @Override
             public void actionPerformed(ActionEvent ae) {
-                addAddress("Strasse", "PLZ", "Stadt/Ort", "Land", "Default");
+                addAddress("Strasse", "PLZ", "Stadt/Ort", "Land", "Default",CONTACT_DEFAULT_ID);
 
                 System.out.println("ADD");
             }
@@ -329,7 +401,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
 
             @Override
             public void actionPerformed(ActionEvent ae) {
-                addPhone("Telefonnummer eingeben", "Default");
+                addPhone("Telefonnummer eingeben", "Default",CONTACT_DEFAULT_ID);
 
                 System.out.println("ADD");
             }
@@ -376,7 +448,473 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
         this.add(detail_scrollpane, "cell 1 1 5 1");
     }                    
 
-    private void addPhone(String phone, String type) {
+    
+    
+    
+    /***************************************************************************
+     * View -> Controller
+     * Methoden werden direkt von Listener der Grafikelementen angesprochen
+     **************************************************************************/
+    private void addButtonActionPerformed(ActionEvent ae) {
+        controller.addContact();
+    }
+    
+    private void removeButtonActionPerformed(ActionEvent ae) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+    }
+
+    private void saveButtonActionPerformed(ActionEvent ae) {
+        controller.saveContact();
+    }
+
+    private void messageButtonActionPerformed(ActionEvent ae) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    private void searchTextActionPerformed(ActionEvent ae) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    private void groupListValueChanged(ListSelectionEvent lse) {
+        /* Nur einmaliger Event erlauben */
+        if(lse.getValueIsAdjusting() == false)
+            controller.getContact();
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.    
+    }
+    
+    private void contactnameTextFocusGained(FocusEvent e) {
+        controller.nameContactFocusGained();
+    }
+    
+    private void contactnameTextFocusLost(FocusEvent e) {
+        controller.nameContactFocusLost();
+    }
+    
+    private void contactnameTextChange(DocumentEvent e) {
+        controller.nameContactChange();   
+    }
+    
+    private void contactprenameTextFocusGained(FocusEvent e) {
+        controller.prenameContactFocusGained();
+    }
+    
+    private void contactprenameTextFocusLost(FocusEvent e) {
+        controller.prenameContactFocusLost();
+    }
+    
+    private void contactprenameTextChange(DocumentEvent e) {
+        controller.prenameContactChange();   
+    }
+    
+    
+    /***************************************************************************
+     * Controller -> View
+     * setter und getter Methoden, die dem Controller das Steuern ermoeglichen
+     **************************************************************************/
+    
+    /**
+     * Index des selektierten Kontakts der Uebersichtsliste
+     * @return Index: -1 wenn nichts selektiert ist 
+     */
+    public int getSelectedContactIndex() {
+        return this.separatorlist.getSelectedIndex();
+    }
+    
+    /**
+     * Kontakt mit dem angegebenen Index selektieren
+     * @param index Gruppen-Index
+     */
+    public void setSelectedContactIndex(int index) {
+        this.separatorlist.setSelectedIndex(index);
+    }
+    
+    /**
+     * ID eines Kontakts in der Uebersichtsliste
+     * @param index Index der Gruppe in der Liste
+     * @return Gruppen ID
+     */
+    public int getContactIdOfIndex(int index) {
+        ListMember member = this.separatorlist.getListMemberOfIndex(index);
+        return member.getID();
+    }
+    
+    /**
+     * Name eines Kontakts in der Uebersichtsliste
+     * @param index Index der Gruppe in der Liste
+     * @return Gruppen-Name
+     */
+    public String getContactNameOfIndex(int index) {
+        ListMember member = this.separatorlist.getListMemberOfIndex(index);
+        return member.getText();
+    }
+    
+    /**
+     * Kontakt-Vorname temporaer aendern
+     * @param contact_prename Kontakt-Vorname
+     */
+    public void setContactPrename(String contact_prename) {
+        this.detail_static_prename_textfield.setText(contact_prename);
+    }
+    
+    /**
+     * Kontakt-Nachname temporaer aendern
+     * @param contact_lastname Kontakt-Nachname
+     */
+    public void setContactLastname(String contact_lastname) {
+        this.detail_static_name_textfield.setText(contact_lastname);
+    }
+    
+    /**
+     * Kontakt Uebersichtsliste anpassen
+     * @param group_id_index Index oder ID der zu aendernden Gruppe
+     * @param group_name Gruppen Name
+     * @param mode Art der Aenderung
+     */
+    public void setContactList(int group_id_index, String group_name, String mode) {
+        
+        ListMember member;
+        switch(mode) {
+            case CONTACT_ADD_CONTACT:
+                member = this.separatorlist.addListMember(group_name, group_id_index);
+                setSelectedContactIndex(this.separatorlist.getListMemberIndex(member)); //TODO unschoen!!!
+                break;
+            case CONTACT_REMOVE_GROUP_WITH_ID:
+                this.separatorlist.removeListMember(group_id_index);
+                break;
+            case CONTACT_REMOVE_GROUP_WITH_INDEX:
+                this.separatorlist.removeListMemberOfIndex(group_id_index);
+                break;
+        }
+    }
+    
+    public void setContactListEmpty() {
+        int contact_quantity;
+        
+        contact_quantity = getContactQuantity();
+        
+        /* Alle Elemente der Liste zuerst loeschen */
+        for(int i = 0; i < contact_quantity; i++){    
+            setContactList(1, "", CONTACT_REMOVE_GROUP_WITH_INDEX);
+            //groupoverview_separatorlist.removeListMemberOfIndex(1);
+        }
+    }
+    
+    /**
+     * Alle Email-Adressen loeschen
+     */
+    public void setEmailEmpty() {
+        if(email_panel.size()>0) {
+            for(JPanel panel : email_panel) {
+                detail_dynamic_panel_email.remove(panel);
+
+            }  
+            email_panel.removeAll(email_panel);
+            email_text.removeAll(email_text);
+            email_remove_button.removeAll(email_remove_button);
+            email_send_button.removeAll(email_send_button);
+            email_combo.removeAll(email_combo);
+            email_id.removeAll(email_id);
+
+            detail_dynamic_panel_email.revalidate();
+        } 
+    }
+    
+    /**
+     * Alle Adressen-Adressen loeschen
+     */
+    public void setAddressEmpty() {
+        if(address_panel.size()>0) {
+            for(JPanel panel : address_panel) {
+                detail_dynamic_panel_address.remove(panel);
+
+            }  
+            address_panel.removeAll(address_panel);
+            address_street.removeAll(address_street);
+            address_city.removeAll(address_city);
+            address_code.removeAll(address_code);
+            address_country.removeAll(address_country);
+            address_remove_button.removeAll(address_remove_button);
+            address_combo.removeAll(address_combo);
+            address_id.removeAll(address_id);
+
+            detail_dynamic_panel_email.revalidate();
+        } 
+    }
+    
+        /**
+     * Alle Adressen-Adressen loeschen
+     */
+    public void setPhoneEmpty() {
+        if(phone_panel.size()>0) {
+            for(JPanel panel : phone_panel) {
+                detail_dynamic_panel_phone.remove(panel);
+
+            }  
+            phone_panel.removeAll(phone_panel);
+            phone_text.removeAll(phone_text);
+            phone_combo.removeAll(phone_combo);
+            phone_id.removeAll(phone_id);
+
+            detail_dynamic_panel_email.revalidate();
+        } 
+    }
+    
+    /**
+     * Kontrolle ob ein Kontakt vorhanden ist anhand der Kontakt-ID
+     * @param contact_id Kontakt-ID
+     * @return Kontakt vorhanden: true; Kontakt nicht vorhanden: false
+     */
+    public boolean getContactState(int contact_id) {
+        if(this.separatorlist.containsListMember(contact_id) == null)
+            return false;
+        else
+            return true;
+    }
+    
+    /**
+     * Groesse der Kontakt-Ubersichtsliste 
+     */
+    public int getContactListSize() {
+        return this.separatorlist.getListSize();
+    }
+    
+    /**
+     * Anzahl vorhanden Kontakte
+     */
+    public int getContactQuantity() {
+        return this.separatorlist.getListMemberSize();
+    }
+    
+    /**
+     * Save-Button aktiviern oder deaktivieren
+     * @param state true: Speichern moeglich; false: Speichern nicht moeglich
+     */
+    public void setSaveButtonState(boolean state) {
+        this.save_button.setEnabled(state);
+    }
+    
+    /**
+     * Message-Button aktiviern oder deaktivieren
+     * @param state
+     */
+    public void setMessageButtonState(boolean state) {
+        message_button.setEnabled(state);
+    }
+    
+    public String getContactName() {
+        return detail_static_name_textfield.getText();
+    }
+    
+    /**
+     * Gruppen-Namen selektieren
+     * @param first Erster Buchstaben des Strings 
+     * @param last Letzter Buchstaben des Strings
+     */
+    public void setContactNameSelection(int first, int last) {
+        detail_static_name_textfield.select(first, last);
+    }
+    
+    public String getContactPrename() {
+        return detail_static_prename_textfield.getText();
+    }
+    
+    /**
+     * Gruppen-Namen selektieren
+     * @param first Erster Buchstaben des Strings 
+     * @param last Letzter Buchstaben des Strings
+     */
+    public void setContactPrenameSelection(int first, int last) {
+        detail_static_prename_textfield.select(first, last);
+    }
+    
+    public String[] getEmailAddresses() {
+        String[] emails = new String[email_text.size()];//new ArrayList<>();
+        int i = 0;
+        
+        if(email_text.size() > 0) {
+            for(JTextField text : email_text) {
+                emails[i] = text.getText();
+                i++;
+                //emails.add(text.getText());
+            }
+        } else
+            emails = null;
+        
+        return emails;
+    }
+    
+    public String[] getEmailTypes() {
+       String[] types = new String[email_combo.size()];//new ArrayList<>();
+       int i = 0;
+        
+        if(email_combo.size() > 0) {
+            for(JComboBox combo : email_combo) {
+                types[i]=((String)combo.getSelectedItem());
+                i++;
+            }
+        } else
+            types = null;
+        
+        return types;
+    }
+    
+      public Integer[] getEmailIDs() {
+        
+        if(email_id.size() > 0)
+            return (Integer[])email_id.toArray(new Integer[email_id.size()]);
+        else
+            return null;
+    }
+      
+       public String[] getPhoneNumbers() {
+        String[] phone = new String[phone_text.size()];//new ArrayList<>();
+        int i = 0;
+        
+        if(phone_text.size() > 0) {
+            for(JTextField text : phone_text) {
+                phone[i] = text.getText();
+                i++;
+                //emails.add(text.getText());
+            }
+        } else
+            phone = null;
+        
+        return phone;
+    }
+    
+    public String[] getPhoneTypes() {
+       String[] types = new String[phone_combo.size()];//new ArrayList<>();
+       int i = 0;
+        
+        if(phone_combo.size() > 0) {
+            for(JComboBox combo : phone_combo) {
+                types[i]=((String)combo.getSelectedItem());
+                i++;
+            }
+        } else
+            types = null;
+        
+        return types;
+    }   
+      
+      
+      
+      public Integer[] getPhoneIDs() {
+        
+         if(phone_id.size() > 0)
+            return (Integer[])phone_id.toArray(new Integer[phone_id.size()]);
+         else
+            return null;
+        
+    }
+      
+     public String[] getAddressStreets() {
+        String[] street = new String[address_street.size()];//new ArrayList<>();
+        int i = 0;
+        
+        if(address_street.size() > 0) {
+            for(JTextField text : address_street) {
+                street[i] = text.getText();
+                i++;
+                //emails.add(text.getText());
+            }
+        } else
+            street = null;
+        
+        return street;
+    }
+     
+      public String[] getAddressCodes() {
+        String[] code = new String[address_code.size()];//new ArrayList<>();
+        int i = 0;
+        
+        if(address_code.size() > 0) {
+            for(JTextField text : address_code) {
+                code[i] = text.getText();
+                i++;
+                //emails.add(text.getText());
+            }
+        } else
+            code = null;
+        
+        return code;
+    }
+      
+     public String[] getAddressCitys() {
+        String[] city = new String[address_city.size()];//new ArrayList<>();
+        int i = 0;
+        
+        if(address_city.size() > 0) {
+            for(JTextField text : address_city) {
+                city[i] = text.getText();
+                i++;
+                //emails.add(text.getText());
+            }
+        } else
+            city = null;
+        
+        return city;
+    }
+     
+      public String[] getAddressCountrys() {
+        String[] country = new String[address_country.size()];//new ArrayList<>();
+        int i = 0;
+        
+        if(address_country.size() > 0) {
+            for(JTextField text : address_country) {
+                country[i] = text.getText();
+                i++;
+                //emails.add(text.getText());
+            }
+        } else
+            country = null;
+        
+        return country;
+    }
+      
+         
+     
+    
+    public String[] getAddressTypes() {
+       String[] types = new String[address_combo.size()];//new ArrayList<>();
+       int i = 0;
+        
+        if(address_combo.size() > 0) {
+            for(JComboBox combo : address_combo) {
+                types[i]=((String)combo.getSelectedItem());
+                i++;
+            }
+        } else
+            types = null;
+        
+        return types;
+    }
+      
+      
+      
+      
+       public Integer[] getAddressIDs() {
+           
+        if(address_id.size() > 0)
+            return (Integer[])address_id.toArray(new Integer[address_id.size()]);
+        else
+            return null;
+        
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    private void addPhone(String phone, String type,int id) {
         Map<Component, Object> constraint_map = ((MigLayout)detail_dynamic_panel_phone.getLayout()).getConstraintMap();
         Component[] all_components = detail_dynamic_panel_phone.getComponents();
         
@@ -449,6 +987,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
         phone_combo.add(phone_type);
         phone_text.add(phone_nummer);
         phone_remove_button.add(remove_phone);
+        phone_id.add(id);
 
        
         detail_dynamic_panel_phone.revalidate();
@@ -457,7 +996,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
     }
     
     
-      private void removePhone(ActionEvent ae) {
+    private void removePhone(ActionEvent ae) {
         JButton remove = (JButton)ae.getSource();
         int index = phone_remove_button.indexOf(remove);
         JPanel panel = phone_panel.get(index);
@@ -484,7 +1023,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
     
     
     
-        private void deselectPhone(FocusEvent fe) {
+    private void deselectPhone(FocusEvent fe) {
         JTextField text = (JTextField)fe.getSource();
         int index = phone_text.indexOf(text);
         JButton remove = phone_remove_button.get(index);
@@ -496,7 +1035,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
     }
    
     
-        private void addAddress(String street, String code, String city, String country ,String type){
+    private void addAddress(String street, String code, String city, String country ,String type, int id){
         Map<Component, Object> constraint_map = ((MigLayout)detail_dynamic_panel_address.getLayout()).getConstraintMap();
         Component[] all_components = detail_dynamic_panel_address.getComponents();
         
@@ -622,6 +1161,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
         address_city.add(city_address);
         address_country.add(country_address);
         address_remove_button.add(remove_address);
+        address_id.add(id);
 
        
         detail_dynamic_panel_address.revalidate();
@@ -632,7 +1172,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
         }
         
         
-     private void removeAddress(ActionEvent ae) {
+    private void removeAddress(ActionEvent ae) {
         JButton remove = (JButton)ae.getSource();
         int index = address_remove_button.indexOf(remove);
         JPanel panel = address_panel.get(index);
@@ -667,7 +1207,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
     
     
     
-        private void deselectAddress(FocusEvent fe, int indicator) {
+    private void deselectAddress(FocusEvent fe, int indicator) {
         JTextField text = (JTextField)fe.getSource();
         int index = 0;
         switch(indicator){
@@ -690,7 +1230,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
         panel.revalidate();      
     }
     
-        private void addEmail(String email, String type) {
+    private void addEmail(String email, String type, int id) {
         Map<Component, Object> constraint_map = ((MigLayout)detail_dynamic_panel_email.getLayout()).getConstraintMap();
         Component[] all_components = detail_dynamic_panel_email.getComponents();
         
@@ -774,6 +1314,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
         email_text.add(email_adress);
         email_remove_button.add(remove_email);
         email_send_button.add(send_email);
+        email_id.add(id);
        
         detail_dynamic_panel_email.revalidate();
         
@@ -783,50 +1324,11 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
     
     
     
-     private void addEmail() {
-        Map<Component, Object> constraint_map = ((MigLayout)detail_dynamic_panel_email.getLayout()).getConstraintMap();
-        Component[] all_components = detail_dynamic_panel_email.getComponents();
-        String[] email_types = {"Default", "Private", "Business"};
-        JPanel email_new = new JPanel(new MigLayout("", //Layout Grenzen
-                "min[][grow,fill]min", //Spalten Grenzen
-                "[][]"));
-        JComboBox email_type = new JComboBox(email_types);
-        email_adress = new JTextField("Email-Adreese eingeben");
-        
-        email_type.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                System.out.println("Email Type geändert");
-            }
-        });
-        
-
-        
-        
-        detail_dynamic_panel_email.removeAll();
-        
-        for(Component c : all_components) {
-             
-            if(c instanceof JButton) {
-                
-                email_new.add(email_type);
-                email_new.add(email_adress,"span 2");
-                
-                detail_dynamic_panel_email.add(email_new, "cell 0 1 2 1,growx,wrap");
-            }
-            
-            detail_dynamic_panel_email.add(c, constraint_map.get(c));
-        }
-        
-        
-        
-        detail_dynamic_panel_email.revalidate();
-    }
+    
                                    
     
      
-        private void removeEmail(ActionEvent aeremove) {
+    private void removeEmail(ActionEvent aeremove) {
         JButton remove = (JButton)aeremove.getSource();
         int index = email_remove_button.indexOf(remove);
         JPanel panel = email_panel.get(index);
@@ -858,7 +1360,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
     
     
     
-        private void deselectEmail(FocusEvent fedeselect) {
+    private void deselectEmail(FocusEvent fedeselect) {
         JTextField text = (JTextField)fedeselect.getSource();
         int index = email_text.indexOf(text);
         JButton send = email_send_button.get(index);
@@ -889,160 +1391,10 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
      
      
      
-    /***************************************************************************
-     * View -> Controller
-     * Methoden werden direkt von Listener der Grafikelementen angesprochen
-     **************************************************************************/
     
-    private void addButtonActionPerformed(ActionEvent ae) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
-    private void removeButtonActionPerformed(ActionEvent ae) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        
-    }
-
-    private void saveButtonActionPerformed(ActionEvent ae) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    private void messageButtonActionPerformed(ActionEvent ae) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
-    private void searchTextActionPerformed(ActionEvent ae) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
-    private void groupListValueChanged(ListSelectionEvent lse) {
-        /* Nur einmaliger Event erlauben */
-        if(lse.getValueIsAdjusting() == false)
-            controller.getContact();
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.    
-    }
 
 
-    /**
-     * Index des selektierten Kontakts der Uebersichtsliste
-     * @return Index: -1 wenn nichts selektiert ist 
-     */
-    public int getSelectedContactIndex() {
-        return this.separatorlist.getSelectedIndex();
-    }
     
-    /**
-     * Kontakt mit dem angegebenen Index selektieren
-     * @param index Gruppen-Index
-     */
-    public void setSelectedContactIndex(int index) {
-        this.separatorlist.setSelectedIndex(index);
-    }
-    
-    /**
-     * ID eines Kontakts in der Uebersichtsliste
-     * @param index Index der Gruppe in der Liste
-     * @return Gruppen ID
-     */
-    public int getContactIdOfIndex(int index) {
-        ListMember member = this.separatorlist.getListMemberOfIndex(index);
-        return member.getID();
-    }
-    
-    /**
-     * Name eines Kontakts in der Uebersichtsliste
-     * @param index Index der Gruppe in der Liste
-     * @return Gruppen-Name
-     */
-    public String getContactNameOfIndex(int index) {
-        ListMember member = this.separatorlist.getListMemberOfIndex(index);
-        return member.getText();
-    }
-    
-    /**
-     * Kontakt-Namen temporaer aendern
-     * @param group_name Gruppen-Namen
-     */
-    public void setContactName(String contact_name) {
-        this.detail_static_name_textfield.setText(contact_name);
-    }
-    
-    /**
-     * Kontakt Uebersichtsliste anpassen
-     * @param group_id_index Index oder ID der zu aendernden Gruppe
-     * @param group_name Gruppen Name
-     * @param mode Art der Aenderung
-     */
-    public void setContactList(int group_id_index, String group_name, String mode) {
-        
-        ListMember member;
-        switch(mode) {
-            case CONTACT_ADD_CONTACT:
-                member = this.separatorlist.addListMember(group_name, group_id_index);
-                setSelectedContactIndex(this.separatorlist.getListMemberIndex(member)); //TODO unschoen!!!
-                break;
-            case CONTACT_REMOVE_GROUP_WITH_ID:
-                this.separatorlist.removeListMember(group_id_index);
-                break;
-            case CONTACT_REMOVE_GROUP_WITH_INDEX:
-                this.separatorlist.removeListMemberOfIndex(group_id_index);
-                break;
-        }
-    }
-    
-    public void setContactListEmpty() {
-        int contact_quantity;
-        
-        contact_quantity = getContactQuantity();
-        
-        /* Alle Elemente der Liste zuerst loeschen */
-        for(int i = 0; i < contact_quantity; i++){    
-            setContactList(1, "", CONTACT_REMOVE_GROUP_WITH_INDEX);
-            //groupoverview_separatorlist.removeListMemberOfIndex(1);
-        }
-    }
-    
-    /**
-     * Kontrolle ob ein Kontakt vorhanden ist anhand der Kontakt-ID
-     * @param contact_id Kontakt-ID
-     * @return Kontakt vorhanden: true; Kontakt nicht vorhanden: false
-     */
-    public boolean getContactState(int contact_id) {
-        if(this.separatorlist.containsListMember(contact_id) == null)
-            return false;
-        else
-            return true;
-    }
-    
-    /**
-     * Groesse der Kontakt-Ubersichtsliste 
-     */
-    public int getContactListSize() {
-        return this.separatorlist.getListSize();
-    }
-    
-    /**
-     * Anzahl vorhanden Kontakte
-     */
-    public int getContactQuantity() {
-        return this.separatorlist.getListMemberSize();
-    }
-    
-    /**
-     * Save-Button aktiviern oder deaktivieren
-     * @param state true: Speichern moeglich; false: Speichern nicht moeglich
-     */
-    public void setSaveButtonState(boolean state) {
-        this.save_button.setEnabled(state);
-    }
-    
-    /**
-     * Message-Button aktiviern oder deaktivieren
-     * @param state
-     */
-    public void setMessageButtonState(boolean state) {
-        message_button.setEnabled(state);
-    }
     
     /***************************************************************************
      * Model -> View
@@ -1066,52 +1418,91 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
                             setContactList(contact.user_id, contact.user_lastname+" "+contact.user_prename, CONTACT_ADD_CONTACT);
                     else {
                         /* Details-ansicht leer */
-                        setContactName(CONTACT_TAB_DEFAULT_NAME_TEXT);
+                        setContactPrename(CONTACT_TAB_DEFAULT_NAME_TEXT);
+                        setContactLastname(CONTACT_TAB_DEFAULT_NAME_TEXT);
                         setContactListEmpty();
                     }   
                 }
                 
                 /* Falls kein Eintrag selektiert ist, den ersten selektieren */
-                controller.selectGroup();
+                controller.selectContact();
                 break;
+                
                 
             case CONTACT_SELECT_EVENT:
                 if(evt.getNewValue() != null) {
-                    //setContactListEmpty();
+      
+                    /*Daten auf Default*/
+                    setEmailEmpty();
+                    setPhoneEmpty();
+                    setAddressEmpty();
                     
+                    /*Name mit Uerbsichtsliste abgleichen wenn zwingend (Aenderungen gemacht) */
                     if(((ContactDTO)evt.getNewValue()).user_lastname.equals(((ContactDTO)evt.getOldValue()).user_lastname))
-                        setContactName(((ContactDTO)evt.getNewValue()).user_lastname);
+                        setContactLastname(((ContactDTO)evt.getNewValue()).user_lastname);
                     else {
-                        //setContactName(getContactNameOfIndex(getSelectedContactIndex()));
+                        String[] lastname = getContactNameOfIndex(getSelectedContactIndex()).split(" ");
+                        setContactLastname(lastname[0]);
+                        setSaveButtonState(true);
+                    }
+                    
+                    if(((ContactDTO)evt.getNewValue()).user_prename.equals(((ContactDTO)evt.getOldValue()).user_prename))
+                        setContactPrename(((ContactDTO)evt.getNewValue()).user_prename);
+                    else {
+                        String[] prename = getContactNameOfIndex(getSelectedContactIndex()).split(" ");
+                        setContactPrename(prename[1]);
                         setSaveButtonState(true);
                     }
                     //detail_static_name_textfield.setText(((GroupDTO)evt.getNewValue()).group_name);
                     
-                    /* Neu Elemente hinzufuegen */
-                    //TODO Methode wie setGroupList erstellen 
-//                    for(ContactDTO groupmember : ((GroupDTO)evt.getNewValue()).group_contacts) {
-//                        detail_member_separatorlist.addListMember(groupmember.user_lastname+" "+groupmember.user_prename,
-//                                groupmember.user_id);
-//                    }
+                    /* Email Adressen */
+                    for(ContactEmail email : ((ContactDTO)evt.getNewValue()).contact_email)
+                        addEmail(email.email_adress,email.email_type,email.email_id);
+                    
+                    /* Adressen */
+                    for(ContactAdress address : ((ContactDTO)evt.getNewValue()).contact_adress)
+                        addAddress(address.adress_street, address.adress_code, address.adress_city, address.adress_country, address.adress_type,address.adress_id);
+                    
+                     /* Telefon */
+                    for(ContactPhone phone : ((ContactDTO)evt.getNewValue()).contact_phone)
+                        addPhone(phone.phone_number, phone.phone_type,phone.phone_id);
                     
                     /* Falls Gruppenmitglieder vorhanden sind, Senden ermoeglichen */
-                    //TODO
-//                    if(detail_member_separatorlist.getListMemberSize() > 0)
-//                        setMessageButtonState(true);
-//                    else
-//                        setMessageButtonState(false);
+                    if(email_panel.size() > 0)
+                        setMessageButtonState(true);
+                    else
+                        setMessageButtonState(false);
                 } else {
-                    //setGroupName(GROUP_TAB_DEFAULT_NAME_TEXT);
+                    setContactLastname(CONTACT_TAB_DEFAULT_NAME_TEXT);
                 }
                 break;
                 
             case CONTACT_INSERT_EVENT:
-                break;
+                if(evt.getNewValue() != null) {
+                    setContactList(CONTACT_DEFAULT_ID, "", CONTACT_REMOVE_GROUP_WITH_ID);
+                }
                 
             case CONTACT_UPDATE_EVENT:
+                if(evt.getNewValue() != null) {
+                    /* Gruppe zu Liste hinzufuegen oder aktualisieren */
+                    ListMember member = separatorlist.addListMember(((ContactDTO)evt.getNewValue()).user_lastname+" "+((ContactDTO)evt.getNewValue()).user_prename, 
+                            ((ContactDTO)evt.getNewValue()).user_id);
+                    /* Neuer Eintrag selektieren */
+                    separatorlist.setSelectedIndex(separatorlist.getListMemberIndex(member));
+                    
+                    /* Gespeichert -> Speichern nicht mehr moeglich */
+                    setSaveButtonState(false);
+                }
                 break;
                 
             case CONTACT_DELETE_EVENT:
+                if(evt.getNewValue() != null) {
+                    /* Gruppe aus Liste entfernen */
+                    separatorlist.removeListMember(((ContactDTO)evt.getNewValue()).user_id);
+                    
+                    /* Falls kein Eintrag selektiert ist, den ersten selektieren */
+                    controller.selectContact();
+                }
                 break;
                 
             case CONTACT_SELECT_GROUPS_EVENT:
