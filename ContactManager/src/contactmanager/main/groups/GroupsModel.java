@@ -13,6 +13,7 @@ import java.util.ArrayList;
  */
 public final class GroupsModel extends AbstractModel implements GroupsInterface {
     
+    
     private GroupsController controller;
     private GroupsDAO groupsdao;
     
