@@ -221,6 +221,30 @@ public class ContactsController extends AbstractController implements ContactsIn
     }
     
     
+    public void sendMessage(String text) {
+        
+        if(getEmailClientState() == true) {
+        // Kontrolle ob die Selektion noch moeglich ist 
+             sendEmail(text);  
+       }    
+     
+    }
+    
+        /**
+     * Email-Moeglichkeit kontrollieren
+     */
+    public boolean getEmailClientState() {
+        return main_controller.getEmailClientStatus();
+    }
+    
+    /**
+     * Nachricht an entsprechende Empfaenger schreiben
+     * @param email E-Mail Adressen
+     */
+    public void sendEmail(String email) {
+        main_controller.sendEmail(email);
+    }
+    
     
     /**
      * Kontakt-Name
