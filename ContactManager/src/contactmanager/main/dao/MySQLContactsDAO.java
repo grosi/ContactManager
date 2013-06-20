@@ -171,15 +171,14 @@ public class MySQLContactsDAO implements ContactsDAO {
 		executeUpdate("DELETE FROM user_phone " +
 				"WHERE phone_id="+Integer.toString(phone_id));
 	}
-	
-	public void insertContactEmail(int user_id, ContactDTO.ContactEmail email) throws DAOException {
+        
+        public void insertContactEmail(int user_id, ContactDTO.ContactEmail email) throws DAOException {
 		int key;
-		          System.out.println("INSERT INTO user_email(type, email, priority, email_view, user_id)" +
-				" VALUES('"+email.email_type+"', '"+email.email_adress+"', " +
-						"'"+Integer.toString(email.email_priority)+"', " + "'"+user_id+"'" +")");
-		key = executeInsert("INSERT INTO user_email(type, email, priority, user_id)" +
-				" VALUES('"+email.email_type+"', '"+email.email_adress+"', " + "'BLA', " +
-						"'"+Integer.toString(email.email_priority)+"', " + "'"+user_id+"'" +")");
+		
+		key = executeInsert("INSERT INTO user_email(user_id, type, email, priority)" +
+				"VALUES("+Integer.toString(user_id)+", " +
+						"'"+email.email_type+"', '"+email.email_adress+"', " +
+						""+Integer.toString(email.email_priority)+")");
 		
 		email.email_id = key;
 	}
