@@ -62,15 +62,15 @@ public final class ContactsModel extends AbstractModel implements ContactsInterf
     public void addContact(ContactDTO contact) {
         try {
             contact.user_id = contactsdao.insertContact(contact);
-//            if(contact.contact_adress.size() > 0)
-//                for(ContactDTO.ContactAdress address : contact.contact_adress)
-//                    contactsdao.insertContactAddress(contact.user_id,address);
-//            if(contact.contact_email.size() > 0)
-//                for(ContactDTO.ContactEmail email : contact.contact_email)
-//                    contactsdao.insertContactEmail(contact.user_id,email);
-//            if(contact.contact_phone.size() > 0)
-//                for(ContactDTO.ContactPhone phone : contact.contact_phone)
-//                    contactsdao.insertContactPhone(contact.user_id, phone);
+            if(contact.contact_adress.size() > 0)
+                for(ContactDTO.ContactAdress address : contact.contact_adress)
+                    contactsdao.insertContactAddress(contact.user_id,address);
+            if(contact.contact_email.size() > 0)
+                for(ContactDTO.ContactEmail email : contact.contact_email)
+                    contactsdao.insertContactEmail(contact.user_id,email);
+            if(contact.contact_phone.size() > 0)
+                for(ContactDTO.ContactPhone phone : contact.contact_phone)
+                    contactsdao.insertContactPhone(contact.user_id, phone);
         } catch (DAOException ex) {
             contact = null;
         }
