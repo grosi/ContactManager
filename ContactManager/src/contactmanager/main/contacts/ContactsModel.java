@@ -168,5 +168,19 @@ public final class ContactsModel extends AbstractModel implements ContactsInterf
 //            
 //        }
     }
+        /**
+     * Nach bestehenden Gruppen suchen, die zu dem angegeben Text passen
+     * @param text
+     */
+    public void searchGroup(String text) {
+        ArrayList<ContactDTO> contact_list;
+        try {
+            contact_list = contactsdao.searchContactList(text);
+        } catch (DAOException ex) {
+            contact_list = null;
+        }
+        
+        firePropertyChange(CONTACT_SEARCH_EVENT, null, contact_list);
+    }
     
 }

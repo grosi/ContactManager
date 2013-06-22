@@ -256,6 +256,51 @@ public class ContactsController extends AbstractController implements ContactsIn
     }
     
     
+    
+    
+        /**
+     * Suche angewaehlt
+     */
+    public void searchContactFocusGained() {
+        String text;
+        
+        text = contacts_view.getSearchText();
+        
+        /* Falls noch keine Anpassungen vorherrschen, alles markieren */
+        if(text.equals(ContactsView.CONTACT_TAB_DEFAULT_SEARCH_TEXT) == true)
+            contacts_view.setSearchSelection(0, text.length());
+    }
+    
+    
+    /**
+     * Suche abgewaehlt
+     */
+    public void searchContactFocusLost() {
+        
+        contacts_view.setSearchSelection(0, 0); //Nichts Selektieren
+        
+        /* Wenn die Eingabemaske leer ist, Standardtext einblenden */
+        if(contacts_view.getSearchText().equals(""))
+            contacts_view.setSearchText(contacts_view.GROUP_TAB_DEFAULT_SEARCH_TEXT);
+    }
+    
+    /**
+     * Nach Gruppen suchen
+     */
+    public void searchContact() {
+        String text;
+        
+        text = contacts_view.getSearchText(); //Suchmuster
+        
+        /* Nur suchen, wenn nicht der Standardtext steht */
+        if(text.equals(contacts_view.GROUP_TAB_DEFAULT_SEARCH_TEXT) == false) {
+            contacts_view.setMouseWaitCursor(true);
+            contacts_model.searchContact(text);
+            contacts_view.setMouseWaitCursor(false);
+        }
+    }
+    
+    
     public void sendMessage(String text) {
         
         if(getEmailClientState() == true) {
