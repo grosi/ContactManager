@@ -163,15 +163,34 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
         //Suchfeld
         search_textfield = new JTextField(GROUP_TAB_DEFAULT_SEARCH_TEXT);
         search_textfield.setBackground(Color.white);
-        search_textfield.addActionListener(new ActionListener() {
+        search_textfield.addFocusListener(new FocusListener() {
 
             @Override
-            public void actionPerformed(ActionEvent ae) {
-                searchTextActionPerformed(ae);
+            public void focusGained(FocusEvent fe) {
+                searchTextFocusGained(fe);
             }
-            
-         
 
+            @Override
+            public void focusLost(FocusEvent fe) {
+                searchTextFocusLost(fe);
+            }
+        });
+        search_textfield.getDocument().addDocumentListener(new DocumentListener() {
+
+            @Override
+            public void insertUpdate(DocumentEvent de) {
+                searchTextChange(de);
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent de) {
+                searchTextChange(de);
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent de) {
+                searchTextChange(de);
+            }
         });
         
         //Liste
@@ -479,8 +498,28 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
         }
     }
     
-    private void searchTextActionPerformed(ActionEvent ae) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    
+        /**
+     * Such-Textfeld selektiert
+     * @param fe 
+     */
+    private void searchTextFocusGained(FocusEvent fe) {
+        controller.searchContactFocusGained();
+    }
+    
+    /**
+     * Such-Textfeld deselektiert
+     * @param fe 
+     */
+    private void searchTextFocusLost(FocusEvent fe) {
+        controller.searchContactFocusLost();
+    }
+        /**
+     * Such-Textfeld Eintrag geaendert
+     * @param fe 
+     */
+    private void searchTextChange(DocumentEvent de) {
+        controller.searchContact();
     }
     
     private void contactListValueChanged(ListSelectionEvent lse) {
@@ -916,7 +955,30 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
         
     }
     
+           /**
+     * Suche-Text
+     * @return Such-Text
+     */
+    public String getSearchText() {
+        return this.search_textfield.getText();
+    }
     
+    /**
+     * Suche-Text setzen
+     * @param text Suche-Text
+     */
+    public void setSearchText(String text) {
+        this.search_textfield.setText(text);
+    }
+    
+    /**
+     * Suche selektieren
+     * @param first Erster Buchstaben des Strings 
+     * @param last Letzter Buchstaben des Strings
+     */
+    public void setSearchSelection(int first, int last) {
+        search_textfield.select(first, last);
+    }
     
     
     
