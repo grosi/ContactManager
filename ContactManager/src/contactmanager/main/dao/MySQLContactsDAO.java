@@ -252,6 +252,22 @@ public class MySQLContactsDAO implements ContactsDAO {
         
         return groups;
     }
+    
+    @Override
+    public ArrayList<GroupDTO> selectGroupsForContacts() throws DAOException {
+        ArrayList<GroupDTO> groups = new ArrayList<>();
+        ResultSet result = null;
+
+        result = executeQuery("SELECT * FROM `group` ORDER BY `name` ASC");
+
+        while(nextLine(result)) {
+            groups.add(getGroupDTO(result));
+        }
+        closeResult(result);
+        
+        return groups;
+        
+    }
    
     
     
@@ -417,4 +433,25 @@ public class MySQLContactsDAO implements ContactsDAO {
         closeResult(result);
     }
 
+    
+    /**
+     * Ergebnisse aus dem Set in DTO ablegen
+     * @param result Ergebnis Set
+     * @return DTO
+     * @throws DAOException 
+     */
+    private GroupDTO getGroupDTO(ResultSet result) throws DAOException {
+        GroupDTO group = new GroupDTO();
+        
+        try {    
+            group.group_id = result.getInt("group_id");
+            group.group_name = result.getString("name");
+            return group;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new DAOException("Colum does not Exists!");
+        }
+        
+       
+    }
 }
