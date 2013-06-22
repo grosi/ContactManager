@@ -162,17 +162,33 @@ public class ContactsController extends AbstractController implements ContactsIn
         ContactDTO contact;
         int index;
         int contact_id;
-              /* Selektierte Kontakt */
+        String contact_listname;
+        
+        /* Selektierter Kontakt */
         index = contacts_view.getSelectedContactIndex();
+        
+        /* Kein Eintrag in Uebersicht selektiert */
+        if(index == -1)
+            return;
+        
         contact_id = contacts_view.getContactIdOfIndex(index);
-        contact = getContactDTO();
-        contact.user_id = contact_id;
-        if(contact_id == CONTACT_DEFAULT_ID) 
-            System.out.println("Kontakt noch nicht gespeichert");
-        /* Gespeicherte Gruppe */    
-        else 
+        contact_listname = contacts_view.getContactNameOfIndex(index);
+        
+        
+        /* Ungespeicherter Kontakt */
+        if(contact_id == CONTACT_DEFAULT_ID) {
+            contacts_view.setContactList(contact_id, contact_listname, ContactsView.CONTACT_REMOVE_GROUP_WITH_ID);
+            selectContact();
+            
+        /* Gespeicherter Kontakt */    
+        } else {
+            contact = getContactDTO();
+            contact.user_id = contact_id;
+            contacts_view.setMouseWaitCursor(true);
             contacts_model.removeContact(contact);
-        contacts_view.setMouseWaitCursor(false);
+            contacts_view.setMouseWaitCursor(false);
+        }
+        
         
         
     
