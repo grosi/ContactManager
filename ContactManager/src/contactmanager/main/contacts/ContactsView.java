@@ -180,7 +180,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
 
             @Override
             public void valueChanged(ListSelectionEvent lse) {
-                groupListValueChanged(lse);
+                contactListValueChanged(lse);
             }
         });
         
@@ -483,11 +483,11 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
-    private void groupListValueChanged(ListSelectionEvent lse) {
+    private void contactListValueChanged(ListSelectionEvent lse) {
         /* Nur einmaliger Event erlauben */
         if(lse.getValueIsAdjusting() == false)
             controller.getContact();
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.    
+        
     }
     
     private void contactnameTextFocusGained(FocusEvent e) {
@@ -931,7 +931,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
         Map<Component, Object> constraint_map = ((MigLayout)detail_dynamic_panel_phone.getLayout()).getConstraintMap();
         Component[] all_components = detail_dynamic_panel_phone.getComponents();
         
-        String[] phone_types = {"Private", "Business"};
+        String[] phone_types = {"PRIVATE", "BUSINESS", "OTHER"};
         JPanel phone_new = new JPanel(new MigLayout("wrap 4"));
         JComboBox phone_type = new JComboBox(phone_types);
         phone_type.setSelectedItem(type);
@@ -1004,8 +1004,6 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
 
        
         detail_dynamic_panel_phone.revalidate();
-        
-        System.out.println("ADD EXIST");
     }
     
     
@@ -1052,7 +1050,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
         Map<Component, Object> constraint_map = ((MigLayout)detail_dynamic_panel_address.getLayout()).getConstraintMap();
         Component[] all_components = detail_dynamic_panel_address.getComponents();
         
-        String[] adress_types = {"Privat","Business", "Bill"};
+        String[] adress_types = {"PRIVATE","BUSINESS", "OTHER"};
         JPanel address_new = new JPanel(new MigLayout("","rel[]rel[]rel[]min",""));
         JComboBox address_type = new JComboBox(adress_types);
         address_type.setSelectedItem("type");
@@ -1179,7 +1177,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
        
         detail_dynamic_panel_address.revalidate();
         
-        System.out.println("ADD EXIST");       
+       
           
             
         }
@@ -1247,7 +1245,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
         Map<Component, Object> constraint_map = ((MigLayout)detail_dynamic_panel_email.getLayout()).getConstraintMap();
         Component[] all_components = detail_dynamic_panel_email.getComponents();
         
-        String[] email_types = {"Private", "Business"};
+        String[] email_types = {"PRIVATE", "BUSINESS", "OTHER"};
         JPanel email_new = new JPanel(new MigLayout("wrap 4"));
         JComboBox email_type = new JComboBox(email_types);
         email_type.setSelectedItem(type);
@@ -1332,7 +1330,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
        
         detail_dynamic_panel_email.revalidate();
         
-        System.out.println("ADD EXIST");
+
     }
     
     
