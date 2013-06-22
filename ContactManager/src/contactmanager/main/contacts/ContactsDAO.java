@@ -40,6 +40,8 @@ public interface ContactsDAO {
 
     /* Schnittstelle der Gruppenzugehoerigkeit */
     public ArrayList<GroupDTO> selectGroupsFromContact(int contact_id) throws DAOException;
+    public ArrayList<GroupDTO> selectGroupsForContacts() throws DAOException;
     public boolean addContactToGroup(int contact_id, int group_id) throws DAOException;
     public boolean deleteContactFromGroup(int contact_id, int group_id) throws DAOException;
+    
 }
