@@ -154,6 +154,30 @@ public class ContactsController extends AbstractController implements ContactsIn
         contacts_view.setSaveButtonState(false);
     }
     
+       
+    /**
+     * Kontakt löschen
+     */
+    public void removeContact() {
+        ContactDTO contact;
+        int index;
+        int contact_id;
+              /* Selektierte Kontakt */
+        index = contacts_view.getSelectedContactIndex();
+        contact_id = contacts_view.getContactIdOfIndex(index);
+        contact = getContactDTO();
+        contact.user_id = contact_id;
+        if(contact_id == CONTACT_DEFAULT_ID) 
+            System.out.println("Kontakt noch nicht gespeichert");
+        /* Gespeicherte Gruppe */    
+        else 
+            contacts_model.removeContact(contact);
+        contacts_view.setMouseWaitCursor(false);
+        
+        
+    
+    }
+    
     /**
      * Kontakt speichern
      */
