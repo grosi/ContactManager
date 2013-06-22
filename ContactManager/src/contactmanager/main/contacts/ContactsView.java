@@ -460,7 +460,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
     }
     
     private void removeButtonActionPerformed(ActionEvent ae) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        controller.removeContact();
         
     }
 
