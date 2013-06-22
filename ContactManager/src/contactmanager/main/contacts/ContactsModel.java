@@ -24,7 +24,7 @@ public final class ContactsModel extends AbstractModel implements ContactsInterf
     }
     
      /**
-     * Alle vorhanden Gruppen der Datenbank einlesen
+     * Alle vorhanden Kontakte der Datenbank einlesen
      */
     public void getContactList() { 
         ArrayList<ContactDTO> group_list;
@@ -34,30 +34,31 @@ public final class ContactsModel extends AbstractModel implements ContactsInterf
         } catch (DAOException ex) {
             group_list = null;
         }
-        
+
         firePropertyChange(CONTACT_LIST_SELECT_EVENT, null, group_list);
     }
     
     
     /**
-     * Eine spezifischer KOntakt der Datenbank einlesen
-     * @param group Gruppen Data Transfer Objekt
+     * Eine spezifischer Kontakt der Datenbank einlesen
+     * @param contact Kontakt Data Transfer Objekt
      */
     public void getContact(ContactDTO contact) {
         ContactDTO contact_db;
+
         try {
             contact_db = contactsdao.selectContact(contact.user_id);
         } catch (DAOException ex) {
             contact_db = null;
         }
-   
+        
         firePropertyChange(CONTACT_SELECT_EVENT, contact, contact_db);
     }
     
     
     /**
-     * Neue Gruppe zu Datenbank hinzufuegen
-     * @param contact Gruppen Data Transfer Objekt
+     * Neuer Kontakt zu Datenbank hinzufuegen
+     * @param contact Kontakt Data Transfer Objekt
      */
     public void addContact(ContactDTO contact) {
         try {
@@ -74,7 +75,7 @@ public final class ContactsModel extends AbstractModel implements ContactsInterf
         } catch (DAOException ex) {
             contact = null;
         }
-        
+        System.out.println("ADD CONTACT");
         firePropertyChange(CONTACT_INSERT_EVENT, null, contact);
     }
     
@@ -89,7 +90,7 @@ public final class ContactsModel extends AbstractModel implements ContactsInterf
         } catch (DAOException ex) {
             contact = null;
         }
-        
+        System.out.println("REMOVE CONTACT");
         firePropertyChange(CONTACT_DELETE_EVENT, null, contact);    
     }
     
@@ -126,7 +127,7 @@ public final class ContactsModel extends AbstractModel implements ContactsInterf
         } catch (DAOException ex) {
             contact = null;
         }
-        
+        System.out.println("SAVE CONTACT");
         firePropertyChange(CONTACT_UPDATE_EVENT, null, contact);
     }
     
@@ -142,7 +143,7 @@ public final class ContactsModel extends AbstractModel implements ContactsInterf
         } catch (DAOException ex) {
             contact_list = null;
         }
-        
+        System.out.println("SEARCH CONTACT");
         firePropertyChange(CONTACT_SEARCH_EVENT, null, contact_list);
     }
     
