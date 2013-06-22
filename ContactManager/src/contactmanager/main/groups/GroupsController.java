@@ -337,12 +337,23 @@ public final class GroupsController extends AbstractController implements SubCon
      */
     public void selectGroup() {
         int group_quantity;
+        int group_id;
+        String group_name;
+        GroupDTO group;
  
         group_quantity = groups_view.getGroupQuantity();
         
         /* Falls die Liste nicht leer ist, erster Eintrag selektieren */
-        if(group_quantity > 0)
+        if(group_quantity > 0) {
             groups_view.setSelectedGroupIndex(1);
+            group_id = groups_view.getGroupIdOfIndex(1);
+            group_name = groups_view.getGroupNameOfIndex(1);
+            
+            group = getGroupDTO();
+            group.group_id = group_id;
+            group.group_name = group_name;
+            groups_model.getGroup(group);
+        }
     }
     
     
