@@ -51,7 +51,9 @@ public class JSeparatorList extends JList{
         listmember_filtered = new FilterList(listmember, new ListMemberMatcher());
 
         this.setModel(new DefaultEventListModel(listmember_separator));
-        this.setSelectionModel(createListSelectionModel());
+        //this.setSelectionModel(createListSelectionModel());
+        this.setSelectionModel(new SeparatorListSelectionModel());
+        this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         this.setCellRenderer(createListCellRenderer());
     }
     
@@ -67,11 +69,13 @@ public class JSeparatorList extends JList{
         if(member_exists != null) {
             int index = this.listmember.indexOf(member_exists);
             member_exists.setText(text);
+            ((SeparatorListSelectionModel)this.getSelectionModel()).setSilent(true);
             this.listmember.set(index, member_exists);
             return member_exists;
         /* Neuer Eintrag hinzufuegen */
         } else {
             ListMember newlistmember = new ListMember(text, id);
+            ((SeparatorListSelectionModel)this.getSelectionModel()).setSilent(true);
             this.listmember.add(newlistmember);
             return newlistmember;
         }  
@@ -86,6 +90,7 @@ public class JSeparatorList extends JList{
         /* Falls Eintrag vorhanden -> loeschen */
         ListMember member_exists = containsListMember(id);
         if(member_exists != null) {
+            ((SeparatorListSelectionModel)this.getSelectionModel()).setSilent(true);
             this.listmember.remove(member_exists);
             return member_exists;
         } else {
@@ -102,6 +107,7 @@ public class JSeparatorList extends JList{
         Object index_object = this.listmember_separator.get(index);
         int member_index = this.listmember.indexOf(index_object);
         ListMember member = this.listmember.get(member_index);
+        ((SeparatorListSelectionModel)this.getSelectionModel()).setSilent(true);
         this.listmember.remove(member);
         return member;
     }
@@ -303,25 +309,73 @@ public class JSeparatorList extends JList{
         };
     }  
     
+
+    
     /**
-     * Selection Model, das das Selektieren von Separatoren verhindert
-     * @return Angepasstes Selection Model
+     * Eigenes Selection Model fuer JList
      */
-    private ListSelectionModel createListSelectionModel() {
-        return new DefaultListSelectionModel() {
-            @Override
-            public void setSelectionInterval(int index0, int index1) {
-                
-                if(!(listmember_separator.get(index0) instanceof SeparatorList.Separator)) {
-                    super.setSelectionInterval(index0, index0);
+    private class SeparatorListSelectionModel extends DefaultListSelectionModel {
+        private boolean silent = false;
+        private int silent_cnt = 1; //Workaround: verhindert, dass manchmal ungewollte Event durchrutschen
+
+        
+        /**
+         * Dient zum Unterdruecken von Events
+         * @param state true: keine Events zulassen
+         */
+        public void setSilent(boolean state){
+            silent = state;
+            silent_cnt = 1;
+        }
+        
+        /**
+         * Das Selektieren von Separatoren verhindern
+         * @param index0
+         * @param index1 
+         */
+        @Override
+        public void setSelectionInterval(int index0, int index1) {
+
+            if(!(listmember_separator.get(index0) instanceof SeparatorList.Separator)) {
+                super.setSelectionInterval(index0, index0);
+            } else {
+                if(getAnchorSelectionIndex() < index0) {
+                    super.setSelectionInterval(index0+1, index0+1);
                 } else {
-                    if(getAnchorSelectionIndex() < index0) {
-                        super.setSelectionInterval(index0+1, index0+1);
-                    } else {
-                        super.setSelectionInterval(index0-1, index0-1);
-                    }
-                }   
+                    super.setSelectionInterval(index0-1, index0-1);
+                }
+            }   
+        }
+        
+        @Override
+        protected void fireValueChanged(int firstIndex, int lastIndex, boolean isAdjusting){
+
+            if(silent){
+                if(this.getValueIsAdjusting() == false && silent_cnt == 0) {
+                    setSilent(false);
+                }
+                silent_cnt--;
+            } else {
+                super.fireValueChanged(firstIndex, lastIndex, isAdjusting);
             }
-        };
+                
+        }
+        
+        @Override
+        protected void fireValueChanged(int firstIndex, int lastIndex){
+            if(silent){
+                if(this.getValueIsAdjusting() == false && silent_cnt == 0) {
+                    setSilent(false);
+                }
+                silent_cnt--;
+            } else {
+                super.fireValueChanged(firstIndex, lastIndex);
+            }
+        }
+        
+        @Override
+        protected void fireValueChanged(boolean isAdjusting) {
+            super.fireValueChanged(isAdjusting);
+        }
     }
 }
