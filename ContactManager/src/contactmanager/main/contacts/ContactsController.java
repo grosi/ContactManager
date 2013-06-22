@@ -119,12 +119,23 @@ public class ContactsController extends AbstractController implements ContactsIn
      */
     public void selectContact() {
         int group_quantity;
+        int contact_id;
+        String[] contact_listname;
+        ContactDTO contact;
  
         group_quantity = contacts_view.getContactQuantity();
-        
+
         /* Falls die Liste nicht leer ist, erster Eintrag selektieren */
-        if(group_quantity > 0)
+        if(group_quantity > 0) {
             contacts_view.setSelectedContactIndex(1);
+            contact_id = contacts_view.getContactIdOfIndex(1);
+            contact_listname = contacts_view.getContactNameOfIndex(1).split(" ");
+            contact = getContactDTO();
+            contact.user_id = contact_id;
+            contact.user_lastname = contact_listname[0];
+            contact.user_prename = contact_listname[1];
+            contacts_model.getContact(contact);
+        }
     }
     
     
