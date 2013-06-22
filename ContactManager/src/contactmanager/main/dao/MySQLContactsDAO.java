@@ -24,7 +24,7 @@ public class MySQLContactsDAO implements ContactsDAO {
     public ArrayList<ContactDTO> selectContactList() throws DAOException {
             ArrayList<ContactDTO> list = new ArrayList<>();
             ResultSet result;
-
+            
             result = executeQuery("SELECT * FROM user ORDER BY prename ASC, lastname ASC");
 
             if (result == null)
@@ -33,7 +33,7 @@ public class MySQLContactsDAO implements ContactsDAO {
             while (nextLine(result)) {
                 /* Benutzer anhaengen */
             	ContactDTO line = fillInContact(result);
-            	getAllInformations(line);
+            	//getAllInformations(line);
             	list.add(line);
             }
 
@@ -87,7 +87,7 @@ public class MySQLContactsDAO implements ContactsDAO {
     @Override
     public int insertContact(ContactDTO insertContact) throws DAOException {
     	int id;
-    	
+        
     	if (insertContact.user_id != 0)
     		throw new DAOException("User id is allready set");
     	
@@ -103,7 +103,7 @@ public class MySQLContactsDAO implements ContactsDAO {
 
     @Override
     public boolean updateContact(ContactDTO updateContact) throws DAOException {
-           	
+
     	if (updateContact.user_id <= 0)
             throw new DAOException("User id is missed");
     	
@@ -135,72 +135,74 @@ public class MySQLContactsDAO implements ContactsDAO {
     //--------------------
     @Override
     public void insertContactAddress(int user_id, ContactDTO.ContactAdress adress) throws DAOException {
-            int key;
+        int key;
 
-            key = executeInsert("INSERT INTO user_address(type, address, district, postal_code, city)" +
-                            "VALUES('"+adress.adress_type+"', '"+adress.adress_street+"', " +
-                                            "'"+adress.adress_country+"', '"+adress.adress_code+"', " +
-                                                            "'"+adress.adress_city+"')");
+        key = executeInsert("INSERT INTO user_address(user_id, type, address, district, postal_code, city)" +
+                        "VALUES("+Integer.toString(user_id)+", '"+adress.adress_type+"', " +
+                                        "'"+adress.adress_street+"', " +
+                                        "'"+adress.adress_country+"', '"+adress.adress_code+"', " +
+                                                        "'"+adress.adress_city+"')");
 
-            adress.adress_id = key;
+        adress.adress_id = key;
     }
     @Override
     public void updateContactAddress(ContactDTO.ContactAdress adress) throws DAOException {
-            executeUpdate("UPDATE user_address SET type='"+adress.adress_type+"',  " +
-                            "address='"+adress.adress_street+"',  district='"+adress.adress_country+"',  " +
-                                            "postal_code='"+adress.adress_code+"',  city='"+adress.adress_city+"' " +
-                                                            "WHERE adress_id="+Integer.toString(adress.adress_id));
+        executeUpdate("UPDATE user_address SET type='"+adress.adress_type+"',  " +
+                        "address='"+adress.adress_street+"',  district='"+adress.adress_country+"',  " +
+                                        "postal_code='"+adress.adress_code+"',  city='"+adress.adress_city+"' " +
+                                                        "WHERE address_id="+Integer.toString(adress.adress_id));
     }
     @Override
     public void deleteContactAddress(int address_id) throws DAOException {
-            executeUpdate("DELETE FROM user_address " +
-                            "WHERE adress_id="+Integer.toString(address_id));
+        executeUpdate("DELETE FROM user_address " +
+                        "WHERE adress_id="+Integer.toString(address_id));
     }
 	
     @Override
     public void insertContactPhone(int user_id, ContactDTO.ContactPhone phone) throws DAOException {
-            int key;
+        int key;
 
-            key = executeInsert("INSERT INTO user_phone(type, number)" +
-                            "VALUES('"+phone.phone_type+"', '"+phone.phone_number+"')");
+        key = executeInsert("INSERT INTO user_phone(user_id, type, number)" +
+                        "VALUES("+Integer.toString(user_id)+", '"+phone.phone_type+"', " +
+                                        "'"+phone.phone_number+"')");
 
-            phone.phone_id = key;
+        phone.phone_id = key;
     }
     @Override
     public void updateContactPhone(ContactDTO.ContactPhone phone) throws DAOException {
-            executeUpdate("UPDATE user_phone SET type='"+phone.phone_type+"', " +
-                            "number='"+phone.phone_number+"' " +
-                                            "WHERE phone_id="+Integer.toString(phone.phone_id));
+        executeUpdate("UPDATE user_phone SET type='"+phone.phone_type+"', " +
+                        "number='"+phone.phone_number+"' " +
+                                        "WHERE phone_id="+Integer.toString(phone.phone_id));
     }
     @Override
     public void deleteContactPhone(int phone_id) throws DAOException {
-            executeUpdate("DELETE FROM user_phone " +
-                            "WHERE phone_id="+Integer.toString(phone_id));
+        executeUpdate("DELETE FROM user_phone " +
+                        "WHERE phone_id="+Integer.toString(phone_id));
     }
         
     @Override
     public void insertContactEmail(int user_id, ContactDTO.ContactEmail email) throws DAOException {
-            int key;
+        int key;
 
-            key = executeInsert("INSERT INTO user_email(user_id, type, email, priority)" +
-                            "VALUES("+Integer.toString(user_id)+", " +
-                                            "'"+email.email_type+"', '"+email.email_adress+"', " +
-                                            ""+Integer.toString(email.email_priority)+")");
+        key = executeInsert("INSERT INTO user_email(user_id, type, email, priority)" +
+                        "VALUES("+Integer.toString(user_id)+", " +
+                                        "'"+email.email_type+"', '"+email.email_adress+"', " +
+                                        ""+Integer.toString(email.email_priority)+")");
 
-            email.email_id = key;
+        email.email_id = key;
     }
     @Override
-	public void updateContactEmail(ContactDTO.ContactEmail email) throws DAOException {
-		executeUpdate("UPDATE user_email SET type='"+email.email_type+"', " +
-				"email='"+email.email_adress+"'," +
-						" priority="+Integer.toString(email.email_priority)+" " +
-								"WHERE email_id="+Integer.toString(email.email_id));
-	}
+    public void updateContactEmail(ContactDTO.ContactEmail email) throws DAOException {
+        executeUpdate("UPDATE user_email SET type='"+email.email_type+"', " +
+                        "email='"+email.email_adress+"'," +
+                                        " priority="+Integer.toString(email.email_priority)+" " +
+                                                        "WHERE email_id="+Integer.toString(email.email_id));
+    }
     @Override
-	public void deleteContactEmail(int email_id) throws DAOException {
-		executeUpdate("DELETE FROM user_email " +
-				"WHERE email_id="+Integer.toString(email_id));
-	}
+    public void deleteContactEmail(int email_id) throws DAOException {
+        executeUpdate("DELETE FROM user_email " +
+                        "WHERE email_id="+Integer.toString(email_id));
+    }
     //--------------------
     
 
@@ -358,7 +360,7 @@ public class MySQLContactsDAO implements ContactsDAO {
     	String id;
     	
     	id = Integer.toString(contact.user_id);
-    	
+
     	/* Adressen */
         result = executeQuery("SELECT * FROM user_address WHERE user_id="+id+" ORDER BY type ASC");
         while (nextLine(result)) {
