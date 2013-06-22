@@ -1053,7 +1053,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
         String[] adress_types = {"PRIVATE","BUSINESS", "OTHER"};
         JPanel address_new = new JPanel(new MigLayout("","rel[]rel[]rel[]min",""));
         JComboBox address_type = new JComboBox(adress_types);
-        address_type.setSelectedItem("type");
+        address_type.setSelectedItem(type);
         JTextField street_address = new JTextField(street);
         JTextField code_address = new JTextField(code);
         JTextField city_address = new JTextField(city);
