@@ -4,6 +4,7 @@ import contactmanager.main.AbstractController;
 import contactmanager.main.AbstractView;
 import contactmanager.main.frame.MainController;
 import contactmanager.main.SubController;
+import contactmanager.main.dao.DAOException;
 
 
 /**
@@ -199,7 +200,7 @@ public class ContactsController extends AbstractController implements ContactsEv
     /**
      * Kontakt speichern
      */
-    public void saveContact() {
+    public void saveContact()  {
         ContactDTO contact;
         int contact_id;
         String contact_name[];
@@ -216,6 +217,7 @@ public class ContactsController extends AbstractController implements ContactsEv
         String[] address_countrys;
         String[] address_types;
         Integer[] address_ids;
+        String[] groups;
                 
         /* Selektierte Gruppe */
         index = contacts_view.getSelectedContactIndex();
@@ -274,10 +276,11 @@ public class ContactsController extends AbstractController implements ContactsEv
         
         
         String[] group_name;
-        group_name = contacts_view.getGroups();
-        
-        
-        
+       
+        /*Gruppe*/
+        group_name=contacts_view.getGroups();
+        contacts_model.deletetGroups(group_name,contact,contacts_view.contact_groups);
+        contacts_model.addedGroups(group_name,contact,contacts_view.contact_groups, contacts_view.all_groups);
         
         
         
