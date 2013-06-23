@@ -155,7 +155,6 @@ public final class ContactsModel extends AbstractModel implements ContactsEvent 
         }
 
         firePropertyChange(CONTACT_SEARCH_EVENT, null, contact_list);
-<<<<<<< HEAD
     } 
 
 
@@ -174,7 +173,4 @@ public final class ContactsModel extends AbstractModel implements ContactsEvent 
         
         firePropertyChange(CONTACT_SEARCH_EVENT, null, group_list);
     } 
-=======
-    }
->>>>>>> refs/remotes/origin/develop
 }
