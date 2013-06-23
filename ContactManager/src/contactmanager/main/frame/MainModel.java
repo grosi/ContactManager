@@ -11,13 +11,12 @@ import java.net.URISyntaxException;
 
 
 /**
+ * Haupt-Modell der Applikation
  * @author grosi
  * @version 0.1
  * @since 27.03.2013
  */
-public class MainModel extends AbstractModel implements MainInterface {
-    
-    private DAOFactory daofactory;
+public class MainModel extends AbstractModel implements MainEvent {
     
     private String application_title = null;
     
@@ -34,7 +33,8 @@ public class MainModel extends AbstractModel implements MainInterface {
      */
     public void tabChange(String tabName) {
         String oldTitle = this.application_title;
-        this.application_title = MainController.APPLICATION_TITLE + " - " + tabName;
+        this.application_title = MainFrame.APPLICATION_TITLE + " - " + tabName;
+        
         firePropertyChange(CURRENT_TAB_CHANGED_EVENT, oldTitle, application_title);
     }
 
@@ -48,18 +48,6 @@ public class MainModel extends AbstractModel implements MainInterface {
     
     
     /**
-     * MySQL Factory instanzieren
-     */
-//    public void createDAOFactory() {
-//        try {
-//            this.daofactory = DAOFactory.getDAOFactory(DAOFactory.MySQL);
-//        } catch (DAOException ex) {
-//            System.err.println("Datenbank nicht erreichtbar");
-//        }
-//    }
-    
-    
-    /**
      * Referenz auf DAO Factory
      * @return Referenz
      * @todo Testen
@@ -67,12 +55,6 @@ public class MainModel extends AbstractModel implements MainInterface {
     public DAOFactory getDAOFactory() throws DAOException{
         
         return DAOFactory.getDAOFactory(DAOFactory.MySQL);
-//        try {
-//            this.daofactory = DAOFactory.getDAOFactory(DAOFactory.MySQL);
-//        } catch (DAOException ex) {
-//            System.err.println("Datenbank nicht erreichtbar");
-//        }
-//        return this.daofactory;
     }
     
     
@@ -83,12 +65,9 @@ public class MainModel extends AbstractModel implements MainInterface {
         
         if(Desktop.isDesktopSupported() && 
                 (os_desktop = Desktop.getDesktop()).isSupported(Desktop.Action.MAIL)) {
-            System.out.println("MAIL OK");
             return true;
-        } else {
-            System.out.println("MAIL ERROR");
+        } else
             return false;
-        }
     }
     
     

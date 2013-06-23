@@ -9,15 +9,14 @@ import contactmanager.main.dao.DAOException;
 import contactmanager.main.dao.DAOFactory;
 import contactmanager.main.groups.GroupsController;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
+ * Hauptkontroller der Applikation
  * @author Simon Grossenbacher
  * @version 0.1
  * @since 27.03.2013
  */
-public class MainController extends AbstractController implements MainInterface {
+public class MainController extends AbstractController {
 
     /* View */
     private MainFrame main_frame;
@@ -48,6 +47,7 @@ public class MainController extends AbstractController implements MainInterface 
         updataData();
     }
 
+    
     
     /***************************************************************************
      * SubController -> MainController Methoden
@@ -117,10 +117,10 @@ public class MainController extends AbstractController implements MainInterface 
     }
 
 
+    
     /***************************************************************************
      * GUI -> Model Methoden, inkl. Exception Handling
      **************************************************************************/
-
     /**
      * Anderer Tab auswaehlen
      * @param tabName
@@ -145,6 +145,7 @@ public class MainController extends AbstractController implements MainInterface 
     }
     
     
+    
     /***************************************************************************
      * Controller Methoden
      **************************************************************************/
@@ -159,5 +160,4 @@ public class MainController extends AbstractController implements MainInterface 
         
         main_frame.setMouseWaitCursor(false);
     }
-
 }
