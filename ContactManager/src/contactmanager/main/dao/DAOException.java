@@ -2,7 +2,8 @@
 package contactmanager.main.dao;
 
 /**
- * @author grosi
+ * DAO Exception Dummy-Klasse
+ * @author Simon Grossenbacher
  * @version 0.1
  * @since 28.03.2013
  */

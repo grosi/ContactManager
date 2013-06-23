@@ -8,20 +8,27 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 /**
- * @author grosi
+ * MySQL DAO Fabrik
+ * @author Simon Grossenbacher
  * @version 0.1
  * @since 28.03.2013
  */
 public class MySQLDAOFactory extends DAOFactory {
 
+    /* Zugangsdaten zur Datenbank */
     private static final String DRIVER= "com.mysql.jdbc.Driver";
     private static final String DBURL=  "jdbc:mysql://sql2.freesqldatabase.com:3306/sql27717" ;
     private static final String USER = "sql27717";
     private static final String PW = "wZ3!cX7!";
 
+    /* Datenbankverbindung */
     private static Connection connection = null;
     private static MySQLDAOFactory instance = null; 
     
+    /**
+     * Fabrik Konstruktor -> Singleton
+     * @throws DAOException 
+     */
     private MySQLDAOFactory() throws DAOException {
         try {
             Class.forName(DRIVER);
@@ -31,6 +38,12 @@ public class MySQLDAOFactory extends DAOFactory {
         }
     }
     
+    
+    /**
+     * Neu Fabrik Instantzieren -> Singleton
+     * @return Referenz auf Fabrik
+     * @throws DAOException 
+     */
     public static MySQLDAOFactory getInstance() throws DAOException {
         if (instance == null) {
             instance = new MySQLDAOFactory();
@@ -40,6 +53,11 @@ public class MySQLDAOFactory extends DAOFactory {
     }
     
     
+    /**
+     * Verbindung zu Datenbank aufbauen
+     * @return Referenz auf Verbindung
+     * @throws SQLException 
+     */
     public Connection getConnection() throws SQLException {
         if(connection == null || connection.isClosed()) {
             connection = DriverManager.getConnection(DBURL, USER, PW);
@@ -47,7 +65,6 @@ public class MySQLDAOFactory extends DAOFactory {
         
         return connection;
     }
-    
     
     
     /**
@@ -60,7 +77,6 @@ public class MySQLDAOFactory extends DAOFactory {
     }
 
     
-    
     /**
      * DAO fuer Gruppen-Modul
      * @return neue DAO
@@ -69,8 +85,5 @@ public class MySQLDAOFactory extends DAOFactory {
     public GroupsDAO getGroupsDAO() {
         return new MySQLGroupsDAO();
     }
-
-   
-    
 
 }
