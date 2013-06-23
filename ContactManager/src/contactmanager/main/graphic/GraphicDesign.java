@@ -78,6 +78,7 @@ public interface GraphicDesign {
     public static final String CONTACT_TAB_EMAIL_LABEL = "E-Mail Adresse";
     public static final String CONTACT_TAB_ADRESS_LABEL = "Adresse";
     public static final String CONTACT_TAB_PHONE_LABEL = "Telefonnummer";
+    public static final String CONTACT_TAB_GROUP_LABEL = "Gruppen";
     
     
     /** Textfelder */
