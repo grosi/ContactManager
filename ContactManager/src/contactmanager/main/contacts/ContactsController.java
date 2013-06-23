@@ -47,6 +47,7 @@ public class ContactsController extends AbstractController implements ContactsEv
     @Override
     public void updateData() {
         contacts_model.getContactList();
+        contacts_model.allGroups();
         System.out.println("UPDATE CONTACTS");
     }
     
