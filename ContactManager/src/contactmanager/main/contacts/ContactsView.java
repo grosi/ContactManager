@@ -121,6 +121,12 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
     private ArrayList<JPanel> phone_panel = new ArrayList<>();
     private ArrayList<Integer> phone_id = new ArrayList<>();
     
+    private ArrayList<JButton> group_remove_button = new ArrayList<>();
+    private ArrayList<JTextField> group_text = new ArrayList<>();
+    private ArrayList<JPanel> group_panel = new ArrayList<>();
+    private ArrayList<Integer> group_id = new ArrayList<>();
+    
+    
 
     private JPanel detail_dynamic_panel_phone;
     private JLabel detail_dynamic_label_phone;
@@ -134,6 +140,13 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
     public static final String CONTACT_ADD_CONTACT = "ADD";
     public static final String CONTACT_REMOVE_GROUP_WITH_ID = "REMOVE_ID";
     public static final String CONTACT_REMOVE_GROUP_WITH_INDEX = "REMOVE_INDEX";
+    private JPanel detail_dynamic_panel_group;
+    private JLabel detail_dynamic_label_group;
+    private JSeparator detail_dynamic_separator_group;
+    private ImageIcon detail_dynamic_imageicon_group;
+    private JButton detail_dynamic_addbutton_group;
+    private JComboBox detail_dynamic_combobox_group;
+    private JPanel detail_dynamic_panel_group_choose;
 
     
     /**
@@ -360,7 +373,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
         detail_dynamic_addbutton.setIcon(detail_dynamic_imageicon_email);
         detail_dynamic_panel_email.add(detail_dynamic_label_email, "cell 0 0");
         detail_dynamic_panel_email.add(detail_dynamic_separator_email, "wrap");
-        detail_dynamic_panel_email.add(detail_dynamic_addbutton,"wrap");
+        detail_dynamic_panel_email.add(detail_dynamic_addbutton,"span,wrap");
         
         
        detail_dynamic_addbutton.addActionListener(new ActionListener() {
@@ -389,7 +402,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
         detail_dynamic_addbutton_address.setIcon(detail_dynamic_imageicon_address);
         detail_dynamic_panel_address.add(detail_dynamic_label_adress, "cell 0 0");
         detail_dynamic_panel_address.add(detail_dynamic_separator_address, "cell 1 0,wrap");
-        detail_dynamic_panel_address.add(detail_dynamic_addbutton_address,"wrap");
+        detail_dynamic_panel_address.add(detail_dynamic_addbutton_address,"span,wrap");
         
     
         detail_dynamic_addbutton_address.addActionListener(new ActionListener() {
@@ -415,7 +428,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
         detail_dynamic_addbutton_phone.setIcon(detail_dynamic_imageicon_phone);
         detail_dynamic_panel_phone.add(detail_dynamic_label_phone, "cell 0 0");
         detail_dynamic_panel_phone.add(detail_dynamic_separator_phone, "cell 1 0,wrap");
-        detail_dynamic_panel_phone.add(detail_dynamic_addbutton_phone,"wrap");
+        detail_dynamic_panel_phone.add(detail_dynamic_addbutton_phone,"span,wrap");
         detail_dynamic_addbutton_phone.addActionListener(new ActionListener() {
 
             @Override
@@ -426,7 +439,37 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
             }
         });       
         
+        //Dynamic Panel Gruppen
+        detail_dynamic_panel_group = new JPanel(new MigLayout("", //Layout Grenzen
+                "min[][grow,fill]min", //Spalten Grenzen
+                "[][]")); //Zeilen Grenzen
+        detail_dynamic_panel_group_choose = new JPanel(new MigLayout("", //Layout Grenzen
+                "min[][grow,fill]min", //Spalten Grenzen
+                "[][]")); //Zeilen Grenzen
+        detail_dynamic_panel_group.setBackground(Color.white);
+        detail_dynamic_panel_group_choose.setBackground(Color.white);
+        detail_dynamic_label_group = new JLabel(CONTACT_TAB_GROUP_LABEL);
+        detail_dynamic_separator_group = new JSeparator();
+        detail_dynamic_imageicon_group = new ImageIcon(IMAGES_FILEPATH+"add16x16.png");
+        detail_dynamic_addbutton_group = new JButton("      Hinzufügen");
+        String[] groups = {"PRIVATE", "BUSINESS", "OTHER"};
         
+        detail_dynamic_combobox_group = new JComboBox(groups);
+        detail_dynamic_addbutton_group.setIcon(detail_dynamic_imageicon_group);
+        detail_dynamic_panel_group.add(detail_dynamic_label_group, "cell 0 0");
+        detail_dynamic_panel_group.add(detail_dynamic_separator_group, "cell 1 0,wrap");
+        detail_dynamic_panel_group_choose.add(detail_dynamic_combobox_group, "cell 0 0");
+        detail_dynamic_panel_group_choose.add(detail_dynamic_addbutton_group,"cell 1 0");
+        detail_dynamic_panel_group.add(detail_dynamic_panel_group_choose,"span,wrap");
+        detail_dynamic_addbutton_group.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                addGroup(((String)detail_dynamic_combobox_group.getSelectedItem()), "Default",CONTACT_DEFAULT_ID);
+
+                System.out.println("ADD");
+            }
+        }); 
         
         
 
@@ -443,6 +486,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
         detail_main_panel.add(detail_dynamic_panel_email, "wrap");
         detail_main_panel.add(detail_dynamic_panel_address, "wrap");
         detail_main_panel.add(detail_dynamic_panel_phone, "wrap");
+        detail_main_panel.add(detail_dynamic_panel_group, "wrap");
         
         
        
@@ -697,6 +741,23 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
         /**
      * Alle Adressen-Adressen loeschen
      */
+    public void setGroupEmpty() {
+        if(group_panel.size()>0) {
+            for(JPanel panel : group_panel) {
+                detail_dynamic_panel_group.remove(panel);
+
+            }  
+            group_panel.removeAll(group_panel);
+            group_text.removeAll(group_text);
+            group_id.removeAll(group_id);
+            group_remove_button.removeAll(group_remove_button);
+            detail_dynamic_panel_group.revalidate();
+        } 
+    }
+    
+        /**
+     * Alle Adressen-Adressen loeschen
+     */
     public void setPhoneEmpty() {
         if(phone_panel.size()>0) {
             for(JPanel panel : phone_panel) {
@@ -707,7 +768,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
             phone_text.removeAll(phone_text);
             phone_combo.removeAll(phone_combo);
             phone_id.removeAll(phone_id);
-
+            phone_remove_button.removeAll(phone_remove_button);
             detail_dynamic_panel_email.revalidate();
         } 
     }
@@ -983,8 +1044,70 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
     
     
     
-    
-    
+    private void addGroup(String group, String type,int id) {
+        Map<Component, Object> constraint_map = ((MigLayout)detail_dynamic_panel_group.getLayout()).getConstraintMap();
+        Component[] all_components = detail_dynamic_panel_group.getComponents();
+        
+        JPanel group_new = new JPanel(new MigLayout("wrap 4"));
+        JTextField group_name = new JTextField(group);
+        ImageIcon remove_image = new ImageIcon(IMAGES_FILEPATH+"remove16x16.png");
+        JButton remove_group = new JButton("Löschen");
+        remove_group.setIcon(remove_image);
+        group_name.setEditable(false);
+       // phone_nummer.setMinimumSize(new Dimension(100, 0));
+        
+        
+        
+        group_name.addFocusListener(new FocusListener() {
+
+            @Override
+            public void focusGained(FocusEvent fe) {
+                System.out.println("Gruppe angewählt"); 
+                selectGroup(fe);
+           }
+
+            @Override
+            public void focusLost(FocusEvent fe) {
+                System.out.println("Gruppe abgewählt");
+                deselectGroup(fe);
+            }
+        });
+        
+        remove_group.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                System.out.println("Gruppe löschen");
+                removeGroup(ae);
+            }
+        });
+        
+
+        
+        
+        detail_dynamic_panel_group.removeAll();
+        
+        for(Component c : all_components) {
+           
+            group_new.add(group_name, " span 2");
+
+            detail_dynamic_panel_group.add(group_new, "span 2,growx,wrap");
+            detail_dynamic_panel_group.add(c, constraint_map.get(c));
+
+            
+            
+        }
+
+
+        
+        group_panel.add(group_new);
+        group_text.add(group_name);
+        group_remove_button.add(remove_group);
+        group_id.add(id);
+
+       
+        detail_dynamic_panel_group.revalidate();
+    }   
     
     
     
@@ -1101,6 +1224,47 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
         int index = phone_text.indexOf(text);
         JButton remove = phone_remove_button.get(index);
         JPanel panel = phone_panel.get(index);
+        remove.setVisible(false);
+        panel.remove(remove);
+        panel.revalidate();
+        
+    }
+    
+    
+    
+    
+    private void removeGroup(ActionEvent ae) {
+        JButton remove = (JButton)ae.getSource();
+        int index = group_remove_button.indexOf(remove);
+        JPanel panel = group_panel.get(index);
+        
+        detail_dynamic_panel_group.remove(panel);
+        detail_dynamic_panel_group.revalidate();
+        
+    }
+    
+     
+        
+    private void selectGroup(FocusEvent hallo) {
+        JTextField text = (JTextField)hallo.getSource();
+        int index = group_text.indexOf(text);
+        JButton remove = group_remove_button.get(index);
+        JPanel panel = group_panel.get(index);
+        
+  
+        panel.add(remove);
+        remove.setVisible(true);
+        panel.revalidate();
+        
+    }
+    
+    
+    
+    private void deselectGroup(FocusEvent fe) {
+        JTextField text = (JTextField)fe.getSource();
+        int index = group_text.indexOf(text);
+        JButton remove = group_remove_button.get(index);
+        JPanel panel = group_panel.get(index);
         remove.setVisible(false);
         panel.remove(remove);
         panel.revalidate();
@@ -1509,6 +1673,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
                     /*Daten auf Default*/
                     setEmailEmpty();
                     setPhoneEmpty();
+                    setGroupEmpty();
                     setAddressEmpty();
                     
                     /*Name mit Uerbsichtsliste abgleichen wenn zwingend (Aenderungen gemacht) */
