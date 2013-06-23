@@ -7,6 +7,7 @@ import contactmanager.main.contacts.ContactDTO.ContactPhone;
 import static contactmanager.main.contacts.ContactsEvent.CONTACT_DEFAULT_ID;
 import contactmanager.main.graphic.JSeparatorList;
 import contactmanager.main.graphic.JSeparatorList.ListMember;
+import contactmanager.main.groups.GroupDTO;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -16,6 +17,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Map;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -430,7 +432,6 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         detail_dynamic_addbutton_group = new JButton("      Hinzufügen");
         String[] groups = {"PRIVATE", "BUSINESS", "OTHER"};
         detail_dynamic_combobox_group = new JComboBox(groups);
-        controller.getAllGroups();
         detail_dynamic_combobox_group.addItem("Test");
         detail_dynamic_addbutton_group.setIcon(detail_dynamic_imageicon_group);
         detail_dynamic_panel_group.add(detail_dynamic_label_group, "cell 0 0");
@@ -1733,13 +1734,14 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
             case CONTACT_ALL_GROUP_EVENT:
                  if(evt.getNewValue() != null) {
                     /* Gruppe aus Liste entfernen */
-                     
-                     
-                     detail_dynamic_combobox_group.addItem("Hallo");
-                   // separatorlist.removeListMember(((ContactDTO)evt.getNewValue()).user_id);
-                    
-                    /* Falls kein Eintrag selektiert ist, den ersten selektieren */
-                   // controller.selectContact(); 
+                     detail_dynamic_combobox_group.removeAllItems();
+                     ArrayList<GroupDTO> group_list;
+                     group_list=(ArrayList<GroupDTO>)evt.getNewValue();
+                        Iterator it = group_list.iterator();
+                      
+                        for(GroupDTO Group : group_list) {
+                          detail_dynamic_combobox_group.addItem(Group.group_name);
+                        }
                  }
                 break;
             default:
