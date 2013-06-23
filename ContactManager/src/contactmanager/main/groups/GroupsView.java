@@ -3,7 +3,6 @@ package contactmanager.main.groups;
 
 import contactmanager.main.AbstractView;
 import contactmanager.main.contacts.ContactDTO;
-import contactmanager.main.graphic.GraphicDesign;
 import contactmanager.main.graphic.JSeparatorList;
 import contactmanager.main.graphic.JSeparatorList.ListMember;
 import java.awt.Color;
@@ -14,7 +13,6 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
-import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -22,7 +20,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -31,11 +28,12 @@ import javax.swing.event.ListSelectionListener;
 import net.miginfocom.swing.MigLayout;
 
 /**
- * @author grosi
+ * Gruppen-View
+ * @author Simon Grossenbacher
  * @version 0.1
- * @since 02.05.2013
+ * @since 27.03.2013
  */
-public final class GroupsView extends AbstractView implements GraphicDesign, GroupsInterface{
+public final class GroupsView extends AbstractView implements GroupsGraphicDesign, GroupsEvent{
     
     /* Controller */
     private GroupsController controller;
@@ -66,12 +64,7 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
     private JButton remove_button;
     private JButton save_button;
     private JButton message_button;
-    
-    /* Konstanten */
-    public static final String GROUP_ADD_GROUP = "ADD";
-    public static final String GROUP_REMOVE_GROUP_WITH_ID = "REMOVE_ID";
-    public static final String GROUP_REMOVE_GROUP_WITH_INDEX = "REMOVE_INDEX";
-
+   
 
     /**
      * View default Konstruktor
@@ -87,6 +80,7 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
         /* Gruppen Tab zu Frame hinzufuegen */
         this.controller.addViewToFrame(GROUPS_TITLE, this);
     }
+    
     
     
     /***************************************************************************
@@ -132,7 +126,6 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
         
         //Liste
         groupoverview_separatorlist = new JSeparatorList();
-        groupoverview_separatorlist.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); /** @TODO */
         groupoverview_separatorlist.addListSelectionListener(new ListSelectionListener() {
 
             @Override
@@ -163,6 +156,7 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
             }
         });
         
+        
         //Speichern Schaltflaeche
         save_button = new JButton();
         save_button.setIcon(new ImageIcon(IMAGES_FILEPATH+"save32x32.png"));
@@ -176,6 +170,7 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
             }
         });
         
+        
         //Hinzufuegen Schaltflaeche
         add_button = new JButton();
         add_button.setIcon(new ImageIcon(IMAGES_FILEPATH+"add32x32.png"));
@@ -188,6 +183,7 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
                 addButtonActionPerformed(ae);
             }
         });
+        
         
         //Entfernen Schaltflaeche
         remove_button = new JButton();
@@ -291,7 +287,8 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
         
     }                    
 
-                                   
+           
+    
     /***************************************************************************
      * View -> Controller
      * Methoden werden direkt von Listener der Grafikelementen angesprochen
@@ -304,6 +301,7 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
         controller.addGroup();
     }
     
+    
     /**
      * Loeschen Button
      * @param ae 
@@ -312,6 +310,7 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
         controller.removeGroup();  
     }
 
+    
     /**
      * Speichern Button
      * @param ae 
@@ -320,6 +319,7 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
         controller.saveGroup();  
     }
 
+    
     /**
      * Nachrichten Button
      * @param ae 
@@ -327,6 +327,7 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
     private void messageButtonActionPerformed(ActionEvent ae) {
             controller.sendMessage();   
     }
+    
     
     /**
      * Such-Textfeld selektiert
@@ -336,6 +337,7 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
         controller.searchGroupFocusGained();
     }
     
+    
     /**
      * Such-Textfeld deselektiert
      * @param fe 
@@ -344,6 +346,7 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
         controller.searchGroupFocusLost();
     }
     
+    
     /**
      * Such-Textfeld Eintrag geaendert
      * @param fe 
@@ -351,6 +354,7 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
     private void searchTextChange(DocumentEvent de) {
         controller.searchGroup();
     }
+    
     
     /**
      * Gruppenliste wurde veraendert
@@ -361,6 +365,7 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
         if(lse.getValueIsAdjusting() == false)
             controller.getGroup();
     }
+    
     
     /**
      * Gruppennamen-Textfeld selektiert
@@ -379,6 +384,7 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
         controller.nameGroupFocusLost();
     }
     
+    
     /**
      * Gruppennamen-Textfeld geaendert
      * @param de 
@@ -386,6 +392,7 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
     private void groupnameTextChange(DocumentEvent de) {
         controller.nameGroupChange();  
     }
+    
     
     
     /***************************************************************************
@@ -400,6 +407,7 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
         return this.groupoverview_separatorlist.getSelectedIndex();
     }
     
+    
     /**
      * Gruppe mit dem angegebenen Index selektieren
      * @param index Gruppen-Index
@@ -407,6 +415,7 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
     public void setSelectedGroupIndex(int index) {
         this.groupoverview_separatorlist.setSelectedIndex(index);
     }
+    
     
     /**
      * ID einer Gruppe in der Uebersichtsliste
@@ -418,6 +427,7 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
         return member.getID();
     }
     
+    
     /**
      * Name einer Gruppe in der Uebersichtsliste
      * @param index Index der Gruppe in der Liste
@@ -428,6 +438,7 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
         return member.getText();
     }
     
+    
     /**
      * Aktueller Name der ausgewaehlten Gruppe
      * @return Gruppen-Name
@@ -436,6 +447,7 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
         return this.detail_static_name_textfield.getText();
     }
     
+    
     /**
      * Gruppen-Namen temporaer aendern
      * @param group_name Gruppen-Namen
@@ -443,6 +455,7 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
     public void setGroupName(String group_name) {
         this.detail_static_name_textfield.setText(group_name);
     }
+    
     
     /**
      * Gruppen Uebersichtsliste anpassen
@@ -465,6 +478,7 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
                 break;
         }
     }
+    
     
     /**
      * Gruppen Ubersichtliste leeren
@@ -495,6 +509,7 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
             detail_member_separatorlist.removeListMemberOfIndex(1);
     }
     
+    
     /**
      * Kontrolle ob eine Gruppe vorhanden ist anhand der Gruppen-ID
      * @param group_id Gruppen-ID
@@ -507,6 +522,7 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
             return true;
     }
     
+    
     /**
      * Groesse der Gruppen-Ubersichtsliste 
      */
@@ -514,12 +530,14 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
         return this.groupoverview_separatorlist.getListSize();
     }
     
+    
     /**
      * Anzahl vorhanden Gruppen
      */
     public int getGroupQuantity() {
         return this.groupoverview_separatorlist.getListMemberSize();
     }
+    
     
     /**
      * Suche-Text
@@ -529,6 +547,7 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
         return this.search_textfield.getText();
     }
     
+    
     /**
      * Suche-Text setzen
      * @param text Suche-Text
@@ -536,6 +555,7 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
     public void setSearchText(String text) {
         this.search_textfield.setText(text);
     }
+    
     
     /**
      * Suche selektieren
@@ -546,6 +566,7 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
         search_textfield.select(first, last);
     }
     
+    
      /**
      * Gruppen-Namen selektieren
      * @param first Erster Buchstaben des Strings 
@@ -555,6 +576,7 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
         detail_static_name_textfield.select(first, last);
     }
     
+    
     /**
      * Save-Button aktiviern oder deaktivieren
      * @param state true: Speichern moeglich; false: Speichern nicht moeglich
@@ -562,6 +584,7 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
     public void setSaveButtonState(boolean state) {
         this.save_button.setEnabled(state);
     }
+    
     
     /**
      * Message-Button aktiviern oder deaktivieren
@@ -618,7 +641,6 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
                         setGroupName(getGroupNameOfIndex(getSelectedGroupIndex()));
                         setSaveButtonState(true);
                     }
-                    //detail_static_name_textfield.setText(((GroupDTO)evt.getNewValue()).group_name);
                     
                     /* Neu Elemente hinzufuegen */
                     //TODO Methode wie setGroupList erstellen 
@@ -672,11 +694,14 @@ public final class GroupsView extends AbstractView implements GraphicDesign, Gro
                 
                 break;
                 
+                
             case GROUP_SELECT_CONTACTS_EVENT:
                 break;
                 
+                
             case GROUP_ADD_CONTACT_EVENT:
                 break;
+                
                 
             case GROUP_DELETE_CONTACT_EVENT:
                 break;

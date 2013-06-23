@@ -7,16 +7,24 @@ import contactmanager.main.dao.DAOException;
 import java.util.ArrayList;
 
 /**
- * @author grosi
+ * Gruppen-Modell
+ * @author Simon Grossenbacher
  * @version 0.1
- * @since 02.05.2013
+ * @since 27.03.2013
  */
-public final class GroupsModel extends AbstractModel implements GroupsInterface {
+public final class GroupsModel extends AbstractModel implements GroupsEvent {
     
-    
+    /* Gruppen Kontroller */
     private GroupsController controller;
+    
+    /* DAO */
     private GroupsDAO groupsdao;
     
+    
+    /**
+     * Konstruktor des Modells
+     * @param controller Referenz auf Gruppen Kontroller
+     */
     public GroupsModel(GroupsController controller) {
         super();
         
@@ -56,7 +64,6 @@ public final class GroupsModel extends AbstractModel implements GroupsInterface 
    
         firePropertyChange(GROUP_SELECT_EVENT, group, group_db);
     }
-    
     
     
     /**
@@ -141,5 +148,4 @@ public final class GroupsModel extends AbstractModel implements GroupsInterface 
         }
     }
 
-    
 }
