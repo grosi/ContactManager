@@ -443,7 +443,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
 
             @Override
             public void actionPerformed(ActionEvent ae) {
-                addGroup(((String)detail_dynamic_combobox_group.getSelectedItem()), "Default",CONTACT_DEFAULT_ID);
+                addGroup(((String)detail_dynamic_combobox_group.getSelectedItem()),CONTACT_DEFAULT_ID);
 
                 System.out.println("ADD");
             }
@@ -981,6 +981,21 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         
         return types;
     }
+    
+       public String[] getGroups() {
+       String[] groups = new String[group_text.size()];//new ArrayList<>();
+       int i = 0;
+        
+        if(address_combo.size() > 0) {
+             for(JTextField text : address_country) {
+                groups[i] = text.getText();
+                i++;
+            }
+        } else
+            groups = null;
+        
+        return groups;
+    }
       
       
       
@@ -993,6 +1008,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
             return null;
         
     }
+       
     
            /**
      * Suche-Text
@@ -1022,7 +1038,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
     
     
     
-    private void addGroup(String group, String type,int id) {
+    private void addGroup(String group,int id) {
         Map<Component, Object> constraint_map = ((MigLayout)detail_dynamic_panel_group.getLayout()).getConstraintMap();
         Component[] all_components = detail_dynamic_panel_group.getComponents();
         
@@ -1684,6 +1700,8 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
                     for(ContactPhone phone : ((ContactDTO)evt.getNewValue()).contact_phone)
                         addPhone(phone.phone_number, phone.phone_type,phone.phone_id);
                     
+                    controller.getContactGroups((ContactDTO)evt.getNewValue());
+                    
                     /* Falls Gruppenmitglieder vorhanden sind, Senden ermoeglichen */
                     if(email_panel.size() > 0)
                         setMessageButtonState(true);
@@ -1744,9 +1762,23 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
                         }
                  }
                 break;
+             
+            case CONTACT_ONE_GROUP_EVENT:
+                 if(evt.getNewValue() != null) {
+                    /* Gruppe in Liste einfügen */
+                    for(GroupDTO groups : ((ArrayList<GroupDTO>)evt.getNewValue()))
+                        addGroup(groups.group_name,groups.group_id);
+                 }
+                break;
+                
+                
             default:
                 System.err.println("Unknows Event");
         }
+    }
+
+    void getContactGroups(ContactDTO contactDTO) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

@@ -173,4 +173,16 @@ public final class ContactsModel extends AbstractModel implements ContactsEvent 
         
         firePropertyChange(CONTACT_ALL_GROUP_EVENT, null, group_list);
     } 
+
+    void getContactGroups(ContactDTO contact) {
+        ArrayList<GroupDTO> groupcontact_list;
+        try {
+            groupcontact_list = contactsdao.selectGroupsFromContact(contact.user_id);
+        } catch (DAOException ex) {
+            groupcontact_list = null;
+        }
+        
+        firePropertyChange(CONTACT_ONE_GROUP_EVENT, null, groupcontact_list);
+    } 
+    
 }

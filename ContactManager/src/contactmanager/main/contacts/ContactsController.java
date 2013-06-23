@@ -271,6 +271,16 @@ public class ContactsController extends AbstractController implements ContactsEv
         else 
             contacts_model.saveContact(contact);
         contacts_view.setMouseWaitCursor(false);
+        
+        
+        String[] group_name;
+        group_name = contacts_view.getGroups();
+        
+        
+        
+        
+        
+        
     }
     
     
@@ -438,6 +448,10 @@ public class ContactsController extends AbstractController implements ContactsEv
         contacts_model.allGroups();
     }
     
+        void getContactGroups(ContactDTO contactDTO) {
+        contacts_model.getContactGroups(contactDTO);
+    }
+    
     /***************************************************************************
      * Controller Methoden
      **************************************************************************/
@@ -448,4 +462,6 @@ public class ContactsController extends AbstractController implements ContactsEv
     private ContactDTO getContactDTO() {
         return new ContactDTO();
     }
+
+
 }

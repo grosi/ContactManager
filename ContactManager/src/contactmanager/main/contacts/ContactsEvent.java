@@ -22,4 +22,5 @@ public interface ContactsEvent {
     public static final String CONTACT_ADD_GROUP_EVENT = "CONTACT_ADD_GROUP";
     public static final String CONTACT_DELETE_GROUP_EVENT = "CONTACT_DELETE_GROUP";
     public static final String CONTACT_ALL_GROUP_EVENT = "CONTACT_ALL_GROUP";
+    public static final String CONTACT_ONE_GROUP_EVENT = "CONTACT_ONE_GROUP";
 }
