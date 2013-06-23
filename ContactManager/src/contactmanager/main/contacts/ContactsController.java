@@ -4,7 +4,6 @@ import contactmanager.main.AbstractController;
 import contactmanager.main.AbstractView;
 import contactmanager.main.frame.MainController;
 import contactmanager.main.SubController;
-import java.util.ArrayList;
 
 
 /**
@@ -12,7 +11,7 @@ import java.util.ArrayList;
  * @version 0.1
  * @since 27.03.2013
  */
-public class ContactsController extends AbstractController implements ContactsInterface, SubController {
+public class ContactsController extends AbstractController implements ContactsEvent, SubController {
     
     private MainController main_controller;
 
@@ -297,7 +296,7 @@ public class ContactsController extends AbstractController implements ContactsIn
         
         /* Wenn die Eingabemaske leer ist, Standardtext einblenden */
         if(contacts_view.getSearchText().equals(""))
-            contacts_view.setSearchText(contacts_view.GROUP_TAB_DEFAULT_SEARCH_TEXT);
+            contacts_view.setSearchText(ContactsView.CONTACT_TAB_DEFAULT_SEARCH_TEXT);
     }
     
     /**
@@ -309,7 +308,7 @@ public class ContactsController extends AbstractController implements ContactsIn
         text = contacts_view.getSearchText(); //Suchmuster
         
         /* Nur suchen, wenn nicht der Standardtext steht */
-        if(text.equals(contacts_view.GROUP_TAB_DEFAULT_SEARCH_TEXT) == false) {
+        if(text.equals(ContactsView.CONTACT_TAB_DEFAULT_SEARCH_TEXT) == false) {
             contacts_view.setMouseWaitCursor(true);
             contacts_model.searchContact(text);
             contacts_view.setMouseWaitCursor(false);
