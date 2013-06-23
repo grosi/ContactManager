@@ -12,36 +12,51 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 /**
- * @author grosi
+ * Gruppen DB-Zugriff
+ * @author Kevin Gerber, Simon Grossenbacher
  * @version 0.1
  * @since 02.05.2013
  */
 public class MySQLGroupsDAO implements GroupsDAO {
     
+    /* DB Daten */
     private Connection connection = null;
     private PreparedStatement prepared_statement = null;
     private ResultSet result = null;
 
-    
+    /**
+     * Konstruktor
+     */
     public MySQLGroupsDAO() {}
     
-
+    
+    /**
+     * Alle Gruppen von der DB laden
+     * @return Liste mit allen Gruppen
+     * @throws DAOException 
+     */
     @Override
     public ArrayList<GroupDTO> selectGroupList() throws DAOException {
         ArrayList<GroupDTO> groups = new ArrayList<>();
 
-        //result = executeQuery("SELECT `group_id`, `name` FROM `group` WHERE `name` LIKE '%e%' ORDER BY `name` ASC");
         result = executeQuery("SELECT * FROM `group` ORDER BY `name` ASC");
 
         while(nextDataSet(result)) {
             groups.add(getGroupDTO(result));
         }
-        //closeConnection();
+
         closeResult(result);
         
         return groups;
     }
 
+    
+    /**
+     * Nach Mustern in Gruppen suchen
+     * @param search_pattern Suchmuster
+     * @return Liste mit Gruppen die zum Suchmuster passen
+     * @throws DAOException 
+     */
     @Override
     public ArrayList<GroupDTO> searchGroupList(String search_pattern) throws DAOException {
         ArrayList<GroupDTO> groups = new ArrayList<>();
@@ -57,12 +72,18 @@ public class MySQLGroupsDAO implements GroupsDAO {
         return groups;
     }
 
+    
+    /**
+     * Detaillierte Daten zu einer Gruppe abfragen
+     * @param group_id ID der Gruppe
+     * @return Gruppen DTO
+     * @throws DAOException 
+     */
     @Override
     public GroupDTO selectGroup(int group_id) throws DAOException {
         ArrayList<ContactDTO> contacts;
         GroupDTO group =null;
 
-        //result = executeQuery("SELECT `group_id`, `name` FROM `group` WHERE `group_id`="+group_id);
         result = executeQuery("SELECT * FROM `group` WHERE `group_id`="+group_id);
         nextDataSet(result);
         group = getGroupDTO(result);
@@ -72,11 +93,16 @@ public class MySQLGroupsDAO implements GroupsDAO {
         contacts = selectContactsFromGroup(group.group_id);
         group.group_contacts = contacts;
         
-        //closeConnection();
-        
         return group;
     }
 
+    
+    /**
+     * Gruppe zu DB hinzufuegen
+     * @param insert_group Gruppen DTO
+     * @return ID der neuen Gruppe
+     * @throws DAOException 
+     */
     @Override
     public int insertGroup(GroupDTO insert_group) throws DAOException {
         int id;
@@ -87,11 +113,16 @@ public class MySQLGroupsDAO implements GroupsDAO {
     	id = executeInsert("INSERT INTO `group`(name)" +
                 "VALUE('"+insert_group.group_name+"')");
     	
-    	//insert_group.group_id = id;
-    	
     	return id;
     }
 
+    
+    /**
+     * Gruppe aktualisieren
+     * @param update_group Gruppen DTO
+     * @return true: Gruppe aktualisiert
+     * @throws DAOException 
+     */
     @Override
     public boolean updateGroup(GroupDTO update_group) throws DAOException {
         if (update_group.group_id <= 0)
@@ -102,6 +133,13 @@ public class MySQLGroupsDAO implements GroupsDAO {
         return true;
     }
 
+    
+    /**
+     * Gruppe loeschen
+     * @param group_id Gruppen ID
+     * @return true: Gruppe geloescht
+     * @throws DAOException 
+     */
     @Override
     public boolean deleteGroup(int group_id) throws DAOException {
          executeUpdate("DELETE `group`.*, `user2group`.* FROM `group` " +
@@ -111,6 +149,13 @@ public class MySQLGroupsDAO implements GroupsDAO {
         return true;
     }
 
+    
+    /**
+     * Kontakte einer Gruppe aus DB laden
+     * @param group_id Gruppen ID
+     * @return Liste mit den Kontakten
+     * @throws DAOException 
+     */
     @Override
     public ArrayList<ContactDTO> selectContactsFromGroup(int group_id) throws DAOException {
         ArrayList<ContactDTO> contacts = new ArrayList<>();
@@ -120,12 +165,20 @@ public class MySQLGroupsDAO implements GroupsDAO {
         while(nextDataSet(result)) {
             contacts.add(getContactDTO(result));
         }
-        //closeConnection();
+
         closeResult(result);
         
         return contacts;
     }
 
+    
+    /**
+     * Gruppe zu Kontakt hinzufuegen
+     * @param group_id Gruppen ID
+     * @param contact_id Kontakt ID
+     * @return true: Hinzufuegen erfolgreich
+     * @throws DAOException 
+     */
     @Override
     public boolean addGroupToContact(int group_id, int contact_id) throws DAOException {
         deleteGroupFromContact(group_id, contact_id);
@@ -135,6 +188,14 @@ public class MySQLGroupsDAO implements GroupsDAO {
         return true;
     }
 
+    
+    /**
+     * Gruppe von Kontakt loesen -> loeschen
+     * @param group_id Gruppen ID
+     * @param contact_id Kontakt ID
+     * @return true: Vorgang erfolgreich
+     * @throws DAOException 
+     */
     @Override
     public boolean deleteGroupFromContact(int group_id, int contact_id) throws DAOException {
         executeUpdate("DELETE FROM user2group " +
@@ -144,6 +205,13 @@ public class MySQLGroupsDAO implements GroupsDAO {
         return true;
     }
 
+    
+    /**
+     * Email-Adressen aller Gruppen-Kontakte von DB laden
+     * @param group_id Gruppen ID
+     * @return List mit Email-Adressen
+     * @throws DAOException 
+     */
     @Override
     public ArrayList<ContactDTO.ContactEmail> selectEmailAddressFromGroup(int group_id) throws DAOException {
         ArrayList<ContactDTO.ContactEmail> emails = new ArrayList<>();
@@ -174,11 +242,11 @@ public class MySQLGroupsDAO implements GroupsDAO {
         return emails;
     }
    
+    
 
     /***************************************************************************
      * Private Methoden fuer Datenbankzugriff
      **************************************************************************/
-
     /**
      * Query ausfuehren
      * @param query String mit Datenbankbefehlen
@@ -213,8 +281,7 @@ public class MySQLGroupsDAO implements GroupsDAO {
             throw new DAOException("Query string is incorrect");
         }
     }
-    
-    
+   
     
     /**
      * Neuer Datensatz zu Datenbank hinzufuegen
@@ -233,7 +300,6 @@ public class MySQLGroupsDAO implements GroupsDAO {
             statement.executeUpdate();
 
             /* Key ermitteln */
-            /** @TODO EXCEPTION java.sql.SQLException: Generated keys not requested. You need to specify Statement.RETURN_GENERATED_KEYS to Statement.executeUpdate() or Connection.prepareStatement().*/
             generatedKeys = statement.getGeneratedKeys();
             if(generatedKeys.next()){
                 key = generatedKeys.getInt(1);    
@@ -248,6 +314,7 @@ public class MySQLGroupsDAO implements GroupsDAO {
 
         return key;
     }
+    
     
     /**
      * Kontrolle ob noch Daten im Set vorhanden sind
@@ -296,6 +363,11 @@ public class MySQLGroupsDAO implements GroupsDAO {
     }
     
     
+    /**
+     * Result schliessen
+     * @param result Result-Set
+     * @throws DAOException 
+     */
     private void closeResult(ResultSet result) throws DAOException {
     	try {
             result.close();
@@ -337,6 +409,12 @@ public class MySQLGroupsDAO implements GroupsDAO {
     }
     
     
+    /**
+     * Kontakt DTO aus Result-Set generieren
+     * @param result
+     * @return
+     * @throws DAOException 
+     */
     private ContactDTO getContactDTO(ResultSet result) throws DAOException{
         ContactDTO contact = new ContactDTO();
         

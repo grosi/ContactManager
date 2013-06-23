@@ -5,9 +5,10 @@ import contactmanager.main.contacts.ContactDTO;
 import java.util.ArrayList;
 
 /**
- * @author grosi
+ * Data Transfer Objekt der Gruppen
+ * @author Simon Grossenbacher
  * @version 0.1
- * @since 02.05.2013
+ * @since 27.03.2013
  */
 public class GroupDTO {
     

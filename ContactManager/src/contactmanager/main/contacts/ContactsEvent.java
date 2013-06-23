@@ -1,13 +1,14 @@
 package contactmanager.main.contacts;
 
 /**
- *
- * @author grosi
+ * Events des Kontakt Paketes
+ * @author Simon Grossenbacher
+ * @version 0.1
+ * @since 02.05.2013
  */
-public interface ContactsInterface {
+public interface ContactsEvent {
     
     /* Allgemeine Angaben */
-    public static final String CONTACTS_TITLE = "Kontakte";
     public static final int CONTACT_DEFAULT_ID = 0;
     
     /* Property Changes */

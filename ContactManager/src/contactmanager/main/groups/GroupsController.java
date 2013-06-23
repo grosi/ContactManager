@@ -7,12 +7,14 @@ import contactmanager.main.SubController;
 import contactmanager.main.frame.MainController;
 
 /**
+ * Gruppen-Kontroller
  * @author Simon Grossenbacher
  * @version 0.1
- * @since 02.05.2013
+ * @since 27.03.2013
  */
-public final class GroupsController extends AbstractController implements SubController, GroupsInterface {
+public final class GroupsController extends AbstractController implements SubController, GroupsEvent {
     
+    /* Hauptkontroller */
     private MainController main_controller;
 
     /* Modelle */
@@ -22,6 +24,10 @@ public final class GroupsController extends AbstractController implements SubCon
     private GroupsView groups_view;
     
     
+    /**
+     * Konstruktor des Gruppen-Moduls
+     * @param mainController Referenz auf Hauptkontroller
+     */
     public GroupsController(MainController mainController) {
         super();
         
@@ -37,10 +43,10 @@ public final class GroupsController extends AbstractController implements SubCon
     }
  
     
+    
     /***************************************************************************
      * MainController-> SubController Methoden
      **************************************************************************/
-    
     /**
      * Aktuelle Datensaetze von der Datenbank holen
      */
@@ -50,19 +56,21 @@ public final class GroupsController extends AbstractController implements SubCon
     }
     
     
+    
     /***************************************************************************
      * Model/View -> MainController Methoden
-     **************************************************************************/
-    
+     **************************************************************************/ 
     /**
      * View zu Frame hinzufuegen
-     * @param title
-     * @param view 
+     * @param title Name des Tabs
+     * @param view Referenz auf JPanel des Tabs
      * @todo evtl in AbstractController einbauen!
      */
+    @Override
     public void addViewToFrame(String title, AbstractView view) {
         this.main_controller.addTabToMainFrame(title, view);
     }
+    
     
     /**
      * Spezifische DAO erstellen
@@ -75,10 +83,10 @@ public final class GroupsController extends AbstractController implements SubCon
     }
     
     
+    
     /***************************************************************************
      * View -> Controller Methoden
      **************************************************************************/
-    
     /**
      * Informationen zu einer Gruppe
      */
@@ -120,8 +128,7 @@ public final class GroupsController extends AbstractController implements SubCon
     /**
      * Neue Gruppe hinzufuegen
      */
-    public void addGroup() {
-        
+    public void addGroup() {   
         /* Platzhalter in Gruppen-Ubersichtliste */
         groups_view.setGroupList(GROUP_DEFAULT_ID, GroupsView.GROUP_TAB_DEFAULT_NAME_TEXT, GroupsView.GROUP_ADD_GROUP);
         
@@ -229,6 +236,7 @@ public final class GroupsController extends AbstractController implements SubCon
             groups_view.setSearchText(GroupsView.GROUP_TAB_DEFAULT_SEARCH_TEXT);
     }
     
+    
     /**
      * Nach Gruppen suchen
      */
@@ -277,10 +285,7 @@ public final class GroupsController extends AbstractController implements SubCon
         }
     }
     
-    
-    
-    
-    
+
     /**
      * Gruppen-Name angewaehlt
      */
@@ -322,7 +327,7 @@ public final class GroupsController extends AbstractController implements SubCon
                 group_name_old = groups_view.getGroupNameOfIndex(index);
                 group_id = groups_view.getGroupIdOfIndex(index);
                 
-                if(group_name_new.equals("") == false && group_name_new.equals(group_name_old) == false) {//&& 
+                if(group_name_new.equals("") == false && group_name_new.equals(group_name_old) == false) {
                     groups_view.setGroupList(group_id, group_name_new, GroupsView.GROUP_ADD_GROUP);
                     groups_view.setSaveButtonState(true);
                 } else {
@@ -364,6 +369,7 @@ public final class GroupsController extends AbstractController implements SubCon
         return main_controller.getEmailClientStatus();
     }
     
+    
     /**
      * Nachricht an entsprechende Empfaenger schreiben
      * @param email E-Mail Adressen
@@ -371,6 +377,7 @@ public final class GroupsController extends AbstractController implements SubCon
     public void sendEmail(String email) {
         main_controller.sendEmail(email);
     }
+    
     
     
     /***************************************************************************

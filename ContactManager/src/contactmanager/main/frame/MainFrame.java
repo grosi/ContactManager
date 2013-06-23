@@ -1,7 +1,6 @@
 package contactmanager.main.frame;
 
 import contactmanager.main.AbstractFrame;
-import contactmanager.main.graphic.GraphicDesign;
 import java.awt.BorderLayout;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -17,12 +16,14 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+
 /**
+ * Hautp-View der Applikation
  * @author Simon Grossenbacher
  * @version 0.1
  * @since 27.03.2013
  */
-public final class MainFrame extends AbstractFrame implements GraphicDesign, MainInterface {
+public final class MainFrame extends AbstractFrame implements MainFrameGraphicDesign, MainEvent {
     
     /* Controller */
     private MainController controller;
@@ -95,6 +96,9 @@ public final class MainFrame extends AbstractFrame implements GraphicDesign, Mai
 
         
     }
+    
+    
+    
     /***************************************************************************
      * View -> Controller
      * Methoden werden direkt von Listener der Grafikelementen angesprochen
@@ -110,37 +114,12 @@ public final class MainFrame extends AbstractFrame implements GraphicDesign, Mai
         controller.changeTabSelection(currentTab.getTitleAt(index));
     }
     
-
-//    private void windowOpenedEvent(WindowEvent we) {
-//        int index = tabPane.getSelectedIndex();
-//        //controller.changeTabSelection(tabPane.getTitleAt(index));
-//        /**@TODO */
-//    }
     
     private void windowClosingEvent(WindowEvent we) {
         controller.closeApplication();
     }
     
-//    private void windowClosedEvent(WindowEvent we) {
-//        /**@TODO */
-//    }
-//    
-//    private void windowIconifedEvent(WindowEvent we) {
-//        /**@TODO */ 
-//    }
-//    
-//    private void windowDeiconifedEvent(WindowEvent we) {
-//        /**@TODO */ 
-//    }
-//       
-//    private void windowActivatedEvent(WindowEvent we) {
-//        /**@TODO */ 
-//    }
-//    
-//    private void windowDeactivatedEvent(WindowEvent we) {
-//        /**@TODO */ 
-//    }
-    
+
     
     /***************************************************************************
      * Controller -> View
@@ -151,11 +130,11 @@ public final class MainFrame extends AbstractFrame implements GraphicDesign, Mai
      * Weiterer Tab hinzufuegen
      * @param panelName Name des Tabs
      * @param panel Referenz auf Tab
-     * @TODO Groesse des Tabs beruecksichtigen
      */
     public void setTab(String panelName, JPanel panel) {
         this.tabPane.add(panelName, panel);
     }
+    
     
     /**
      * Mauszeiger aendern
@@ -177,6 +156,8 @@ public final class MainFrame extends AbstractFrame implements GraphicDesign, Mai
         this.state_label.setText(text+"  ");
     }
 
+    
+    
     /***************************************************************************
      * Model -> View
      * Ausgeloeste Events des Modells, welche das View ueber Aenderungen informieren

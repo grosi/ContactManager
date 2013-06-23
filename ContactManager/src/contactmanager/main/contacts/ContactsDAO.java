@@ -43,5 +43,4 @@ public interface ContactsDAO {
     public ArrayList<GroupDTO> selectGroupsForContacts() throws DAOException;
     public boolean addContactToGroup(int contact_id, int group_id) throws DAOException;
     public boolean deleteContactFromGroup(int contact_id, int group_id) throws DAOException;
-    
 }

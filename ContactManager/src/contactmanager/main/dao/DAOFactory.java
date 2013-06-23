@@ -3,15 +3,15 @@ package contactmanager.main.dao;
 
 import contactmanager.main.contacts.ContactsDAO;
 import contactmanager.main.groups.GroupsDAO;
-import java.sql.Connection;
-import java.sql.SQLException;
 
 /**
- * @author grosi
+ * DAO Fabrik
+ * @author Simon Grossenbacher
  * @version 0.1
  * @since 28.03.2013
  */
 public abstract class DAOFactory {
+    
     /* Liste mit allen verfuegbaren Daten */
     public static final int MySQL = 1;
     
@@ -19,11 +19,14 @@ public abstract class DAOFactory {
     public abstract ContactsDAO getContactsDAO();
     public abstract GroupsDAO getGroupsDAO();
     
+    /**
+     * Konstruktor
+     */
     protected DAOFactory() {}
     
    
     /**
-     *
+     * Neue spezifische Fabrik erstellen
      * @param database Art der Datenbank waehlen
      * @return Datenbank Fabrik
      * @throws DAOException
