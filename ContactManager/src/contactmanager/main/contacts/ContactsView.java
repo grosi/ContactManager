@@ -429,8 +429,9 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         detail_dynamic_imageicon_group = new ImageIcon(IMAGES_FILEPATH+"add16x16.png");
         detail_dynamic_addbutton_group = new JButton("      Hinzufügen");
         String[] groups = {"PRIVATE", "BUSINESS", "OTHER"};
-        
         detail_dynamic_combobox_group = new JComboBox(groups);
+        controller.getAllGroups();
+        detail_dynamic_combobox_group.addItem("Test");
         detail_dynamic_addbutton_group.setIcon(detail_dynamic_imageicon_group);
         detail_dynamic_panel_group.add(detail_dynamic_label_group, "cell 0 0");
         detail_dynamic_panel_group.add(detail_dynamic_separator_group, "cell 1 0,wrap");
@@ -1728,7 +1729,19 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
                 
             case CONTACT_DELETE_GROUP_EVENT:
                 break;
-                
+            
+            case CONTACT_ALL_GROUP_EVENT:
+                 if(evt.getNewValue() != null) {
+                    /* Gruppe aus Liste entfernen */
+                     
+                     
+                     detail_dynamic_combobox_group.addItem("Hallo");
+                   // separatorlist.removeListMember(((ContactDTO)evt.getNewValue()).user_id);
+                    
+                    /* Falls kein Eintrag selektiert ist, den ersten selektieren */
+                   // controller.selectContact(); 
+                 }
+                break;
             default:
                 System.err.println("Unknows Event");
         }
