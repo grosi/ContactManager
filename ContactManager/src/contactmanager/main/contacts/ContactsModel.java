@@ -2,6 +2,7 @@ package contactmanager.main.contacts;
 
 import contactmanager.main.AbstractModel;
 import contactmanager.main.dao.DAOException;
+import contactmanager.main.groups.GroupDTO;
 import java.util.ArrayList;
 
 
@@ -181,6 +182,22 @@ public final class ContactsModel extends AbstractModel implements ContactsInterf
         }
         
         firePropertyChange(CONTACT_SEARCH_EVENT, null, contact_list);
-    }
-    
+    } 
+
+
+
+        /**
+     * Alle Gruppen auslesen
+     * @param text
+     */
+    public void allGroups() {
+        ArrayList<GroupDTO> group_list;
+        try {
+            group_list = contactsdao.selectGroupsForContacts();
+        } catch (DAOException ex) {
+            group_list = null;
+        }
+        
+        firePropertyChange(CONTACT_SEARCH_EVENT, null, group_list);
+    } 
 }
