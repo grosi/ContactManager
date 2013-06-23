@@ -171,6 +171,6 @@ public final class ContactsModel extends AbstractModel implements ContactsEvent 
             group_list = null;
         }
         
-        firePropertyChange(CONTACT_SEARCH_EVENT, null, group_list);
+        firePropertyChange(CONTACT_ALL_GROUP_EVENT, null, group_list);
     } 
 }
