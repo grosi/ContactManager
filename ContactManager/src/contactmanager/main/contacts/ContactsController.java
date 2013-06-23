@@ -34,6 +34,8 @@ public class ContactsController extends AbstractController implements ContactsEv
         contacts_view = new ContactsView(this);
         addView(contacts_view);
     }
+    
+    
  
     
     /***************************************************************************
@@ -426,6 +428,14 @@ public class ContactsController extends AbstractController implements ContactsEv
         }   
     }
     
+    
+    
+        /**
+     * Kontakt-Vorname
+     */
+    public void getAllGroups() {
+        contacts_model.allGroups();
+    }
     
     /***************************************************************************
      * Controller Methoden
