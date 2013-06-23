@@ -4,36 +4,14 @@ import contactmanager.main.AbstractView;
 import contactmanager.main.contacts.ContactDTO.ContactAdress;
 import contactmanager.main.contacts.ContactDTO.ContactEmail;
 import contactmanager.main.contacts.ContactDTO.ContactPhone;
-import static contactmanager.main.contacts.ContactsInterface.CONTACT_DEFAULT_ID;
-import contactmanager.main.graphic.GraphicDesign;
-import static contactmanager.main.graphic.GraphicDesign.GROUP_TAB_ADD_MNEMONIC;
-import static contactmanager.main.graphic.GraphicDesign.GROUP_TAB_DEFAULT_SEARCH_TEXT;
-import static contactmanager.main.graphic.GraphicDesign.GROUP_TAB_GROUPDETAIL_MIN_HEIGHT;
-import static contactmanager.main.graphic.GraphicDesign.GROUP_TAB_GROUPDETAIL_MIN_WIDTH;
-import static contactmanager.main.graphic.GraphicDesign.GROUP_TAB_GROUPLIST_MIN_HEIGHT;
-import static contactmanager.main.graphic.GraphicDesign.GROUP_TAB_GROUPLIST_MIN_WIDTH;
-import static contactmanager.main.graphic.GraphicDesign.GROUP_TAB_MESSAGE_MNEMONIC;
-import static contactmanager.main.graphic.GraphicDesign.GROUP_TAB_REMOVE_MNEMONIC;
-import static contactmanager.main.graphic.GraphicDesign.GROUP_TAB_SAVE_MNEMONIC;
-import static contactmanager.main.graphic.GraphicDesign.IMAGES_FILEPATH;
+import static contactmanager.main.contacts.ContactsEvent.CONTACT_DEFAULT_ID;
 import contactmanager.main.graphic.JSeparatorList;
 import contactmanager.main.graphic.JSeparatorList.ListMember;
-import static contactmanager.main.groups.GroupsInterface.GROUP_ADD_CONTACT_EVENT;
-import static contactmanager.main.groups.GroupsInterface.GROUP_DELETE_CONTACT_EVENT;
-import static contactmanager.main.groups.GroupsInterface.GROUP_DELETE_EVENT;
-import static contactmanager.main.groups.GroupsInterface.GROUP_INSERT_EVENT;
-import static contactmanager.main.groups.GroupsInterface.GROUP_LIST_SELECT_EVENT;
-import static contactmanager.main.groups.GroupsInterface.GROUP_SEARCH_EVENT;
-import static contactmanager.main.groups.GroupsInterface.GROUP_SELECT_CONTACTS_EVENT;
-import static contactmanager.main.groups.GroupsInterface.GROUP_SELECT_EVENT;
-import static contactmanager.main.groups.GroupsInterface.GROUP_UPDATE_EVENT;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.beans.PropertyChangeEvent;
@@ -48,8 +26,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.event.AncestorEvent;
-import javax.swing.event.AncestorListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
@@ -61,7 +37,7 @@ import net.miginfocom.swing.MigLayout;
  * @version 0.1
  * @since 27.03.2013
  */
-public final class ContactsView extends AbstractView implements GraphicDesign, ContactsInterface {
+public final class ContactsView extends AbstractView implements ContactsGraphicDesign, ContactsEvent {
     
     private ContactsController controller;
     
@@ -161,7 +137,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
 
         /* Linke Spalte */
         //Suchfeld
-        search_textfield = new JTextField(GROUP_TAB_DEFAULT_SEARCH_TEXT);
+        search_textfield = new JTextField(CONTACT_TAB_DEFAULT_SEARCH_TEXT);
         search_textfield.setBackground(Color.white);
         search_textfield.addFocusListener(new FocusListener() {
 
@@ -206,7 +182,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
         //Scroll Pane
         list_scrollpane = new JScrollPane();
         list_scrollpane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        list_scrollpane.setMinimumSize(new Dimension(GROUP_TAB_GROUPLIST_MIN_WIDTH, GROUP_TAB_GROUPLIST_MIN_HEIGHT));
+        list_scrollpane.setMinimumSize(new Dimension(CONTACT_TAB_GROUPLIST_MIN_WIDTH, CONTACT_TAB_GROUPLIST_MIN_HEIGHT));
         list_scrollpane.setViewportView(separatorlist); //Separator Liste hinzufuegen
         
 
@@ -214,7 +190,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
         //Nachricht Schaltflaeche 
         message_button = new JButton();
         message_button.setIcon(new ImageIcon(IMAGES_FILEPATH+"messages32x32.png"));  
-        message_button.setMnemonic(GROUP_TAB_MESSAGE_MNEMONIC);
+        message_button.setMnemonic(CONTACT_TAB_MESSAGE_MNEMONIC);
         message_button.setToolTipText(CONTACT_TAB_MESSAGE_TOOLTIP);
         message_button.addActionListener(new ActionListener() {
 
@@ -227,7 +203,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
         //Speichern Schaltflaeche
         save_button = new JButton();
         save_button.setIcon(new ImageIcon(IMAGES_FILEPATH+"save32x32.png"));
-        save_button.setMnemonic(GROUP_TAB_SAVE_MNEMONIC);
+        save_button.setMnemonic(CONTACT_TAB_SAVE_MNEMONIC);
         save_button.setToolTipText(CONTACT_TAB_SAVE_TOOLTIP);
         save_button.addActionListener(new ActionListener() {
 
@@ -240,7 +216,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
         //Hinzufuegen Schaltflaeche
         add_button = new JButton();
         add_button.setIcon(new ImageIcon(IMAGES_FILEPATH+"add32x32.png"));
-        add_button.setMnemonic(GROUP_TAB_ADD_MNEMONIC);
+        add_button.setMnemonic(CONTACT_TAB_ADD_MNEMONIC);
         add_button.setToolTipText(CONTACT_TAB_ADD_TOOLTIP);
         add_button.addActionListener(new ActionListener() {
 
@@ -253,7 +229,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
         //Entfernen Schaltflaeche
         remove_button = new JButton();
         remove_button.setIcon(new ImageIcon(IMAGES_FILEPATH+"remove32x32.png"));
-        remove_button.setMnemonic(GROUP_TAB_REMOVE_MNEMONIC);
+        remove_button.setMnemonic(CONTACT_TAB_REMOVE_MNEMONIC);
         remove_button.setToolTipText(CONTACT_TAB_REMOVE_TOOLTIP);
         remove_button.addActionListener(new ActionListener() {
 
@@ -450,7 +426,7 @@ public final class ContactsView extends AbstractView implements GraphicDesign, C
         
         //Scroll Pane
         detail_scrollpane = new JScrollPane();
-        detail_scrollpane.setMinimumSize(new Dimension(GROUP_TAB_GROUPDETAIL_MIN_WIDTH, GROUP_TAB_GROUPDETAIL_MIN_HEIGHT));
+        detail_scrollpane.setMinimumSize(new Dimension(CONTACT_TAB_GROUPDETAIL_MIN_WIDTH, CONTACT_TAB_GROUPDETAIL_MIN_HEIGHT));
         detail_scrollpane.setViewportView(detail_main_panel);
         
         

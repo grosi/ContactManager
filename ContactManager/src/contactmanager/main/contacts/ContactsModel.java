@@ -10,11 +10,19 @@ import java.util.ArrayList;
  * @version 0.1
  * @since 27.03.2013
  */
-public final class ContactsModel extends AbstractModel implements ContactsInterface {
+public final class ContactsModel extends AbstractModel implements ContactsEvent {
     
+    /* Kontakt Kontroller */
     private ContactsController controller;
+    
+    /* DAO */
     private ContactsDAO contactsdao;
 
+    
+    /**
+     * Konstruktor Kontakt Modell
+     * @param controller Referenz auf Kontakt Kontroller
+     */
     public ContactsModel(ContactsController controller) {
         super();
         
@@ -22,6 +30,7 @@ public final class ContactsModel extends AbstractModel implements ContactsInterf
         
         this.contactsdao = (ContactsDAO)controller.getDAO();
     }
+    
     
      /**
      * Alle vorhanden Kontakte der Datenbank einlesen
@@ -75,14 +84,14 @@ public final class ContactsModel extends AbstractModel implements ContactsInterf
         } catch (DAOException ex) {
             contact = null;
         }
-        System.out.println("ADD CONTACT");
+  
         firePropertyChange(CONTACT_INSERT_EVENT, null, contact);
     }
     
     
     /**
-     * Entfernt eine Gruppe
-     * @param group Gruppen Data Transfer Objekt
+     * Entfernt ein Kontakt
+     * @param contact Kontakt Data Transfer Objekt
      */
     public void removeContact(ContactDTO contact) {
         try {
@@ -90,14 +99,14 @@ public final class ContactsModel extends AbstractModel implements ContactsInterf
         } catch (DAOException ex) {
             contact = null;
         }
-        System.out.println("REMOVE CONTACT");
+
         firePropertyChange(CONTACT_DELETE_EVENT, null, contact);    
     }
     
     
     /**
-     * Bestehende Gruppe in der Datenbank speichern (Aktualisieren)
-     * @param group Gruppen Data Transfer Objekt
+     * Bestehender Kontakt in der Datenbank speichern (Aktualisieren)
+     * @param contact Kontakt Data Transfer Objekt
      */
     public void saveContact(ContactDTO contact) {
         try {
@@ -127,13 +136,13 @@ public final class ContactsModel extends AbstractModel implements ContactsInterf
         } catch (DAOException ex) {
             contact = null;
         }
-        System.out.println("SAVE CONTACT");
+
         firePropertyChange(CONTACT_UPDATE_EVENT, null, contact);
     }
     
     
     /**
-     * Nach bestehenden Gruppen suchen, die zu dem angegeben Text passen
+     * Nach bestehendem Kontakt suchen, die zu dem angegeben Text passen
      * @param text
      */
     public void searchContact(String text) {
@@ -143,44 +152,7 @@ public final class ContactsModel extends AbstractModel implements ContactsInterf
         } catch (DAOException ex) {
             contact_list = null;
         }
-        System.out.println("SEARCH CONTACT");
+
         firePropertyChange(CONTACT_SEARCH_EVENT, null, contact_list);
     }
-    
-    
-    /**
-     * E-Mail Adressen der Gruppen-Mitglieder einlesen
-     * @param group Gruppen Data Transfer Objekt
-     * @TODO E-Mail Prioritaeten beruecksichtigen
-     */
-    public void sendMessage(ContactDTO contact) {
-        String receiver = "";
-        ArrayList<ContactDTO.ContactEmail> email; 
-        
-//        try {
-//            email = groupsdao.selectEmailAddressFromGroup(contact.user_id);
-//            
-//            for(ContactDTO.ContactEmail email_adress : email)
-//                 receiver += email_adress.email_adress + ",";
-//            
-//            controller.sendEmail(receiver);
-//        } catch (DAOException ex) {
-//            
-//        }
-    }
-        /**
-     * Nach bestehenden Gruppen suchen, die zu dem angegeben Text passen
-     * @param text
-     */
-    public void searchGroup(String text) {
-        ArrayList<ContactDTO> contact_list;
-        try {
-            contact_list = contactsdao.searchContactList(text);
-        } catch (DAOException ex) {
-            contact_list = null;
-        }
-        
-        firePropertyChange(CONTACT_SEARCH_EVENT, null, contact_list);
-    }
-    
 }
