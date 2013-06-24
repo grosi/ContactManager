@@ -57,6 +57,7 @@ public class JSeparatorList extends JList{
         this.setCellRenderer(createListCellRenderer());
     }
     
+    
     /**
      * Fuegt ein neues Listenelement hinzu oder aktualisiert ein bestehendes
      * @param text
@@ -69,17 +70,18 @@ public class JSeparatorList extends JList{
         if(member_exists != null) {
             int index = this.listmember.indexOf(member_exists);
             member_exists.setText(text);
-            ((SeparatorListSelectionModel)this.getSelectionModel()).setSilent(true);
+            //((SeparatorListSelectionModel)this.getSelectionModel()).setSilent(true);
             this.listmember.set(index, member_exists);
             return member_exists;
         /* Neuer Eintrag hinzufuegen */
         } else {
             ListMember newlistmember = new ListMember(text, id);
-            ((SeparatorListSelectionModel)this.getSelectionModel()).setSilent(true);
+            //((SeparatorListSelectionModel)this.getSelectionModel()).setSilent(true);
             this.listmember.add(newlistmember);
             return newlistmember;
         }  
     }
+    
     
     /**
      * Loescht ein Listenelement anhand einer ID
@@ -90,7 +92,7 @@ public class JSeparatorList extends JList{
         /* Falls Eintrag vorhanden -> loeschen */
         ListMember member_exists = containsListMember(id);
         if(member_exists != null) {
-            ((SeparatorListSelectionModel)this.getSelectionModel()).setSilent(true);
+            //((SeparatorListSelectionModel)this.getSelectionModel()).setSilent(true);
             this.listmember.remove(member_exists);
             return member_exists;
         } else {
@@ -99,10 +101,11 @@ public class JSeparatorList extends JList{
         
     }
     
-     /**
-     * Loescht ein Listenelemts anhand des Index
-     * @param index Index eines Listenelementes
-     */
+    
+    /**
+    * Loescht ein Listenelemts anhand des Index
+    * @param index Index eines Listenelementes
+    */
     public ListMember removeListMemberOfIndex(int index) {
         Object index_object = this.listmember_separator.get(index);
         int member_index = this.listmember.indexOf(index_object);
@@ -111,6 +114,7 @@ public class JSeparatorList extends JList{
         this.listmember.remove(member);
         return member;
     }
+    
     
     /**
      * ID eines Listenelementes 
@@ -124,11 +128,17 @@ public class JSeparatorList extends JList{
     }
     
     
+    /**
+     * Index in der Liste eines Listeneintrags
+     * @param member Referenz auf Listeneintrag
+     * @return 
+     */
     public int getListMemberIndex(ListMember member) {
         
         return listmember_separator.indexOf(member);
     }
    
+    
     /**
      * Gibt die aktuelle Groesse der Liste zurueck
      * @return
@@ -137,6 +147,7 @@ public class JSeparatorList extends JList{
         return listmember_separator.size();
     }
     
+    
     /**
      * Aktuelle Anzahl der Listeneintraege ohne Separatoren
      * @return 
@@ -144,6 +155,7 @@ public class JSeparatorList extends JList{
     public int getListMemberSize() {
         return listmember.size();
     }
+    
     
     /**
      * Prueft ob ein Listeneintrag mit einer bestimmt ID bereits existiert
@@ -157,7 +169,17 @@ public class JSeparatorList extends JList{
         }
         return null;
     }
+    
      
+    /**
+     * Event Listener fuer die naechsten 2 Aktionen ausschalten
+     * @param state 
+     */
+    public void setListenerSilent(boolean state) {
+        ((SeparatorListSelectionModel)this.getSelectionModel()).setSilent(state);
+    }
+    
+    
     /**
      *  Spezifikation des Listeninhalts
      */
@@ -208,6 +230,7 @@ public class JSeparatorList extends JList{
         }
     } 
     
+    
     /**
      *  Vergleicht Listeneintraege nach Text
      */
@@ -223,6 +246,7 @@ public class JSeparatorList extends JList{
             }
         };
     }
+    
     
     /**
      * Vergleicht Listeneintraege nach dem ersten Buchstaben
@@ -240,6 +264,7 @@ public class JSeparatorList extends JList{
         };
     }
       
+    
     /**
      *  Filter fuer Listeneintraege
      * @TODO evtl. entfernen
@@ -253,6 +278,7 @@ public class JSeparatorList extends JList{
         }
         
     }
+    
     
     /**
      * Matcher fuer Filterung
@@ -276,6 +302,7 @@ public class JSeparatorList extends JList{
         
     } 
 
+    
     /**
      * List Renderer der nach Inhalt und Separator unterscheidet
      * @return Angepasster Default-Renderer
@@ -308,8 +335,7 @@ public class JSeparatorList extends JList{
             }
         };
     }  
-    
-
+   
     
     /**
      * Eigenes Selection Model fuer JList
@@ -349,7 +375,6 @@ public class JSeparatorList extends JList{
         
         @Override
         protected void fireValueChanged(int firstIndex, int lastIndex, boolean isAdjusting){
-
             if(silent){
                 if(this.getValueIsAdjusting() == false && silent_cnt == 0) {
                     setSilent(false);
