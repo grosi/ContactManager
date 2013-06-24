@@ -452,8 +452,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
             @Override
             public void actionPerformed(ActionEvent ae) {
                 addGroup(((String)detail_dynamic_combobox_group.getSelectedItem()),CONTACT_DEFAULT_ID);
-
-                System.out.println("ADD");
+                setSaveButtonState(true);
             }
         }); 
         
@@ -1234,7 +1233,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
 
             @Override
             public void actionPerformed(ActionEvent ae) {
-                System.out.println("Gruppe löschen");
+                setSaveButtonState(true);
                 removeGroup(ae);
             }
         });

@@ -113,6 +113,7 @@ public class ContactsController extends AbstractController implements ContactsEv
             } else {
                 contacts_view.setMessageButtonState(false);
             }
+            main_controller.setStatusBar("Kontakt '"+contact_listname[0]+" "+contact_listname[1]+"' angewählt" );
         }
     }
     
@@ -167,7 +168,7 @@ public class ContactsController extends AbstractController implements ContactsEv
         ContactDTO contact;
         int index;
         int contact_id;
-        String contact_listname;
+        String[] contact_listname;
         
         /* Selektierter Kontakt */
         index = contacts_view.getSelectedContactIndex();
@@ -177,12 +178,12 @@ public class ContactsController extends AbstractController implements ContactsEv
             return;
         
         contact_id = contacts_view.getContactIdOfIndex(index);
-        contact_listname = contacts_view.getContactNameOfIndex(index);
+        contact_listname = contacts_view.getContactNameOfIndex(index).split(" ");
         
         
         /* Ungespeicherter Kontakt */
         if(contact_id == CONTACT_DEFAULT_ID) {
-            contacts_view.setContactList(contact_id, contact_listname, ContactsView.CONTACT_REMOVE_GROUP_WITH_ID);
+            contacts_view.setContactList(contact_id, contact_listname[0], ContactsView.CONTACT_REMOVE_GROUP_WITH_ID);
             selectContact();
             
         /* Gespeicherter Kontakt */    
@@ -192,6 +193,8 @@ public class ContactsController extends AbstractController implements ContactsEv
             contacts_view.setMouseWaitCursor(true);
             contacts_model.removeContact(contact);
             contacts_view.setMouseWaitCursor(false);
+            
+            main_controller.setStatusBar("Kontakt '"+contact_listname[0]+" "+contact_listname[1]+"' gelöscht" );
         }
         
         
@@ -289,7 +292,7 @@ public class ContactsController extends AbstractController implements ContactsEv
         contacts_model.deletetGroups(group_name,contact,contacts_view.contact_groups);
         contacts_model.addedGroups(group_name,contact,contacts_view.contact_groups, contacts_view.all_groups);
         
-        
+        main_controller.setStatusBar("Kontakt '"+contact_name[0]+" "+contact_name[1]+"' gespeichert" );
         
     }
     
