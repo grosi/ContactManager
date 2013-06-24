@@ -232,7 +232,38 @@ public final class ContactsModel extends AbstractModel implements ContactsEvent 
              test=false; 
         }
     }
-    
-    
+
+    void deleteMail(ArrayList<Integer> Mails) {
+        for(Integer Mail : Mails) {
+          try {
+              contactsdao.deleteContactEmail((int)Mail); 
+             } catch (DAOException ex) {
+               Mails = null;
+             }
+         }
+    }
+
+    void deleteAddress(ArrayList<Integer> Addresses) {
+        for(Integer Address : Addresses) {
+          try {
+              contactsdao.deleteContactAddress((int)Address); 
+             } catch (DAOException ex) {
+               Addresses = null;
+             }
+         }
+    }
+
+    void deletePhone(ArrayList<Integer> Phones) {
+           for(Integer Phone : Phones) {
+          try {
+              contactsdao.deleteContactPhone((int)Phone); 
+             } catch (DAOException ex) {
+               Phones = null;
+             }
+         }
+    }
 }
+    
+    
+
 
