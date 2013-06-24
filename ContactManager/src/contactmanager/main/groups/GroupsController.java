@@ -97,7 +97,7 @@ public final class GroupsController extends AbstractController implements SubCon
         int group_id;
         String group_name;
         
-        index = groups_view.getSelectedGroupIndex(); //Selektierte Gruppe in der Ubersichtsliste
+        index = groups_view.getSelectedGroupIndex(); //Selektierte Gruppe in der Uebersichtsliste
         list_size = groups_view.getGroupListSize(); //Groesse der Uerbsichtsliste
         
         /* Kontrolle ob die Selektion noch moeglich ist */
@@ -121,6 +121,8 @@ public final class GroupsController extends AbstractController implements SubCon
             } else {
                 groups_view.setMessageButtonState(false);
             }
+            
+            main_controller.setStatusBar("Gruppe '"+group_name+"' angewählt" );
         }
     }
     
@@ -130,8 +132,9 @@ public final class GroupsController extends AbstractController implements SubCon
      */
     public void addGroup() {   
         /* Platzhalter in Gruppen-Ubersichtliste */
+        groups_view.setGroupListSilent(true);
         groups_view.setGroupList(GROUP_DEFAULT_ID, GroupsView.GROUP_TAB_DEFAULT_NAME_TEXT, GroupsView.GROUP_ADD_GROUP);
-        
+        groups_view.setGroupListSilent(false);
         /* Detailsansicht zuruecksetzen */
         groups_view.setGroupName(GroupsView.GROUP_TAB_DEFAULT_NAME_TEXT);
         groups_view.setContactListEmpty();
@@ -172,6 +175,8 @@ public final class GroupsController extends AbstractController implements SubCon
             groups_view.setMouseWaitCursor(true);
             groups_model.removeGroup(group);
             groups_view.setMouseWaitCursor(false);
+            
+            main_controller.setStatusBar("Gruppe '"+group_name+"' gelöscht");
         }
     }
     
@@ -207,6 +212,8 @@ public final class GroupsController extends AbstractController implements SubCon
         else 
             groups_model.saveGroup(group);
         groups_view.setMouseWaitCursor(false);
+        
+        main_controller.setStatusBar("Gruppe '"+group_name+"' gespeichert");
     }
     
     
@@ -331,7 +338,7 @@ public final class GroupsController extends AbstractController implements SubCon
                     groups_view.setGroupList(group_id, group_name_new, GroupsView.GROUP_ADD_GROUP);
                     groups_view.setSaveButtonState(true);
                 } else {
-                    groups_view.setSaveButtonState(false);
+                    //groups_view.setSaveButtonState(false);
                 }
         } 
     }
