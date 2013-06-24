@@ -143,7 +143,9 @@ public class ContactsController extends AbstractController implements ContactsEv
     
     public void addContact() {
         /* Platzhalter in Gruppen-Ubersichtliste */
+        contacts_view.setContactListSilent(true);
         contacts_view.setContactList(CONTACT_DEFAULT_ID, ContactsView.CONTACT_TAB_DEFAULT_NAME_TEXT, ContactsView.CONTACT_ADD_CONTACT);
+        contacts_view.setContactListSilent(false);
         
         /* Detailsansicht zuruecksetzen */
         contacts_view.setContactLastname(ContactsView.CONTACT_TAB_DEFAULT_NAME_TEXT);

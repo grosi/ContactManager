@@ -479,6 +479,10 @@ public final class GroupsView extends AbstractView implements GroupsGraphicDesig
         }
     }
     
+    public void setGroupListSilent(boolean state) {
+        this.groupoverview_separatorlist.setListenerSilent(state);
+    }
+    
     
     /**
      * Gruppen Ubersichtliste leeren
@@ -612,13 +616,17 @@ public final class GroupsView extends AbstractView implements GroupsGraphicDesig
 
                 if(evt.getNewValue() != null) {
                     setGroupListEmpty();
-                
+    
                     /* Bei leerer Gruppen Ubersichtsliste, Details-Ansicht leer lassen */
-                    if(((ArrayList<GroupDTO>)evt.getNewValue()).size() != 0)
+                    if(((ArrayList<GroupDTO>)evt.getNewValue()).size() != 0) {
                         /* Neu Elemente hinzufuegen */
-                        for(GroupDTO group : (ArrayList<GroupDTO>)evt.getNewValue()) 
+                        for(GroupDTO group : (ArrayList<GroupDTO>)evt.getNewValue()) {
+                            setGroupListSilent(true);
                             setGroupList(group.group_id, group.group_name, GROUP_ADD_GROUP);
-                    else {
+                        }
+                        setGroupListSilent(false);
+                        
+                    } else {
                         /* Details-ansicht leer */
                         setGroupName(GROUP_TAB_DEFAULT_NAME_TEXT);
                         setContactListEmpty();
@@ -635,11 +643,18 @@ public final class GroupsView extends AbstractView implements GroupsGraphicDesig
                 if(evt.getNewValue() != null) {
                     setContactListEmpty();
                     
-                    if(((GroupDTO)evt.getNewValue()).group_name.equals(((GroupDTO)evt.getOldValue()).group_name))
-                        setGroupName(((GroupDTO)evt.getNewValue()).group_name);
-                    else {
-                        setGroupName(getGroupNameOfIndex(getSelectedGroupIndex()));
-                        setSaveButtonState(true);
+                    if(((GroupDTO)evt.getNewValue()).group_name.equals(((GroupDTO)evt.getOldValue()).group_name)) {
+                        if(!getGroupNameOfIndex(getSelectedGroupIndex()).equals(getGroupName())) {
+                            setGroupName(((GroupDTO)evt.getNewValue()).group_name);
+                            setSaveButtonState(false);
+                        } else {
+                            setSaveButtonState(false);
+                        }
+                    } else {
+                        if(!getGroupNameOfIndex(getSelectedGroupIndex()).equals(getGroupName())) {
+                            setSaveButtonState(true);
+                            setGroupName(getGroupNameOfIndex(getSelectedGroupIndex()));
+                        }
                     }
                     
                     /* Neu Elemente hinzufuegen */

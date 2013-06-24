@@ -662,6 +662,10 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         }
     }
     
+    public void setContactListSilent(boolean state) {
+        this.separatorlist.setListenerSilent(state);
+    }
+    
     public void setContactListEmpty() {
         int contact_quantity;
         
@@ -1644,11 +1648,14 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
                     setContactListEmpty();
                 
                     /* Bei leerer Gruppen Ubersichtsliste, Details-Ansicht leer lassen */
-                    if(((ArrayList<ContactDTO>)evt.getNewValue()).size() != 0)
+                    if(((ArrayList<ContactDTO>)evt.getNewValue()).size() != 0) {
                         /* Neu Elemente hinzufuegen */
-                        for(ContactDTO contact : (ArrayList<ContactDTO>)evt.getNewValue()) 
+                        for(ContactDTO contact : (ArrayList<ContactDTO>)evt.getNewValue()) {
+                            setContactListSilent(true);
                             setContactList(contact.user_id, contact.user_lastname+" "+contact.user_prename, CONTACT_ADD_CONTACT);
-                    else {
+                        }
+                        separatorlist.setListenerSilent(false);
+                    } else {
                         /* Details-ansicht leer */
                         setContactPrename(CONTACT_TAB_DEFAULT_NAME_TEXT);
                         setContactLastname(CONTACT_TAB_DEFAULT_NAME_TEXT);
