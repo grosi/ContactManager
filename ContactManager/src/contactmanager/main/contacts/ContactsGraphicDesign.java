@@ -57,5 +57,10 @@ public interface ContactsGraphicDesign {
     public static final String CONTACT_TAB_DEFAULT_PRENAME_TEXT = "Vorname eingeben";
     public static final String CONTACT_TAB_DEFAULT_EMAIL_TEXT = "E-Mail Adresse eingeben";
     public static final String CONTACT_TAB_DEFAULT_PHONE_TEXT = "Telefonnummer eingeben";
+    public static final String CONTACT_TAB_DEFAULT_STREET_TEXT = "Strasse";
+    public static final String CONTACT_TAB_DEFAULT_CODE_TEXT = "PLZ";
+    public static final String CONTACT_TAB_DEFAULT_CITY_TEXT = "Stadt/Ort";
+    public static final String CONTACT_TAB_DEFAULT_COUNTRY_TEXT = "Land";
+    
     
 }

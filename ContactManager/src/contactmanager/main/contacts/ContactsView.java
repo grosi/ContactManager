@@ -394,9 +394,10 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
 
             @Override
             public void actionPerformed(ActionEvent ae) {
-                addAddress("Strasse", "PLZ", "Stadt/Ort", "Land", "Default",CONTACT_DEFAULT_ID);
-
-                System.out.println("ADD");
+                addAddress(CONTACT_TAB_DEFAULT_STREET_TEXT, 
+                        CONTACT_TAB_DEFAULT_CODE_TEXT, 
+                        CONTACT_TAB_DEFAULT_CITY_TEXT, 
+                        CONTACT_TAB_DEFAULT_COUNTRY_TEXT, "Default",CONTACT_DEFAULT_ID);
             }
         });
         
@@ -611,6 +612,42 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
     
     private void phoneTextChange(Object obj) {
         controller.phoneContactChange(obj);
+    }
+    
+    private void addressStreetTextFocusGained(FocusEvent e) {
+        controller.addressStreetContactFocusGained(e.getSource());
+    }
+    
+    private void addressStreetTextFocusLost(FocusEvent e) {
+        controller.addressStreetContactFocusLost(e.getSource());
+    }
+    
+    private void addressCodeTextFocusGained(FocusEvent e) {
+        controller.addressCodeContactFocusGained(e.getSource());
+    }
+    
+    private void addressCodeTextFocusLost(FocusEvent e) {
+        controller.addressCodeContactFocusLost(e.getSource());
+    }
+    
+    private void addressCityTextFocusGained(FocusEvent e) {
+        controller.addressCityContactFocusGained(e.getSource());
+    }
+    
+    private void addressCityTextFocusLost(FocusEvent e) {
+        controller.addressCityContactFocusLost(e.getSource());
+    }
+    
+    private void addressCountryTextFocusGained(FocusEvent e) {
+        controller.addressCountryContactFocusGained(e.getSource());
+    }
+    
+    private void addressCountryTextFocusLost(FocusEvent e) {
+        controller.addressCountryContactFocusLost(e.getSource());
+    }
+    
+    private void addressTextChange(Object obj) {
+        controller.addressContactChange(obj);
     }
     
     
@@ -1121,6 +1158,46 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
     }
     
     
+    public String getContactAddressStreet(Object obj) {
+        return ((JTextField)obj).getText();
+    }
+    
+    
+    public void setContactAddressStreetSelection(int first, int last, Object obj) {
+        ((JTextField)obj).select(first, last);
+    }
+    
+    
+    public String getContactAddressCode(Object obj) {
+        return ((JTextField)obj).getText();
+    }
+    
+    
+    public void setContactAddressCodeSelection(int first, int last, Object obj) {
+        ((JTextField)obj).select(first, last);
+    }
+    
+    public String getContactAddressCity(Object obj) {
+        return ((JTextField)obj).getText();
+    }
+    
+    
+    public void setContactAddressCitySelection(int first, int last, Object obj) {
+        ((JTextField)obj).select(first, last);
+    }
+    
+    public String getContactAddressCountry(Object obj) {
+        return ((JTextField)obj).getText();
+    }
+    
+    
+    public void setContactAddressCountrySelection(int first, int last, Object obj) {
+        ((JTextField)obj).select(first, last);
+    }
+    
+    
+    
+    
     
     
     private void addGroup(String group,int id) {
@@ -1397,78 +1474,103 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         city_address.setMinimumSize(new Dimension(166, 0));
         country_address.setMinimumSize(new Dimension(100, 0));
         
-         address_type.addActionListener(new ActionListener() {
+        
+        DocumentListener documentlistener = new DocumentListener() {
+
+            @Override
+            public void insertUpdate(DocumentEvent de) {
+                addressTextChange(de.getDocument().getProperty("address"));
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent de) {
+                addressTextChange(de.getDocument().getProperty("address"));
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent de) {
+                addressTextChange(de.getDocument().getProperty("address"));
+            }
+        };
+        
+        address_type.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent ae) {
-                System.out.println("Email Type geÃ¤ndert");
+                setSaveButtonState(true);
             }
         });
         
-         street_address.addFocusListener(new FocusListener() {
+        street_address.getDocument().putProperty("address", street_address);
+        street_address.addFocusListener(new FocusListener() {
 
             @Override
             public void focusGained(FocusEvent fe) {
-                System.out.println("Adresse angewÃ¤hlt"); 
+                addressStreetTextFocusGained(fe);
                 selectAddress(fe,1);
            }
 
             @Override
             public void focusLost(FocusEvent fe) {
-                System.out.println("Adresse abgewÃ¤hlt");
+                addressStreetTextFocusLost(fe);
                 deselectAddress(fe,1);
             }
         });
+        street_address.getDocument().addDocumentListener(documentlistener);
     
-           code_address.addFocusListener(new FocusListener() {
+        code_address.getDocument().putProperty("address", code_address);
+        code_address.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent fe) {
-                System.out.println("Adresse angewÃ¤hlt"); 
+                addressCodeTextFocusGained(fe);
                 selectAddress(fe,2);
            }
 
             @Override
             public void focusLost(FocusEvent fe) {
-                System.out.println("Adresse abgewÃ¤hlt");
+                addressCodeTextFocusLost(fe);
                 deselectAddress(fe,2);
             }
         });
+        code_address.getDocument().addDocumentListener(documentlistener);
          
-          city_address.addFocusListener(new FocusListener() {
+        city_address.getDocument().putProperty("address", city_address);
+        city_address.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent fe) {
-                System.out.println("Adresse angewÃ¤hlt"); 
+                addressCityTextFocusLost(fe);
                 selectAddress(fe,3);
            }
 
             @Override
             public void focusLost(FocusEvent fe) {
-                System.out.println("Adresse abgewÃ¤hlt");
+                addressCityTextFocusLost(fe);
                 deselectAddress(fe,3);
             }
         });
-          
-         country_address.addFocusListener(new FocusListener() {
+        city_address.getDocument().addDocumentListener(documentlistener);
+        
+        country_address.getDocument().putProperty("address", country_address);
+        country_address.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent fe) {
-                System.out.println("Adresse angewÃ¤hlt"); 
+                addressCountryTextFocusGained(fe);
                 selectAddress(fe,4);
            }
 
             @Override
             public void focusLost(FocusEvent fe) {
-                System.out.println("Adresse abgewÃ¤hlt");
+                addressCountryTextFocusLost(fe);
                 deselectAddress(fe,4);
             }
         });
-         
+        country_address.getDocument().addDocumentListener(documentlistener);
            
            
         remove_address.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent ae) {
-                System.out.println("Email lÃ¶schen");
                 removeAddress(ae);
             }
         });

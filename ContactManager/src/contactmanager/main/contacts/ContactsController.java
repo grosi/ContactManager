@@ -483,12 +483,12 @@ public class ContactsController extends AbstractController implements ContactsEv
      * @param obj Referenz auf die Telefon-Nummer
      */
     public void phoneContactFocusGained(Object obj) {
-        String contact_email;
+        String contact_phone;
         
         /* Alles Makieren wenn noch keine EMail-Adresse eingegeben wurde */
-        contact_email = contacts_view.getContactEmail(obj);
-        if(contact_email.equals(ContactsView.CONTACT_TAB_DEFAULT_PHONE_TEXT) == true) 
-            contacts_view.setContactPhoneSelection(0, contact_email.length(),obj);
+        contact_phone = contacts_view.getContactPhone(obj);
+        if(contact_phone.equals(ContactsView.CONTACT_TAB_DEFAULT_PHONE_TEXT) == true) 
+            contacts_view.setContactPhoneSelection(0, contact_phone.length(),obj);
     }
     
     /**
@@ -504,6 +504,98 @@ public class ContactsController extends AbstractController implements ContactsEv
      * @param obj Referenz auf die Telefon-Nummer
      */
     public void phoneContactChange(Object obj) {
+        contacts_view.setSaveButtonState(true);
+    }
+    
+    /**
+     * Strasse angewaehlt
+     * @param obj Referenz auf die Strasse
+     */
+    public void addressStreetContactFocusGained(Object obj) {
+        String contact_street;
+        
+        /* Alles Makieren wenn noch keine EMail-Adresse eingegeben wurde */
+        contact_street = contacts_view.getContactAddressStreet(obj);
+        if(contact_street.equals(ContactsView.CONTACT_TAB_DEFAULT_STREET_TEXT) == true) 
+            contacts_view.setContactAddressStreetSelection(0, contact_street.length(),obj);
+    }
+    
+    /**
+     * Strasse abgewaehlt
+     * @param obj Referenz auf die Strasse
+     */
+    public void addressStreetContactFocusLost(Object obj) {
+        contacts_view.setContactAddressStreetSelection(0,0,obj);
+    }
+    
+    /**
+     * PLZ angewaehlt
+     * @param obj Referenz auf die PLZ
+     */
+    public void addressCodeContactFocusGained(Object obj) {
+        String contact_code;
+        
+        /* Alles Makieren wenn noch keine EMail-Adresse eingegeben wurde */
+        contact_code = contacts_view.getContactAddressCode(obj);
+        if(contact_code.equals(ContactsView.CONTACT_TAB_DEFAULT_CODE_TEXT) == true) 
+            contacts_view.setContactAddressCodeSelection(0, contact_code.length(),obj);
+    }
+    
+    /**
+     * PLZ abgewaehlt
+     * @param obj Referenz auf die PLZ
+     */
+    public void addressCodeContactFocusLost(Object obj) {
+        contacts_view.setContactAddressCodeSelection(0,0,obj);
+    }
+    
+    /**
+     * Stadt angewaehlt
+     * @param obj Referenz auf die Stadt
+     */
+    public void addressCityContactFocusGained(Object obj) {
+        String contact_city;
+        
+        /* Alles Makieren wenn noch keine EMail-Adresse eingegeben wurde */
+        contact_city = contacts_view.getContactAddressCity(obj);
+        if(contact_city.equals(ContactsView.CONTACT_TAB_DEFAULT_CITY_TEXT) == true) 
+            contacts_view.setContactAddressCitySelection(0, contact_city.length(),obj);
+    }
+    
+    /**
+     * Stadt abgewaehlt
+     * @param obj Referenz auf die Stadt
+     */
+    public void addressCityContactFocusLost(Object obj) {
+        contacts_view.setContactAddressCitySelection(0,0,obj);
+    }
+    
+    /**
+     * Land angewaehlt
+     * @param obj Referenz auf das Land
+     */
+    public void addressCountryContactFocusGained(Object obj) {
+        String contact_country;
+        
+        /* Alles Makieren wenn noch keine EMail-Adresse eingegeben wurde */
+        contact_country = contacts_view.getContactAddressCountry(obj);
+        if(contact_country.equals(ContactsView.CONTACT_TAB_DEFAULT_COUNTRY_TEXT) == true) 
+            contacts_view.setContactAddressCountrySelection(0, contact_country.length(),obj);
+    }
+    
+    /**
+     * Land abgewaehlt
+     * @param obj Referenz auf das Land
+     */
+    public void addressCountryContactFocusLost(Object obj) {
+        contacts_view.setContactAddressCountrySelection(0,0,obj);
+    }
+    
+    /**
+     * Adresse geaendert
+     * @param obj Referenz auf die Addresse
+     */
+    public void addressContactChange(Object obj) {
         contacts_view.setSaveButtonState(true);
     }
     
