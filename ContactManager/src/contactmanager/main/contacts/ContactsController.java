@@ -276,7 +276,12 @@ public class ContactsController extends AbstractController implements ContactsEv
             contacts_model.saveContact(contact);
         contacts_view.setMouseWaitCursor(false);
         
-        
+        contacts_model.deleteMail(contacts_view.remove_emails);
+        contacts_view.remove_emails.removeAll(contacts_view.remove_emails);        
+        contacts_model.deleteAddress(contacts_view.remove_addresses);
+        contacts_view.remove_addresses.removeAll(contacts_view.remove_addresses);
+        contacts_model.deletePhone(contacts_view.remove_phones);
+        contacts_view.remove_phones.removeAll(contacts_view.remove_phones);
         String[] group_name;
        
         /*Gruppe*/
