@@ -1205,6 +1205,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         Component[] all_components = detail_dynamic_panel_group.getComponents();
         
         JPanel group_new = new JPanel(new MigLayout("wrap 4"));
+        group_new.setBackground(Color.white);
         JTextField group_name = new JTextField(group);
         ImageIcon remove_image = new ImageIcon(IMAGES_FILEPATH+"remove16x16.png");
         JButton remove_group = new JButton("Löschen");
@@ -1274,6 +1275,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         
         String[] phone_types = {"PRIVATE", "BUSINESS", "OTHER"};
         JPanel phone_new = new JPanel(new MigLayout("wrap 4"));
+        phone_new.setBackground(Color.white);
         JComboBox phone_type = new JComboBox(phone_types);
         phone_type.setSelectedItem(type);
         JTextField phone_nummer = new JTextField(phone);
@@ -1459,6 +1461,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         
         String[] adress_types = {"PRIVATE","BUSINESS", "OTHER"};
         JPanel address_new = new JPanel(new MigLayout("","rel[]rel[]rel[]min",""));
+        address_new.setBackground(Color.white);
         JComboBox address_type = new JComboBox(adress_types);
         address_type.setSelectedItem(type);
         JTextField street_address = new JTextField(street);
@@ -1680,6 +1683,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         
         String[] email_types = {"PRIVATE", "BUSINESS", "OTHER"};
         JPanel email_new = new JPanel(new MigLayout("wrap 4"));
+        email_new.setBackground(Color.white);
         JComboBox email_type = new JComboBox(email_types);
         email_type.setSelectedItem(type);
         JTextField email_adress = new JTextField(email);
