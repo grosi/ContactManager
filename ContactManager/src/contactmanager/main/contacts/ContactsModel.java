@@ -210,7 +210,9 @@ public final class ContactsModel extends AbstractModel implements ContactsEvent 
     
     
     void addedGroups(String[] groups,ContactDTO contact, ArrayList<GroupDTO> groupcontact_list, ArrayList<GroupDTO> groupcontact_all) {
-      boolean test=false;  
+      boolean test=false;
+      if(groups.length>0)
+      {
         for(int i = 0; i < groups.length; i++) {
             for(GroupDTO Group : groupcontact_list) {
                 if(((String)Group.group_name).equals(groups[i]))
@@ -231,6 +233,7 @@ public final class ContactsModel extends AbstractModel implements ContactsEvent 
             else
              test=false; 
         }
+      }
     }
 
     void deleteMail(ArrayList<Integer> Mails) {
