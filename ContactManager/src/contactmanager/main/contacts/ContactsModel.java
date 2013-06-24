@@ -213,12 +213,12 @@ public final class ContactsModel extends AbstractModel implements ContactsEvent 
       boolean test=false;  
         for(int i = 0; i < groups.length; i++) {
             for(GroupDTO Group : groupcontact_list) {
-                if(groups[i].equals((String)Group.group_name))
+                if(((String)Group.group_name).equals(groups[i]))
                     test=true;
             }
             if(test==false){            
                 for(GroupDTO Groupall : groupcontact_all) {
-                if(groups[i].equals((String)Groupall.group_name)){
+                if(((String)Groupall.group_name).equals(groups[i])){
                  try {
                      contactsdao.addContactToGroup(contact.user_id, Groupall.group_id); 
                  } catch (DAOException ex) {
@@ -235,3 +235,4 @@ public final class ContactsModel extends AbstractModel implements ContactsEvent 
     
     
 }
+
