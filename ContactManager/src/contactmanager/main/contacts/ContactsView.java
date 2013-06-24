@@ -725,7 +725,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
             email_send_button.removeAll(email_send_button);
             email_combo.removeAll(email_combo);
             email_id.removeAll(email_id);
-
+            remove_emails.removeAll(remove_emails);
             detail_dynamic_panel_email.revalidate();
         } 
     }
@@ -747,7 +747,6 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
             address_remove_button.removeAll(address_remove_button);
             address_combo.removeAll(address_combo);
             address_id.removeAll(address_id);
-
             detail_dynamic_panel_email.revalidate();
         } 
     }
@@ -765,6 +764,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
             group_text.removeAll(group_text);
             group_id.removeAll(group_id);
             group_remove_button.removeAll(group_remove_button);
+            remove_groups.removeAll(remove_groups);
             detail_dynamic_panel_group.revalidate();
         } 
     }
@@ -1289,7 +1289,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         JButton remove = (JButton)ae.getSource();
         int index = phone_remove_button.indexOf(remove);
         JPanel panel = phone_panel.get(index);
-        
+        remove_phones.add(phone_id.get(index));
         detail_dynamic_panel_phone.remove(panel);
         detail_dynamic_panel_phone.revalidate();
         
@@ -1517,6 +1517,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         JButton remove = (JButton)ae.getSource();
         int index = address_remove_button.indexOf(remove);
         JPanel panel = address_panel.get(index);
+        remove_addresses.add(address_id.get(index));
         detail_dynamic_panel_address.remove(panel);
         detail_dynamic_panel_address.revalidate();
         
@@ -1689,7 +1690,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         JButton remove = (JButton)aeremove.getSource();
         int index = email_remove_button.indexOf(remove);
         JPanel panel = email_panel.get(index);
-        remove_emails.add(index);
+        remove_emails.add(email_id.get(index));
         detail_dynamic_panel_email.remove(panel);
         detail_dynamic_panel_email.revalidate();
         panel.revalidate();
@@ -1720,6 +1721,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
     private void deselectEmail(FocusEvent fedeselect) {
         JTextField text = (JTextField)fedeselect.getSource();
         int index = email_text.indexOf(text);
+        try {
         JButton send = email_send_button.get(index);
         JButton remove = email_remove_button.get(index);
         JPanel panel = email_panel.get(index);
@@ -1730,7 +1732,11 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         
         panel.revalidate();
         detail_dynamic_label_email.revalidate();
-        
+        }
+        catch (ArrayIndexOutOfBoundsException ex) {
+          
+        }
+                
     }
    
     public void enableSaveButton(boolean state) {
