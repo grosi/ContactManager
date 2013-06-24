@@ -107,6 +107,11 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
     
     public ArrayList<GroupDTO> all_groups = new ArrayList<>();
     public ArrayList<GroupDTO> contact_groups = new ArrayList<>();
+    
+    public ArrayList<Integer> remove_groups = new ArrayList<>();
+    public ArrayList<Integer> remove_addresses = new ArrayList<>();
+    public ArrayList<Integer> remove_phones = new ArrayList<>();
+    public ArrayList<Integer> remove_emails = new ArrayList<>();   
 
     private JPanel detail_dynamic_panel_phone;
     private JLabel detail_dynamic_label_phone;
@@ -991,12 +996,25 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
        public String[] getGroups() {
        String[] groups = new String[group_text.size()];//new ArrayList<>();
        int i = 0;
-        
+       int j = 0;
+       boolean test = false;
         if(group_text.size() > 0) {
              for(JTextField group : group_text) {
-                groups[i] = group.getText();
-                 System.out.println(group.getText());
-                i++;
+                
+                for(Integer deletegroup : remove_groups){ 
+                 
+                    if(j==deletegroup)
+                        test=true;
+                }
+              j++;
+              if(test==false)
+              {
+                  System.out.println(group.getText());
+                  groups[i] = group.getText();    
+                  i++;
+              }
+              else
+                  test=false;
             }
         } else
             groups = null;
@@ -1014,6 +1032,21 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         else
             return null;
         
+    }
+       
+     public Integer[] getRemovedEmails() {
+        Integer removes[]= new Integer[remove_emails.size()]; 
+        int i=0;
+        if(remove_emails.size() > 0) {
+            for(Integer remove : remove_emails) {
+                removes[i]=remove;
+                i++;
+            }
+        } 
+        else
+            removes = null;
+        
+        return removes;    
     }
        
     
@@ -1063,13 +1096,13 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
 
             @Override
             public void focusGained(FocusEvent fe) {
-                System.out.println("Gruppe angewählt"); 
+                System.out.println("Gruppe angewÃ¤hlt"); 
                 selectGroup(fe);
            }
 
             @Override
             public void focusLost(FocusEvent fe) {
-                System.out.println("Gruppe abgewählt");
+                System.out.println("Gruppe abgewÃ¤hlt");
                 deselectGroup(fe);
             }
         });
@@ -1132,7 +1165,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
 
             @Override
             public void actionPerformed(ActionEvent ae) {
-                System.out.println("Nummer Type geändert");
+                System.out.println("Nummer Type geÃ¤ndert");
             }
         });
         
@@ -1140,13 +1173,13 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
 
             @Override
             public void focusGained(FocusEvent fe) {
-                System.out.println("Nummer angewählt"); 
+                System.out.println("Nummer angewÃ¤hlt"); 
                 selectPhone(fe);
            }
 
             @Override
             public void focusLost(FocusEvent fe) {
-                System.out.println("Nummer abgewählt");
+                System.out.println("Nummer abgewÃ¤hlt");
                 deselectPhone(fe);
             }
         });
@@ -1155,7 +1188,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
 
             @Override
             public void actionPerformed(ActionEvent ae) {
-                System.out.println("Nummer löschen");
+                System.out.println("Nummer lÃ¶schen");
                 removePhone(ae);
             }
         });
@@ -1244,6 +1277,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         group_text.remove(index);
         group_remove_button.remove(index);
         group_id.remove(index);
+        remove_groups.add(index);
         
         detail_dynamic_panel_group.remove(panel);
         detail_dynamic_panel_group.revalidate();
@@ -1308,7 +1342,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
 
             @Override
             public void actionPerformed(ActionEvent ae) {
-                System.out.println("Email Type geändert");
+                System.out.println("Email Type geÃ¤ndert");
             }
         });
         
@@ -1316,13 +1350,13 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
 
             @Override
             public void focusGained(FocusEvent fe) {
-                System.out.println("Adresse angewählt"); 
+                System.out.println("Adresse angewÃ¤hlt"); 
                 selectAddress(fe,1);
            }
 
             @Override
             public void focusLost(FocusEvent fe) {
-                System.out.println("Adresse abgewählt");
+                System.out.println("Adresse abgewÃ¤hlt");
                 deselectAddress(fe,1);
             }
         });
@@ -1330,13 +1364,13 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
            code_address.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent fe) {
-                System.out.println("Adresse angewählt"); 
+                System.out.println("Adresse angewÃ¤hlt"); 
                 selectAddress(fe,2);
            }
 
             @Override
             public void focusLost(FocusEvent fe) {
-                System.out.println("Adresse abgewählt");
+                System.out.println("Adresse abgewÃ¤hlt");
                 deselectAddress(fe,2);
             }
         });
@@ -1344,13 +1378,13 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
           city_address.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent fe) {
-                System.out.println("Adresse angewählt"); 
+                System.out.println("Adresse angewÃ¤hlt"); 
                 selectAddress(fe,3);
            }
 
             @Override
             public void focusLost(FocusEvent fe) {
-                System.out.println("Adresse abgewählt");
+                System.out.println("Adresse abgewÃ¤hlt");
                 deselectAddress(fe,3);
             }
         });
@@ -1358,13 +1392,13 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
          country_address.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent fe) {
-                System.out.println("Adresse angewählt"); 
+                System.out.println("Adresse angewÃ¤hlt"); 
                 selectAddress(fe,4);
            }
 
             @Override
             public void focusLost(FocusEvent fe) {
-                System.out.println("Adresse abgewählt");
+                System.out.println("Adresse abgewÃ¤hlt");
                 deselectAddress(fe,4);
             }
         });
@@ -1375,7 +1409,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
 
             @Override
             public void actionPerformed(ActionEvent ae) {
-                System.out.println("Email löschen");
+                System.out.println("Email lÃ¶schen");
                 removeAddress(ae);
             }
         });
@@ -1500,7 +1534,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
 
             @Override
             public void actionPerformed(ActionEvent ae) {
-                System.out.println("Email Type geändert");
+                System.out.println("Email Type geÃ¤ndert");
             }
         });
         
@@ -1508,13 +1542,13 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
 
             @Override
             public void focusGained(FocusEvent fe) {
-                System.out.println("Adresse angewählt"); 
+                System.out.println("Adresse angewÃ¤hlt"); 
                 selectEmail(fe);
            }
 
             @Override
             public void focusLost(FocusEvent fe) {
-                System.out.println("Adresse abgewählt");
+                System.out.println("Adresse abgewÃ¤hlt");
                 deselectEmail(fe);
             }
         });
@@ -1523,7 +1557,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
 
             @Override
             public void actionPerformed(ActionEvent ae) {
-                System.out.println("Email löschen");
+                System.out.println("Email lÃ¶schen");
                 removeEmail(ae);
             }
         });
@@ -1581,7 +1615,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         JButton remove = (JButton)aeremove.getSource();
         int index = email_remove_button.indexOf(remove);
         JPanel panel = email_panel.get(index);
-        
+        remove_emails.add(index);
         detail_dynamic_panel_email.remove(panel);
         detail_dynamic_panel_email.revalidate();
         panel.revalidate();
@@ -1661,14 +1695,11 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
                     setContactListEmpty();
                 
                     /* Bei leerer Gruppen Ubersichtsliste, Details-Ansicht leer lassen */
-                    if(((ArrayList<ContactDTO>)evt.getNewValue()).size() != 0) {
+                    if(((ArrayList<ContactDTO>)evt.getNewValue()).size() != 0)
                         /* Neu Elemente hinzufuegen */
-                        for(ContactDTO contact : (ArrayList<ContactDTO>)evt.getNewValue()) {
-                            setContactListSilent(true);
+                        for(ContactDTO contact : (ArrayList<ContactDTO>)evt.getNewValue()) 
                             setContactList(contact.user_id, contact.user_lastname+" "+contact.user_prename, CONTACT_ADD_CONTACT);
-                        }
-                        separatorlist.setListenerSilent(false);
-                    } else {
+                    else {
                         /* Details-ansicht leer */
                         setContactPrename(CONTACT_TAB_DEFAULT_NAME_TEXT);
                         setContactLastname(CONTACT_TAB_DEFAULT_NAME_TEXT);
@@ -1805,4 +1836,3 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
     }
     
 }
-    
