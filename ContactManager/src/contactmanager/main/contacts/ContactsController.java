@@ -444,9 +444,67 @@ public class ContactsController extends AbstractController implements ContactsEv
         }   
     }
     
+    /**
+     * Email-Adresse angewaehlt
+     * @param obj Referenz auf die Email-Adresse
+     */
+    public void emailContactFocusGained(Object obj) {
+        String contact_email;
+        
+        /* Alles Makieren wenn noch keine EMail-Adresse eingegeben wurde */
+        contact_email = contacts_view.getContactEmail(obj);
+        if(contact_email.equals(ContactsView.CONTACT_TAB_DEFAULT_EMAIL_TEXT) == true) 
+            contacts_view.setContactEmailSelection(0, contact_email.length(),obj);
+    }
+    
+    /**
+     * Email-Adresse abgewaehlt
+     * @param obj Referenz auf die Email-Adresse
+     */
+    public void emailContactFocusLost(Object obj) {
+        contacts_view.setContactEmailSelection(0,0,obj);
+    }
+    
+    /**
+     * Email-Adresse geaendert
+     * @param obj Referenz auf die Email-Adresse
+     */
+    public void emailContactChange(Object obj) {
+        contacts_view.setSaveButtonState(true);
+    }
+    
+    /**
+     * Email-Adresse angewaehlt
+     * @param obj Referenz auf die Email-Adresse
+     */
+    public void phoneContactFocusGained(Object obj) {
+        String contact_email;
+        
+        /* Alles Makieren wenn noch keine EMail-Adresse eingegeben wurde */
+        contact_email = contacts_view.getContactEmail(obj);
+        if(contact_email.equals(ContactsView.CONTACT_TAB_DEFAULT_PHONE_TEXT) == true) 
+            contacts_view.setContactPhoneSelection(0, contact_email.length(),obj);
+    }
+    
+    /**
+     * Email-Adresse abgewaehlt
+     * @param obj Referenz auf die Email-Adresse
+     */
+    public void phoneContactFocusLost(Object obj) {
+        contacts_view.setContactPhoneSelection(0,0,obj);
+    }
+    
+    /**
+     * Email-Adresse geaendert
+     * @param obj Referenz auf die Email-Adresse
+     */
+    public void phoneContactChange(Object obj) {
+        contacts_view.setSaveButtonState(true);
+    }
     
     
-        /**
+    
+    /**
      * Kontakt-Vorname
      */
     public void getAllGroups() {

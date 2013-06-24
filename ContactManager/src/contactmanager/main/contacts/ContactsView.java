@@ -63,7 +63,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
     private JSeparator detail_dynamic_separator_email;
     private JSeparator detail_dynamic_separator_address;
     private JButton detail_dynamic_addbutton;
-    private JTextField email_adress;
+//    private JTextField email_adress;
     
     /* Suche */
     private JTextField search_textfield;
@@ -365,7 +365,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
 
             @Override
             public void actionPerformed(ActionEvent ae) {
-                addEmail("E-Mail Adresse eingeben", "Default",CONTACT_DEFAULT_ID);
+                addEmail(CONTACT_TAB_DEFAULT_EMAIL_TEXT, "Default",CONTACT_DEFAULT_ID);
 //                email_adress.setText("E-Mail Adresse eingeben");
                 System.out.println("ADD");
             }
@@ -418,7 +418,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
 
             @Override
             public void actionPerformed(ActionEvent ae) {
-                addPhone("Telefonnummer eingeben", "Default",CONTACT_DEFAULT_ID);
+                addPhone(CONTACT_TAB_DEFAULT_PHONE_TEXT, "Default",CONTACT_DEFAULT_ID);
 
                 System.out.println("ADD");
             }
@@ -588,6 +588,31 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         JTextField text = email_text.get(index);
         controller.sendMessage(text.getText());
     }
+    
+    private void emailTextFocusGained(FocusEvent e) {
+        controller.emailContactFocusGained(e.getSource());
+    }
+    
+    private void emailTextFocusLost(FocusEvent e) {
+        controller.emailContactFocusLost(e.getSource());
+    }
+    
+    private void emailTextChange(Object obj) {
+        controller.emailContactChange(obj);
+    }
+    
+    private void phoneTextFocusGained(FocusEvent e) {
+        controller.phoneContactFocusGained(e.getSource());
+    }
+    
+    private void phoneTextFocusLost(FocusEvent e) {
+        controller.phoneContactFocusLost(e.getSource());
+    }
+    
+    private void phoneTextChange(Object obj) {
+        controller.phoneContactChange(obj);
+    }
+    
     
     /***************************************************************************
      * Controller -> View
@@ -1076,6 +1101,26 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
     }
     
     
+    public String getContactEmail(Object obj) {
+        return ((JTextField)obj).getText();
+    }
+    
+    
+    public void setContactEmailSelection(int first, int last, Object obj) {
+        ((JTextField)obj).select(first, last);
+    }
+    
+    
+    public String getContactPhone(Object obj) {
+        return ((JTextField)obj).getText();
+    }
+    
+    
+    public void setContactPhoneSelection(int first, int last, Object obj) {
+        ((JTextField)obj).select(first, last);
+    }
+    
+    
     
     
     private void addGroup(String group,int id) {
@@ -1165,7 +1210,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
 
             @Override
             public void actionPerformed(ActionEvent ae) {
-                System.out.println("Nummer Type geÃ¤ndert");
+                setSaveButtonState(true);
             }
         });
         
@@ -1173,16 +1218,35 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
 
             @Override
             public void focusGained(FocusEvent fe) {
-                System.out.println("Nummer angewÃ¤hlt"); 
+                phoneTextFocusGained(fe);
                 selectPhone(fe);
            }
 
             @Override
             public void focusLost(FocusEvent fe) {
-                System.out.println("Nummer abgewÃ¤hlt");
+                phoneTextFocusLost(fe);
                 deselectPhone(fe);
             }
         });
+        phone_nummer.getDocument().putProperty("phone", phone_nummer); //Property fuer die Referenz-Zungaenglichkeit
+        DocumentListener documentlistener = new DocumentListener() {
+
+            @Override
+            public void insertUpdate(DocumentEvent de) {
+                phoneTextChange(de.getDocument().getProperty("phone"));
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent de) {
+                phoneTextChange(de.getDocument().getProperty("phone"));
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent de) {
+                phoneTextChange(de.getDocument().getProperty("phone"));
+            }
+        };
+        phone_nummer.getDocument().addDocumentListener(documentlistener);
         
         remove_phone.addActionListener(new ActionListener() {
 
@@ -1192,10 +1256,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
                 removePhone(ae);
             }
         });
-        
 
-        
-        
         detail_dynamic_panel_phone.removeAll();
         
         for(Component c : all_components) {
@@ -1213,8 +1274,6 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
             
         }
 
-
-        
         phone_panel.add(phone_new);
         phone_combo.add(phone_type);
         phone_text.add(phone_nummer);
@@ -1534,7 +1593,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
 
             @Override
             public void actionPerformed(ActionEvent ae) {
-                System.out.println("Email Type geÃ¤ndert");
+                setSaveButtonState(true);
             }
         });
         
@@ -1542,16 +1601,35 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
 
             @Override
             public void focusGained(FocusEvent fe) {
-                System.out.println("Adresse angewÃ¤hlt"); 
+                emailTextFocusGained(fe);
                 selectEmail(fe);
            }
 
             @Override
             public void focusLost(FocusEvent fe) {
-                System.out.println("Adresse abgewÃ¤hlt");
+                emailTextFocusLost(fe);
                 deselectEmail(fe);
             }
         });
+        email_adress.getDocument().putProperty("address", email_adress); //Property fuer die Referenz-Zungaenglichkeit
+        DocumentListener documentlistener = new DocumentListener() {
+
+            @Override
+            public void insertUpdate(DocumentEvent de) {
+                emailTextChange(de.getDocument().getProperty("address"));
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent de) {
+                emailTextChange(de.getDocument().getProperty("address"));
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent de) {
+                emailTextChange(de.getDocument().getProperty("address"));
+            }
+        };
+        email_adress.getDocument().addDocumentListener(documentlistener);
         
         remove_email.addActionListener(new ActionListener() {
 
@@ -1589,8 +1667,6 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
             
             
         }
-
-
         
         email_panel.add(email_new);
         email_combo.add(email_type);
@@ -1600,8 +1676,6 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         email_id.add(id);
        
         detail_dynamic_panel_email.revalidate();
-        
-
     }
     
     

@@ -55,5 +55,7 @@ public interface ContactsGraphicDesign {
     public static final String CONTACT_TAB_DEFAULT_SEARCH_TEXT = "Suchbegriff eingeben...";
     public static final String CONTACT_TAB_DEFAULT_NAME_TEXT = "Name eingeben";
     public static final String CONTACT_TAB_DEFAULT_PRENAME_TEXT = "Vorname eingeben";
+    public static final String CONTACT_TAB_DEFAULT_EMAIL_TEXT = "E-Mail Adresse eingeben";
+    public static final String CONTACT_TAB_DEFAULT_PHONE_TEXT = "Telefonnummer eingeben";
     
 }
