@@ -1096,13 +1096,13 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
 
             @Override
             public void focusGained(FocusEvent fe) {
-                System.out.println("Gruppe angewählt"); 
+                System.out.println("Gruppe angewÃ¤hlt"); 
                 selectGroup(fe);
            }
 
             @Override
             public void focusLost(FocusEvent fe) {
-                System.out.println("Gruppe abgewählt");
+                System.out.println("Gruppe abgewÃ¤hlt");
                 deselectGroup(fe);
             }
         });
@@ -1165,7 +1165,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
 
             @Override
             public void actionPerformed(ActionEvent ae) {
-                System.out.println("Nummer Type geändert");
+                System.out.println("Nummer Type geÃ¤ndert");
             }
         });
         
@@ -1173,13 +1173,13 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
 
             @Override
             public void focusGained(FocusEvent fe) {
-                System.out.println("Nummer angewählt"); 
+                System.out.println("Nummer angewÃ¤hlt"); 
                 selectPhone(fe);
            }
 
             @Override
             public void focusLost(FocusEvent fe) {
-                System.out.println("Nummer abgewählt");
+                System.out.println("Nummer abgewÃ¤hlt");
                 deselectPhone(fe);
             }
         });
@@ -1188,7 +1188,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
 
             @Override
             public void actionPerformed(ActionEvent ae) {
-                System.out.println("Nummer löschen");
+                System.out.println("Nummer lÃ¶schen");
                 removePhone(ae);
             }
         });
@@ -1342,7 +1342,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
 
             @Override
             public void actionPerformed(ActionEvent ae) {
-                System.out.println("Email Type geändert");
+                System.out.println("Email Type geÃ¤ndert");
             }
         });
         
@@ -1350,13 +1350,13 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
 
             @Override
             public void focusGained(FocusEvent fe) {
-                System.out.println("Adresse angewählt"); 
+                System.out.println("Adresse angewÃ¤hlt"); 
                 selectAddress(fe,1);
            }
 
             @Override
             public void focusLost(FocusEvent fe) {
-                System.out.println("Adresse abgewählt");
+                System.out.println("Adresse abgewÃ¤hlt");
                 deselectAddress(fe,1);
             }
         });
@@ -1364,13 +1364,13 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
            code_address.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent fe) {
-                System.out.println("Adresse angewählt"); 
+                System.out.println("Adresse angewÃ¤hlt"); 
                 selectAddress(fe,2);
            }
 
             @Override
             public void focusLost(FocusEvent fe) {
-                System.out.println("Adresse abgewählt");
+                System.out.println("Adresse abgewÃ¤hlt");
                 deselectAddress(fe,2);
             }
         });
@@ -1378,13 +1378,13 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
           city_address.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent fe) {
-                System.out.println("Adresse angewählt"); 
+                System.out.println("Adresse angewÃ¤hlt"); 
                 selectAddress(fe,3);
            }
 
             @Override
             public void focusLost(FocusEvent fe) {
-                System.out.println("Adresse abgewählt");
+                System.out.println("Adresse abgewÃ¤hlt");
                 deselectAddress(fe,3);
             }
         });
@@ -1392,13 +1392,13 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
          country_address.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent fe) {
-                System.out.println("Adresse angewählt"); 
+                System.out.println("Adresse angewÃ¤hlt"); 
                 selectAddress(fe,4);
            }
 
             @Override
             public void focusLost(FocusEvent fe) {
-                System.out.println("Adresse abgewählt");
+                System.out.println("Adresse abgewÃ¤hlt");
                 deselectAddress(fe,4);
             }
         });
@@ -1409,7 +1409,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
 
             @Override
             public void actionPerformed(ActionEvent ae) {
-                System.out.println("Email löschen");
+                System.out.println("Email lÃ¶schen");
                 removeAddress(ae);
             }
         });
@@ -1534,7 +1534,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
 
             @Override
             public void actionPerformed(ActionEvent ae) {
-                System.out.println("Email Type geändert");
+                System.out.println("Email Type geÃ¤ndert");
             }
         });
         
@@ -1542,13 +1542,13 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
 
             @Override
             public void focusGained(FocusEvent fe) {
-                System.out.println("Adresse angewählt"); 
+                System.out.println("Adresse angewÃ¤hlt"); 
                 selectEmail(fe);
            }
 
             @Override
             public void focusLost(FocusEvent fe) {
-                System.out.println("Adresse abgewählt");
+                System.out.println("Adresse abgewÃ¤hlt");
                 deselectEmail(fe);
             }
         });
@@ -1557,7 +1557,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
 
             @Override
             public void actionPerformed(ActionEvent ae) {
-                System.out.println("Email löschen");
+                System.out.println("Email lÃ¶schen");
                 removeEmail(ae);
             }
         });
@@ -1615,7 +1615,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         JButton remove = (JButton)aeremove.getSource();
         int index = email_remove_button.indexOf(remove);
         JPanel panel = email_panel.get(index);
-        
+        remove_emails.add(index);
         detail_dynamic_panel_email.remove(panel);
         detail_dynamic_panel_email.revalidate();
         panel.revalidate();
@@ -1695,14 +1695,11 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
                     setContactListEmpty();
                 
                     /* Bei leerer Gruppen Ubersichtsliste, Details-Ansicht leer lassen */
-                    if(((ArrayList<ContactDTO>)evt.getNewValue()).size() != 0) {
+                    if(((ArrayList<ContactDTO>)evt.getNewValue()).size() != 0)
                         /* Neu Elemente hinzufuegen */
-                        for(ContactDTO contact : (ArrayList<ContactDTO>)evt.getNewValue()) {
-                            setContactListSilent(true);
+                        for(ContactDTO contact : (ArrayList<ContactDTO>)evt.getNewValue()) 
                             setContactList(contact.user_id, contact.user_lastname+" "+contact.user_prename, CONTACT_ADD_CONTACT);
-                        }
-                        separatorlist.setListenerSilent(false);
-                    } else {
+                    else {
                         /* Details-ansicht leer */
                         setContactPrename(CONTACT_TAB_DEFAULT_NAME_TEXT);
                         setContactLastname(CONTACT_TAB_DEFAULT_NAME_TEXT);
@@ -1839,4 +1836,3 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
     }
     
 }
-    
