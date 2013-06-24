@@ -479,8 +479,8 @@ public class ContactsController extends AbstractController implements ContactsEv
     }
     
     /**
-     * Email-Adresse angewaehlt
-     * @param obj Referenz auf die Email-Adresse
+     * Telefon angewaehlt
+     * @param obj Referenz auf die Telefon-Nummer
      */
     public void phoneContactFocusGained(Object obj) {
         String contact_email;
@@ -492,16 +492,16 @@ public class ContactsController extends AbstractController implements ContactsEv
     }
     
     /**
-     * Email-Adresse abgewaehlt
-     * @param obj Referenz auf die Email-Adresse
+     * Telefon abgewaehlt
+     * @param obj Referenz auf die Telefon-Nummer
      */
     public void phoneContactFocusLost(Object obj) {
         contacts_view.setContactPhoneSelection(0,0,obj);
     }
     
     /**
-     * Email-Adresse geaendert
-     * @param obj Referenz auf die Email-Adresse
+     * Telefon geaendert
+     * @param obj Referenz auf die Telefon-Nummer
      */
     public void phoneContactChange(Object obj) {
         contacts_view.setSaveButtonState(true);
