@@ -155,7 +155,7 @@ public class MySQLContactsDAO implements ContactsDAO {
     @Override
     public void deleteContactAddress(int address_id) throws DAOException {
         executeUpdate("DELETE FROM user_address " +
-                        "WHERE adress_id="+Integer.toString(address_id));
+                        "WHERE address_id="+Integer.toString(address_id));
     }
 	
     @Override
