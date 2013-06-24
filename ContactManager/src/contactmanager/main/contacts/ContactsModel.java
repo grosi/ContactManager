@@ -183,6 +183,55 @@ public final class ContactsModel extends AbstractModel implements ContactsEvent 
         }
         
         firePropertyChange(CONTACT_ONE_GROUP_EVENT, null, groupcontact_list);
-    } 
+    }
+
+    void deletetGroups(String[] groups,ContactDTO contact, ArrayList<GroupDTO> groupcontact_list)  {
+        boolean test=false;
+          for(GroupDTO Group : groupcontact_list) {
+   
+             for(int i = 0; i < groups.length; i++) {
+                 System.out.println(groups[i]);
+                  if(Group.group_name.equals((String)groups[i]))
+                    test=true;   
+                }
+             if(test==false){
+                try {
+                    contactsdao.deleteContactFromGroup(contact.user_id, Group.group_id);
+                } catch (DAOException ex) {
+                    groupcontact_list = null;
+                }
+             }
+             else
+                 test=false;
+        }
+
+    }
+
+    
+    
+    void addedGroups(String[] groups,ContactDTO contact, ArrayList<GroupDTO> groupcontact_list, ArrayList<GroupDTO> groupcontact_all) {
+      boolean test=false;  
+        for(int i = 0; i < groups.length; i++) {
+            for(GroupDTO Group : groupcontact_list) {
+                if(groups[i].equals((String)Group.group_name))
+                    test=true;
+            }
+            if(test==false){            
+                for(GroupDTO Groupall : groupcontact_all) {
+                if(groups[i].equals((String)Groupall.group_name)){
+                 try {
+                     contactsdao.addContactToGroup(contact.user_id, Groupall.group_id); 
+                 } catch (DAOException ex) {
+                    groupcontact_list = null;
+                 }
+                }   
+             }
+
+            }
+            else
+             test=false; 
+        }
+    }
+    
     
 }
