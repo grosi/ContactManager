@@ -1959,22 +1959,35 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
                     setAddressEmpty();
                     
                     /*Name mit Uerbsichtsliste abgleichen wenn zwingend (Aenderungen gemacht) */
-                    if(((ContactDTO)evt.getNewValue()).user_lastname.equals(((ContactDTO)evt.getOldValue()).user_lastname))
-                        setContactLastname(((ContactDTO)evt.getNewValue()).user_lastname);
-                    else {
-                        String[] lastname = getContactNameOfIndex(getSelectedContactIndex()).split(" ");
-                        setContactLastname(lastname[0]);
-                        setSaveButtonState(true);
+                    if(((ContactDTO)evt.getNewValue()).user_lastname.equals(((ContactDTO)evt.getOldValue()).user_lastname)) {
+                        if(!(getContactNameOfIndex(getSelectedContactIndex()).split(" "))[0].equals(getContactName()))
+                            setContactLastname(((ContactDTO)evt.getNewValue()).user_lastname);
+                       
+                        setSaveButtonState(false);
+                        
+                    } else {
+                        if(!(getContactNameOfIndex(getSelectedContactIndex()).split(" "))[0].equals(getContactName())) {
+                            String[] lastname = getContactNameOfIndex(getSelectedContactIndex()).split(" ");
+                            setContactLastname(lastname[0]);
+                            setSaveButtonState(true);
+                          
+                        }
                     }
                     
-                    if(((ContactDTO)evt.getNewValue()).user_prename.equals(((ContactDTO)evt.getOldValue()).user_prename))
-                        setContactPrename(((ContactDTO)evt.getNewValue()).user_prename);
-                    else {
-                        String[] prename = getContactNameOfIndex(getSelectedContactIndex()).split(" ");
-                        setContactPrename(prename[1]);
-                        setSaveButtonState(true);
+                    if(((ContactDTO)evt.getNewValue()).user_prename.equals(((ContactDTO)evt.getOldValue()).user_prename)) {
+                        if(!(getContactNameOfIndex(getSelectedContactIndex()).split(" "))[1].equals(getContactPrename()))
+                            setContactPrename(((ContactDTO)evt.getNewValue()).user_prename);
+                        if(((ContactDTO)evt.getNewValue()).user_lastname.equals(((ContactDTO)evt.getOldValue()).user_lastname))
+                            setSaveButtonState(false);
+                        
+                    } else {
+                        if(!(getContactNameOfIndex(getSelectedContactIndex()).split(" "))[1].equals(getContactPrename())) {
+                            String[] prename = getContactNameOfIndex(getSelectedContactIndex()).split(" ");
+                            setContactPrename(prename[1]);
+                            setSaveButtonState(true);
+                        
+                        }
                     }
-                    //detail_static_name_textfield.setText(((GroupDTO)evt.getNewValue()).group_name);
                     
                     /* Email Adressen */
                     for(ContactEmail email : ((ContactDTO)evt.getNewValue()).contact_email)
@@ -2012,7 +2025,6 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
                             ((ContactDTO)evt.getNewValue()).user_id);
                     /* Neuer Eintrag selektieren */
                     separatorlist.setSelectedIndex(separatorlist.getListMemberIndex(member));
-                    
                     /* Gespeichert -> Speichern nicht mehr moeglich */
                     setSaveButtonState(false);
                 }
@@ -2067,9 +2079,4 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
                 System.err.println("Unknows Event");
         }
     }
-
-    void getContactGroups(ContactDTO contactDTO) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
 }
