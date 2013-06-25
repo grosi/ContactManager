@@ -211,9 +211,10 @@ public final class ContactsModel extends AbstractModel implements ContactsEvent 
     
     void addedGroups(String[] groups,ContactDTO contact, ArrayList<GroupDTO> groupcontact_list, ArrayList<GroupDTO> groupcontact_all) {
       boolean test=false;
-      if(groups.length>0)
-      {
-        for(int i = 0; i < groups.length; i++) {
+      try{
+        if(groups.length>0)
+        {
+          for(int i = 0; i < groups.length; i++) {
             for(GroupDTO Group : groupcontact_list) {
                 if(((String)Group.group_name).equals(groups[i]))
                     test=true;
@@ -226,7 +227,7 @@ public final class ContactsModel extends AbstractModel implements ContactsEvent 
                  } catch (DAOException ex) {
                     groupcontact_list = null;
                  }
-                }   
+               }   
              }
 
             }
@@ -234,7 +235,10 @@ public final class ContactsModel extends AbstractModel implements ContactsEvent 
              test=false; 
         }
       }
-    }
+     } catch (NullPointerException  ex) {
+          
+        }
+      }
 
     void deleteMail(ArrayList<Integer> Mails) {
         for(Integer Mail : Mails) {
