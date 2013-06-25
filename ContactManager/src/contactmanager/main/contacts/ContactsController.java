@@ -155,6 +155,7 @@ public class ContactsController extends AbstractController implements ContactsEv
         contacts_view.setEmailEmpty();
         contacts_view.setPhoneEmpty();
         contacts_view.setAddressEmpty();
+        contacts_view.setGroupEmpty();
 
         contacts_view.setSaveButtonState(false);
     }
