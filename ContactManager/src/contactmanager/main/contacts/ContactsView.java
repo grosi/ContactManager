@@ -1367,8 +1367,22 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         JButton remove = (JButton)ae.getSource();
         int index = phone_remove_button.indexOf(remove);
         JPanel panel = phone_panel.get(index);
-        remove_phones.add(phone_id.get(index));
-        detail_dynamic_panel_phone.remove(panel);
+
+        if(phone_id.get(index)==0)
+        {
+            panel.removeAll();
+            phone_combo.remove(phone_combo.get(index));
+            phone_id.remove(phone_id.get(index));
+            phone_text.remove(phone_text.get(index));
+            phone_remove_button.remove(phone_remove_button.get(index));
+            detail_dynamic_panel_phone.remove(panel);
+            phone_panel.remove(phone_panel.get(index));
+        }
+        else
+        {
+          remove_phones.add(phone_id.get(index));          
+          detail_dynamic_panel_phone.remove(panel);
+        }
         detail_dynamic_panel_phone.revalidate();
         
     }
@@ -1393,11 +1407,15 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
     private void deselectPhone(FocusEvent fe) {
         JTextField text = (JTextField)fe.getSource();
         int index = phone_text.indexOf(text);
+        try{
         JButton remove = phone_remove_button.get(index);
         JPanel panel = phone_panel.get(index);
         remove.setVisible(false);
         panel.remove(remove);
         panel.revalidate();
+        }catch (ArrayIndexOutOfBoundsException ex){
+            
+        }
         
     }
     
@@ -1415,7 +1433,6 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         group_remove_button.remove(index);
         group_id.remove(index);
         remove_groups.add(index);
-        
         detail_dynamic_panel_group.remove(panel);
         detail_dynamic_panel_group.revalidate();
         group_panel.remove(index);
@@ -1621,8 +1638,24 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         JButton remove = (JButton)ae.getSource();
         int index = address_remove_button.indexOf(remove);
         JPanel panel = address_panel.get(index);
-        remove_addresses.add(address_id.get(index));
-        detail_dynamic_panel_address.remove(panel);
+        
+        if(address_id.get(index)==0)
+        {
+            panel.removeAll();
+            address_combo.remove(address_combo.get(index));
+            address_id.remove(address_id.get(index));
+            address_city.remove(address_city.get(index));
+            address_code.remove(address_code.get(index));
+            address_country.remove(address_country.get(index));
+            address_street.remove(address_street.get(index));
+            address_remove_button.remove(address_remove_button.get(index));
+            detail_dynamic_panel_address.remove(panel);
+            address_panel.remove(address_panel.get(index));
+        }
+        else{
+            remove_addresses.add(address_id.get(index));
+            detail_dynamic_panel_address.remove(panel);
+        }
         detail_dynamic_panel_address.revalidate();
         
     }
@@ -1668,12 +1701,16 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         }         
         
         
-        
+        try{
         JButton remove = address_remove_button.get(index);
         JPanel panel = address_panel.get(index);   
         remove.setVisible(false);
         panel.remove(remove);       
-        panel.revalidate();      
+        panel.revalidate();
+        } catch (ArrayIndexOutOfBoundsException ex) {
+          
+        }
+         
     }
     
     private void addEmail(String email, String type, int id) {
@@ -1795,8 +1832,22 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         JButton remove = (JButton)aeremove.getSource();
         int index = email_remove_button.indexOf(remove);
         JPanel panel = email_panel.get(index);
-        remove_emails.add(email_id.get(index));
-        detail_dynamic_panel_email.remove(panel);
+
+        if(email_id.get(index)==0)
+        {
+            panel.removeAll();
+            email_combo.remove(email_combo.get(index));
+            email_id.remove(email_id.get(index));
+            email_text.remove(email_text.get(index));
+            email_remove_button.remove(email_remove_button.get(index));
+            email_send_button.remove(email_send_button.get(index));
+            detail_dynamic_panel_email.remove(panel);
+            email_panel.remove(email_panel.get(index));
+        }
+        else{
+            remove_emails.add(email_id.get(index));
+            detail_dynamic_panel_email.remove(panel);
+        }
         detail_dynamic_panel_email.revalidate();
         panel.revalidate();
     }
@@ -1833,8 +1884,6 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         remove.setVisible(false);
         panel.remove(remove);
         panel.add(send);
-
-        
         panel.revalidate();
         detail_dynamic_label_email.revalidate();
         }
