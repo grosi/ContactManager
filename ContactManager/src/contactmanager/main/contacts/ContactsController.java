@@ -156,7 +156,7 @@ public class ContactsController extends AbstractController implements ContactsEv
         contacts_view.setPhoneEmpty();
         contacts_view.setAddressEmpty();
         contacts_view.setGroupEmpty();
-
+   
         contacts_view.setSaveButtonState(false);
     }
     
@@ -389,7 +389,7 @@ public class ContactsController extends AbstractController implements ContactsEv
         int contact_id;
         String[] contact_name_old;
         String contact_name_new;
-        
+    
         /* Informationen holen */
         index = contacts_view.getSelectedContactIndex();
         list_size = contacts_view.getContactListSize();
@@ -403,8 +403,6 @@ public class ContactsController extends AbstractController implements ContactsEv
                 if(contact_name_new.equals("") == false && contact_name_new.equals(contact_name_old[0]) == false) {//&& 
                     contacts_view.setContactList(contact_id, contact_name_new+" "+contact_name_old[1], ContactsView.CONTACT_ADD_CONTACT);
                     contacts_view.setSaveButtonState(true);
-                } else {
-                    contacts_view.setSaveButtonState(false);
                 }
         }   
     }
@@ -446,8 +444,6 @@ public class ContactsController extends AbstractController implements ContactsEv
                 if(contact_name_new.equals("") == false && contact_name_new.equals(contact_name_old[1]) == false) {//&& 
                     contacts_view.setContactList(contact_id, contact_name_old[0]+" "+contact_name_new, ContactsView.CONTACT_ADD_CONTACT);
                     contacts_view.setSaveButtonState(true);
-                } else {
-                    contacts_view.setSaveButtonState(false);
                 }
         }   
     }
