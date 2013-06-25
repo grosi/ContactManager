@@ -187,6 +187,7 @@ public final class ContactsModel extends AbstractModel implements ContactsEvent 
 
     void deletetGroups(String[] groups,ContactDTO contact, ArrayList<GroupDTO> groupcontact_list)  {
         boolean test=false;
+        try{
           for(GroupDTO Group : groupcontact_list) {
    
              for(int i = 0; i < groups.length; i++) {
@@ -204,7 +205,10 @@ public final class ContactsModel extends AbstractModel implements ContactsEvent 
              else
                  test=false;
         }
-
+     } catch (NullPointerException  ex) {
+          
+        }
+    
     }
 
     
