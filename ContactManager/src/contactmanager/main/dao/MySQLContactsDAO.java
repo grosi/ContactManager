@@ -22,6 +22,7 @@ public class MySQLContactsDAO implements ContactsDAO {
    
     @Override
     public ArrayList<ContactDTO> selectContactList() throws DAOException {
+         
             ArrayList<ContactDTO> list = new ArrayList<>();
             ResultSet result;
             
@@ -46,7 +47,7 @@ public class MySQLContactsDAO implements ContactsDAO {
     public ArrayList<ContactDTO> searchContactList(String search_pattern) throws DAOException {
         ArrayList<ContactDTO> list = new ArrayList<>();
         ResultSet result;
-
+      
         result = executeQuery("SELECT * FROM user " +
         		"WHERE prename LIKE '%"+search_pattern+"%' OR lastname LIKE '%"+search_pattern+"%' " +
         		"ORDER BY prename ASC, lastname ASC");
@@ -70,7 +71,7 @@ public class MySQLContactsDAO implements ContactsDAO {
     public ContactDTO selectContact(int id) throws DAOException {
             ResultSet result;
             ContactDTO line;
-
+       
             result = executeQuery("SELECT * FROM user WHERE user_id="+Integer.toString(id));
             
             if (!nextLine(result)) {
@@ -87,7 +88,7 @@ public class MySQLContactsDAO implements ContactsDAO {
     @Override
     public int insertContact(ContactDTO insertContact) throws DAOException {
     	int id;
-        
+
     	if (insertContact.user_id != 0)
     		throw new DAOException("User id is allready set");
     	
@@ -103,7 +104,7 @@ public class MySQLContactsDAO implements ContactsDAO {
 
     @Override
     public boolean updateContact(ContactDTO updateContact) throws DAOException {
-
+ 
     	if (updateContact.user_id <= 0)
             throw new DAOException("User id is missed");
     	
@@ -119,7 +120,7 @@ public class MySQLContactsDAO implements ContactsDAO {
     public boolean deleteContact(int id) throws DAOException {
     	if (id <= 0)
             throw new DAOException("User id is missed");
-    	
+
     	/* Alle Anderene Felder auch loeschen */
             executeUpdate("DELETE user.*, user_address.*, user_phone.*, user_email.*, user2group.* " +
             		"FROM user " +
@@ -284,7 +285,7 @@ public class MySQLContactsDAO implements ContactsDAO {
 			result = statement.executeQuery(query);
 			//statement.close();
 		}
-		catch (SQLException e) {
+		catch (SQLException e ) {
 			e.printStackTrace();
 			throw new DAOException("Error in your SQL Query");
 		}
