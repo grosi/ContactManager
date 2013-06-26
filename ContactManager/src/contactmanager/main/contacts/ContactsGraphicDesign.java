@@ -15,7 +15,7 @@ public interface ContactsGraphicDesign {
     public static final String CONTACTS_TITLE = "Kontakte";
     
     /** Bilder Dateipfad */
-    public static final String IMAGES_FILEPATH = "src/contactmanager/main/graphic/images/";
+    public static final String IMAGES_FILEPATH = "/contactmanager/main/graphic/images/";
     
     
     /** Dimensionen */
