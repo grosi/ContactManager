@@ -211,7 +211,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         /* Rechte Spalte */
         //Nachricht Schaltflaeche 
         message_button = new JButton();
-        message_button.setIcon(new ImageIcon(IMAGES_FILEPATH+"messages32x32.png"));  
+        message_button.setIcon(new ImageIcon(getClass().getResource(IMAGES_FILEPATH+"messages32x32.png")));  
         message_button.setMnemonic(CONTACT_TAB_MESSAGE_MNEMONIC);
         message_button.setToolTipText(CONTACT_TAB_MESSAGE_TOOLTIP);
         message_button.addActionListener(new ActionListener() {
@@ -224,7 +224,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         
         //Speichern Schaltflaeche
         save_button = new JButton();
-        save_button.setIcon(new ImageIcon(IMAGES_FILEPATH+"save32x32.png"));
+        save_button.setIcon(new ImageIcon(getClass().getResource(IMAGES_FILEPATH+"save32x32.png")));
         save_button.setMnemonic(CONTACT_TAB_SAVE_MNEMONIC);
         save_button.setToolTipText(CONTACT_TAB_SAVE_TOOLTIP);
         save_button.addActionListener(new ActionListener() {
@@ -237,7 +237,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         
         //Hinzufuegen Schaltflaeche
         add_button = new JButton();
-        add_button.setIcon(new ImageIcon(IMAGES_FILEPATH+"add32x32.png"));
+        add_button.setIcon(new ImageIcon(getClass().getResource(IMAGES_FILEPATH+"add32x32.png")));
         add_button.setMnemonic(CONTACT_TAB_ADD_MNEMONIC);
         add_button.setToolTipText(CONTACT_TAB_ADD_TOOLTIP);
         add_button.addActionListener(new ActionListener() {
@@ -250,7 +250,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         
         //Entfernen Schaltflaeche
         remove_button = new JButton();
-        remove_button.setIcon(new ImageIcon(IMAGES_FILEPATH+"remove32x32.png"));
+        remove_button.setIcon(new ImageIcon(getClass().getResource(IMAGES_FILEPATH+"remove32x32.png")));
         remove_button.setMnemonic(CONTACT_TAB_REMOVE_MNEMONIC);
         remove_button.setToolTipText(CONTACT_TAB_REMOVE_TOOLTIP);
         remove_button.addActionListener(new ActionListener() {
@@ -353,7 +353,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         detail_dynamic_panel_email.setBackground(Color.white);
         detail_dynamic_label_email = new JLabel(CONTACT_TAB_EMAIL_LABEL);
         detail_dynamic_separator_email = new JSeparator();
-        detail_dynamic_imageicon_email = new ImageIcon(IMAGES_FILEPATH+"add16x16.png");
+        detail_dynamic_imageicon_email = new ImageIcon(getClass().getResource(IMAGES_FILEPATH+"add16x16.png"));
         detail_dynamic_addbutton = new JButton("      Hinzufügen");
         detail_dynamic_addbutton.setIcon(detail_dynamic_imageicon_email);
         detail_dynamic_panel_email.add(detail_dynamic_label_email, "cell 0 0");
@@ -382,7 +382,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         detail_dynamic_panel_address.setBackground(Color.white);
         detail_dynamic_label_adress = new JLabel(CONTACT_TAB_ADRESS_LABEL);
         detail_dynamic_separator_address = new JSeparator();
-        detail_dynamic_imageicon_address = new ImageIcon(IMAGES_FILEPATH+"add16x16.png");
+        detail_dynamic_imageicon_address = new ImageIcon(getClass().getResource(IMAGES_FILEPATH+"add16x16.png"));
         detail_dynamic_addbutton_address = new JButton("      Hinzufügen");
         detail_dynamic_addbutton_address.setIcon(detail_dynamic_imageicon_address);
         detail_dynamic_panel_address.add(detail_dynamic_label_adress, "cell 0 0");
@@ -409,7 +409,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         detail_dynamic_panel_phone.setBackground(Color.white);
         detail_dynamic_label_phone = new JLabel(CONTACT_TAB_PHONE_LABEL);
         detail_dynamic_separator_phone = new JSeparator();
-        detail_dynamic_imageicon_phone = new ImageIcon(IMAGES_FILEPATH+"add16x16.png");
+        detail_dynamic_imageicon_phone = new ImageIcon(getClass().getResource(IMAGES_FILEPATH+"add16x16.png"));
         detail_dynamic_addbutton_phone = new JButton("      Hinzufügen");
         detail_dynamic_addbutton_phone.setIcon(detail_dynamic_imageicon_phone);
         detail_dynamic_panel_phone.add(detail_dynamic_label_phone, "cell 0 0");
@@ -436,7 +436,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         detail_dynamic_panel_group_choose.setBackground(Color.white);
         detail_dynamic_label_group = new JLabel(CONTACT_TAB_GROUP_LABEL);
         detail_dynamic_separator_group = new JSeparator();
-        detail_dynamic_imageicon_group = new ImageIcon(IMAGES_FILEPATH+"add16x16.png");
+        detail_dynamic_imageicon_group = new ImageIcon(getClass().getResource(IMAGES_FILEPATH+"add16x16.png"));
         detail_dynamic_addbutton_group = new JButton("      Hinzufügen");
         String[] groups = {"PRIVATE", "BUSINESS", "OTHER"};
         detail_dynamic_combobox_group = new JComboBox(groups);
@@ -1206,7 +1206,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         JPanel group_new = new JPanel(new MigLayout("wrap 4"));
         group_new.setBackground(Color.white);
         JTextField group_name = new JTextField(group);
-        ImageIcon remove_image = new ImageIcon(IMAGES_FILEPATH+"remove16x16.png");
+        ImageIcon remove_image = new ImageIcon(getClass().getResource(IMAGES_FILEPATH+"remove16x16.png"));
         JButton remove_group = new JButton("Löschen");
         remove_group.setIcon(remove_image);
         group_name.setEditable(false);
@@ -1218,13 +1218,11 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
 
             @Override
             public void focusGained(FocusEvent fe) {
-                System.out.println("Gruppe angewÃ¤hlt"); 
                 selectGroup(fe);
            }
 
             @Override
             public void focusLost(FocusEvent fe) {
-                System.out.println("Gruppe abgewÃ¤hlt");
                 deselectGroup(fe);
             }
         });
@@ -1278,7 +1276,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         JComboBox phone_type = new JComboBox(phone_types);
         phone_type.setSelectedItem(type);
         JTextField phone_nummer = new JTextField(phone);
-        ImageIcon remove_image = new ImageIcon(IMAGES_FILEPATH+"remove16x16.png");
+        ImageIcon remove_image = new ImageIcon(getClass().getResource(IMAGES_FILEPATH+"remove16x16.png"));
         JButton remove_phone = new JButton("Löschen");
         remove_phone.setIcon(remove_image);
         phone_nummer.setMinimumSize(new Dimension(100, 0));
@@ -1330,7 +1328,6 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
 
             @Override
             public void actionPerformed(ActionEvent ae) {
-                System.out.println("Nummer lÃ¶schen");
                 removePhone(ae);
             }
         });
@@ -1484,7 +1481,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         JTextField code_address = new JTextField(code);
         JTextField city_address = new JTextField(city);
         JTextField country_address = new JTextField(country);
-        ImageIcon remove_image = new ImageIcon(IMAGES_FILEPATH+"remove16x16.png");
+        ImageIcon remove_image = new ImageIcon(getClass().getResource(IMAGES_FILEPATH+"remove16x16.png"));
         JButton remove_address = new JButton("Löschen");
         remove_address.setIcon(remove_image);
         
@@ -1723,10 +1720,10 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         JComboBox email_type = new JComboBox(email_types);
         email_type.setSelectedItem(type);
         JTextField email_adress = new JTextField(email);
-        ImageIcon remove_image = new ImageIcon(IMAGES_FILEPATH+"remove16x16.png");
+        ImageIcon remove_image = new ImageIcon(getClass().getResource(IMAGES_FILEPATH+"remove16x16.png"));
         JButton remove_email = new JButton("Löschen");
         remove_email.setIcon(remove_image);
-        ImageIcon send_image = new ImageIcon(IMAGES_FILEPATH+"messages16x16.png");
+        ImageIcon send_image = new ImageIcon(getClass().getResource(IMAGES_FILEPATH+"messages16x16.png"));
         JButton send_email = new JButton("Senden");
         send_email.setIcon(send_image);
         email_adress.setMinimumSize(new Dimension(100, 0));
@@ -1778,7 +1775,6 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
 
             @Override
             public void actionPerformed(ActionEvent ae) {
-                System.out.println("Email lÃ¶schen");
                 removeEmail(ae);
             }
         });
@@ -1787,7 +1783,6 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
 
             @Override
             public void actionPerformed(ActionEvent ae) {
-                System.out.println("Email schreiben");
                 contactsendEmailAcrionEvent(ae);
             }
         });

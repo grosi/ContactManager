@@ -7,6 +7,7 @@ import contactmanager.main.graphic.JSeparatorList;
 import contactmanager.main.graphic.JSeparatorList.ListMember;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -145,7 +146,7 @@ public final class GroupsView extends AbstractView implements GroupsGraphicDesig
         /* Rechte Spalte */
         //Nachricht Schaltflaeche 
         message_button = new JButton();
-        message_button.setIcon(new ImageIcon(IMAGES_FILEPATH+"messages32x32.png"));  
+        message_button.setIcon(new ImageIcon(getClass().getResource(IMAGES_FILEPATH+"messages32x32.png")));  
         message_button.setMnemonic(GROUP_TAB_MESSAGE_MNEMONIC);
         message_button.setToolTipText(GROUP_TAB_MESSAGE_TOOLTIP);
         message_button.addActionListener(new ActionListener() {
@@ -155,11 +156,11 @@ public final class GroupsView extends AbstractView implements GroupsGraphicDesig
                 messageButtonActionPerformed(ae);
             }
         });
-        
-        
+
+	
         //Speichern Schaltflaeche
         save_button = new JButton();
-        save_button.setIcon(new ImageIcon(IMAGES_FILEPATH+"save32x32.png"));
+        save_button.setIcon(new ImageIcon(getClass().getResource(IMAGES_FILEPATH+"save32x32.png")));
         save_button.setMnemonic(GROUP_TAB_SAVE_MNEMONIC);
         save_button.setToolTipText(GROUP_TAB_SAVE_TOOLTIP);
         save_button.addActionListener(new ActionListener() {
@@ -173,7 +174,7 @@ public final class GroupsView extends AbstractView implements GroupsGraphicDesig
         
         //Hinzufuegen Schaltflaeche
         add_button = new JButton();
-        add_button.setIcon(new ImageIcon(IMAGES_FILEPATH+"add32x32.png"));
+        add_button.setIcon(new ImageIcon(getClass().getResource(IMAGES_FILEPATH+"add32x32.png")));
         add_button.setMnemonic(GROUP_TAB_ADD_MNEMONIC);
         add_button.setToolTipText(GROUP_TAB_ADD_TOOLTIP);
         add_button.addActionListener(new ActionListener() {
@@ -187,7 +188,7 @@ public final class GroupsView extends AbstractView implements GroupsGraphicDesig
         
         //Entfernen Schaltflaeche
         remove_button = new JButton();
-        remove_button.setIcon(new ImageIcon(IMAGES_FILEPATH+"remove32x32.png"));
+        remove_button.setIcon(new ImageIcon(getClass().getResource(IMAGES_FILEPATH+"remove32x32.png")));
         remove_button.setMnemonic(GROUP_TAB_REMOVE_MNEMONIC);
         remove_button.setToolTipText(GROUP_TAB_REMOVE_TOOLTIP);
         remove_button.addActionListener(new ActionListener() {
