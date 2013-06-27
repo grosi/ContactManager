@@ -405,7 +405,7 @@ public class ContactsController extends AbstractController implements ContactsEv
     
     
      /**
-     * Feld mit Kontaktname nicht mehr selektiert
+     * Feld mit Kontaktname nicht mehr selektiert -> zu erstem Kontakt springen
      */
     public void nameContactFocusLost() {
         contacts_view.setContactNameSelection(0,0);
