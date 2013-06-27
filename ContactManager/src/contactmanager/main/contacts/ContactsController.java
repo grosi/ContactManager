@@ -161,6 +161,10 @@ public class ContactsController extends AbstractController implements ContactsEv
         contacts_view.setAddEmailButtonState(true);
         contacts_view.setAddAddressButtonState(true);
         contacts_view.setAddPhoneButtonState(true);
+        if(contacts_view.getGroupQuantity() > 0) {
+            contacts_view.setAddGroupButtonState(true);
+            contacts_view.setAddGroupComboState(true);
+        }
         contacts_view.setContactPrenameTextState(true);
         contacts_view.setContactLastnameTextState(true);
         contacts_view.setSaveButtonState(false);

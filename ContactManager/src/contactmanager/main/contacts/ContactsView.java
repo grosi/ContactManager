@@ -699,7 +699,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
     }
     
     public void setContactPrenameTextState(boolean state) {
-        this.detail_static_prename_textfield.setEditable(state);
+        this.detail_static_prename_textfield.setEnabled(state);
     }
     
     /**
@@ -711,7 +711,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
     }
     
     public void setContactLastnameTextState(boolean state) {
-        this.detail_static_name_textfield.setEditable(state);
+        this.detail_static_name_textfield.setEnabled(state);
     }
     
     /**
@@ -895,6 +895,23 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         detail_dynamic_addbutton_phone.setEnabled(state);
     }
     
+    
+    public void setAddGroupButtonState(boolean state) {
+        detail_dynamic_addbutton_group.setEnabled(state);
+    }
+    
+    
+    public void setAddGroupComboState(boolean state) {
+        detail_dynamic_combobox_group.setEnabled(state);
+    }
+    
+    public void setAddGroupComboItem(String text) {
+        detail_dynamic_combobox_group.addItem(text);
+    }
+    
+    public int getGroupQuantity() {
+        return all_groups.size();
+    }
     
     public String getContactName() {
         return detail_static_name_textfield.getText();
@@ -1973,6 +1990,8 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
                         setAddEmailButtonState(false);
                         setAddAddressButtonState(false);
                         setAddPhoneButtonState(false);
+                        setAddGroupButtonState(false);
+                        setAddGroupComboState(false);
                         setContactPrenameTextState(false);
                         setContactLastnameTextState(false);
                         setContactPrename(CONTACT_TAB_DEFAULT_EMPTYNAME_TEXT);
@@ -2078,6 +2097,8 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
                         setAddAddressButtonState(false);
                         setAddPhoneButtonState(false);
                         setRemoveButtonState(false);
+                        setAddGroupButtonState(false);
+                        setAddGroupComboState(false);
                         setContactPrenameTextState(false);
                         setContactLastnameTextState(false);
                         setContactPrename(CONTACT_TAB_DEFAULT_EMPTYNAME_TEXT);
@@ -2104,12 +2125,23 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
                      detail_dynamic_combobox_group.removeAllItems();
                      ArrayList<GroupDTO> group_list;
                      group_list=(ArrayList<GroupDTO>)evt.getNewValue();
-                        Iterator it = group_list.iterator();
+                       
+                     if(!group_list.isEmpty()) {
                       
                         for(GroupDTO Group : group_list) {
                           detail_dynamic_combobox_group.addItem(Group.group_name);
                         }
                         all_groups=group_list;
+                        
+                        if(getContactQuantity() > 0) {
+                            setAddGroupButtonState(true);
+                            setAddGroupComboState(true);
+                        }
+                     } else {
+                         setAddGroupButtonState(false);
+                         setAddGroupComboItem("Keine Gruppen vorhanden");
+                         setAddGroupComboState(false);
+                     }
                  }
                 break;
              
