@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 
 /**
- * @author Simon Grossenbacher
+ * @author Philipp Eder
  * @version 0.1
  * @since 27.03.2013
  */
@@ -161,7 +161,6 @@ public final class ContactsModel extends AbstractModel implements ContactsEvent 
 
         /**
      * Alle Gruppen auslesen
-     * @param text
      */
     public void allGroups() {
         ArrayList<GroupDTO> group_list;
@@ -174,6 +173,11 @@ public final class ContactsModel extends AbstractModel implements ContactsEvent 
         firePropertyChange(CONTACT_ALL_GROUP_EVENT, null, group_list);
     } 
 
+ 
+     /**
+     * Gruppen von einem Kontakt auslesen
+     * @param contact Contact Transfer Objecet
+     */
     void getContactGroups(ContactDTO contact) {
         ArrayList<GroupDTO> groupcontact_list;
         try {
@@ -185,11 +189,18 @@ public final class ContactsModel extends AbstractModel implements ContactsEvent 
         firePropertyChange(CONTACT_ONE_GROUP_EVENT, null, groupcontact_list);
     }
 
+    
+      /**
+     * Gruppen welche gelöscht wurde evaluieren und aus Datenbank löschen
+     * @param groups Ausgewählte Gruppen für Kontakt
+     * @param contact Contact Transfer Objecet
+     * @param groupcontact_list Uhrsprüngliche Listen des Kontaktes
+     */
     void deletetGroups(String[] groups,ContactDTO contact, ArrayList<GroupDTO> groupcontact_list)  {
         boolean test=false;
         try{
           for(GroupDTO Group : groupcontact_list) {
-   
+             /*Testen ob Gruppen gelöst wurde */
              for(int i = 0; i < groups.length; i++) {
                  System.out.println(groups[i]);
                   if(Group.group_name.equals((String)groups[i]))
@@ -212,18 +223,26 @@ public final class ContactsModel extends AbstractModel implements ContactsEvent 
     }
 
     
-    
+       /**
+     * Gruppen welche hinzugefügt wurde evaluieren und zur Datenbank hinzufügen
+     * @param groups Ausgewählte Gruppen für Kontakt
+     * @param contact Contact Transfer Objecet
+     * @param groupcontact_list Uhrsprüngliche Listen des Kontaktes
+     * @param groupcontact_all Alle Gruppen die existieren
+     */ 
     void addedGroups(String[] groups,ContactDTO contact, ArrayList<GroupDTO> groupcontact_list, ArrayList<GroupDTO> groupcontact_all) {
       boolean test=false;
       try{
         if(groups.length>0)
         {
+          /*Evaluieren welche Gruppen schon gespeichert sind */
           for(int i = 0; i < groups.length; i++) {
             for(GroupDTO Group : groupcontact_list) {
                 if(((String)Group.group_name).equals(groups[i]))
                     test=true;
             }
-            if(test==false){            
+            if(test==false){
+                /* Gruppe vervollständigen und speichern*/
                 for(GroupDTO Groupall : groupcontact_all) {
                 if(((String)Groupall.group_name).equals(groups[i])){
                  try {
@@ -244,6 +263,11 @@ public final class ContactsModel extends AbstractModel implements ContactsEvent 
         }
       }
 
+    
+      /**
+     * Emailadressen von Kontakt löschen
+     * @param Mails Emailids
+     */
     void deleteMail(ArrayList<Integer> Mails) {
         for(Integer Mail : Mails) {
           try {
@@ -254,6 +278,10 @@ public final class ContactsModel extends AbstractModel implements ContactsEvent 
          }
     }
 
+     /**
+     * Adressen von Kontakt löschen
+     * @param Addresses Adressenids
+     */
     void deleteAddress(ArrayList<Integer> Addresses) {
         for(Integer Address : Addresses) {
           try {
@@ -264,6 +292,11 @@ public final class ContactsModel extends AbstractModel implements ContactsEvent 
          }
     }
 
+    
+     /**
+     * Telefonnummern von Kontakt löschen
+     * @param Phones Telefonnummerids
+     */
     void deletePhone(ArrayList<Integer> Phones) {
            for(Integer Phone : Phones) {
           try {
