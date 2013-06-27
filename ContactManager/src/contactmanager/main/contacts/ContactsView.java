@@ -1329,6 +1329,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
             @Override
             public void actionPerformed(ActionEvent ae) {
                 removePhone(ae);
+                setSaveButtonState(true);
             }
         });
 
@@ -1554,7 +1555,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         city_address.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent fe) {
-                addressCityTextFocusLost(fe);
+                addressCityTextFocusGained(fe);
                 selectAddress(fe,3);
            }
 
@@ -1588,6 +1589,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
             @Override
             public void actionPerformed(ActionEvent ae) {
                 removeAddress(ae);
+                setSaveButtonState(true);
             }
         });
         
@@ -1776,6 +1778,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
             @Override
             public void actionPerformed(ActionEvent ae) {
                 removeEmail(ae);
+                setSaveButtonState(true);
             }
         });
         
