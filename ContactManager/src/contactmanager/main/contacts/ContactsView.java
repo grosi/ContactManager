@@ -35,7 +35,7 @@ import javax.swing.event.ListSelectionListener;
 import net.miginfocom.swing.MigLayout;
 
 /**
- * @author Simon Grossenbacher
+ * @author Philipp Eder
  * @version 0.1
  * @since 27.03.2013
  */
@@ -75,7 +75,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
     private JButton message_button;
     
     
-    
+    /* E-Mail */
     private ArrayList<JButton> email_send_button = new ArrayList<>();
     private ArrayList<JButton> email_remove_button = new ArrayList<>();
     private ArrayList<JComboBox> email_combo = new ArrayList<>();
@@ -83,7 +83,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
     private ArrayList<JPanel> email_panel = new ArrayList<>();
     private ArrayList<Integer> email_id = new ArrayList<>();
     
-    
+    /* Adressen */
     private ArrayList<JButton> address_remove_button = new ArrayList<>();
     private ArrayList<JComboBox> address_combo = new ArrayList<>();
     private ArrayList<JTextField> address_street = new ArrayList<>();
@@ -92,27 +92,33 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
     private ArrayList<JTextField> address_country = new ArrayList<>();
     private ArrayList<JPanel> address_panel = new ArrayList<>();
     private ArrayList<Integer> address_id = new ArrayList<>();
-        
+     
+    /* Telefonnummer */
     private ArrayList<JButton> phone_remove_button = new ArrayList<>();
     private ArrayList<JComboBox> phone_combo = new ArrayList<>();
     private ArrayList<JTextField> phone_text = new ArrayList<>();
     private ArrayList<JPanel> phone_panel = new ArrayList<>();
     private ArrayList<Integer> phone_id = new ArrayList<>();
     
+    /* Gruppen */
     private ArrayList<JButton> group_remove_button = new ArrayList<>();
     private ArrayList<JTextField> group_text = new ArrayList<>();
     private ArrayList<JPanel> group_panel = new ArrayList<>();
     private ArrayList<Integer> group_id = new ArrayList<>();
     
-    
+    /* Alle vorhandenen Gruppen*/
     public ArrayList<GroupDTO> all_groups = new ArrayList<>();
+    
+    /*Gruppen von Kontakt*/
     public ArrayList<GroupDTO> contact_groups = new ArrayList<>();
     
+    /*Gelöste Daten*/
     public ArrayList<Integer> remove_groups = new ArrayList<>();
     public ArrayList<Integer> remove_addresses = new ArrayList<>();
     public ArrayList<Integer> remove_phones = new ArrayList<>();
     public ArrayList<Integer> remove_emails = new ArrayList<>();   
-
+    
+    
     private JPanel detail_dynamic_panel_phone;
     private JLabel detail_dynamic_label_phone;
     private JSeparator detail_dynamic_separator_phone;
@@ -121,6 +127,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
     private ImageIcon detail_dynamic_imageicon_address;
     private ImageIcon detail_dynamic_imageicon_phone;
     private ImageIcon detail_dynamic_imageicon_email;
+    
     /* Konstanten */
     public static final String CONTACT_ADD_CONTACT = "ADD";
     public static final String CONTACT_REMOVE_GROUP_WITH_ID = "REMOVE_ID";
