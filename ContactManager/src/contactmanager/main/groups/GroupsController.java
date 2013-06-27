@@ -140,6 +140,7 @@ public final class GroupsController extends AbstractController implements SubCon
         groups_view.setContactListEmpty();
 
         groups_view.setRemoveButtonState(true);
+        groups_view.setGroupNameTextState(true);
         groups_view.setSaveButtonState(false);
     }
     

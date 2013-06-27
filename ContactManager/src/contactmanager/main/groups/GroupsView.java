@@ -459,6 +459,15 @@ public final class GroupsView extends AbstractView implements GroupsGraphicDesig
     
     
     /**
+     * Gruppen-Namen Textfeld Status aendern
+     * @param state true: Textfeld eingeschaltet; false: Textfeld ausgeschaltet 
+     */
+    public void setGroupNameTextState(boolean state) {
+        this.detail_static_name_textfield.setEnabled(state);
+    }
+    
+    
+    /**
      * Gruppen Uebersichtsliste anpassen
      * @param group_id_index Index oder ID der zu aendernden Gruppe
      * @param group_name Gruppen Name
@@ -636,6 +645,7 @@ public final class GroupsView extends AbstractView implements GroupsGraphicDesig
                         
                     } else {
                         /* Details-ansicht leer */
+                        setGroupNameTextState(false);
                         setMessageButtonState(false);
                         setSaveButtonState(false);
                         setRemoveButtonState(false);
@@ -715,8 +725,12 @@ public final class GroupsView extends AbstractView implements GroupsGraphicDesig
                     groupoverview_separatorlist.removeListMember(((GroupDTO)evt.getNewValue()).group_id);
                     
                     /*Falls keine Gruppen in der Datenbank sind, loeschen verhindern */
-                    if(groupoverview_separatorlist.getListMemberSize() == 0)
+                    if(groupoverview_separatorlist.getListMemberSize() == 0) {
                         setRemoveButtonState(false);
+                        setGroupName(GROUP_TAB_DEFAULT_EMPTYNAME_TEXT);
+                        setGroupNameTextState(false);
+                    }
+                        
                     
                     /* Falls kein Eintrag selektiert ist, den ersten selektieren */
                     controller.selectGroup();
