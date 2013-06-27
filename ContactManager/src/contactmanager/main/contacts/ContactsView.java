@@ -865,6 +865,14 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         message_button.setEnabled(state);
     }
     
+    /**
+     * Loeschen-Button aktiviern oder deaktivieren
+     * @param state
+     */
+    public void setRemoveButtonState(boolean state) {
+        remove_button.setEnabled(state);
+    }
+    
     public String getContactName() {
         return detail_static_name_textfield.getText();
     }
@@ -1936,6 +1944,9 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
                         setContactListSilent(false);
                     } else {
                         /* Details-ansicht leer */
+                        setMessageButtonState(false);
+                        setSaveButtonState(false);
+                        setRemoveButtonState(false);
                         setContactPrename(CONTACT_TAB_DEFAULT_NAME_TEXT);
                         setContactLastname(CONTACT_TAB_DEFAULT_NAME_TEXT);
                         setContactListEmpty();
@@ -2030,8 +2041,12 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
                 
             case CONTACT_DELETE_EVENT:
                 if(evt.getNewValue() != null) {
-                    /* Gruppe aus Liste entfernen */
+                    /* kontakt aus Liste entfernen */
                     separatorlist.removeListMember(((ContactDTO)evt.getNewValue()).user_id);
+                    
+                    /*Falls keine Kontakte in der Datenbank sind, loeschen verhindern */
+                    if(separatorlist.getListMemberSize() == 0)
+                        setRemoveButtonState(false);
                     
                     /* Falls kein Eintrag selektiert ist, den ersten selektieren */
                     controller.selectContact();

@@ -593,13 +593,20 @@ public final class GroupsView extends AbstractView implements GroupsGraphicDesig
     
     /**
      * Message-Button aktiviern oder deaktivieren
-     * @param state
+     * @param state true: Nachricht senden moeglich; false: Nachricht senden nicht moeglich
      */
     public void setMessageButtonState(boolean state) {
         message_button.setEnabled(state);
     }
    
     
+    /**
+     * Loeschen-Button aktiviern oder deaktivieren
+     * @param state true: Loeschen moeglich; false: Loeschen nicht moeglich
+     */
+    public void setRemoveButtonState(boolean state) {
+        remove_button.setEnabled(state);
+    }
     
     /***************************************************************************
      * Model -> View
@@ -629,6 +636,9 @@ public final class GroupsView extends AbstractView implements GroupsGraphicDesig
                         
                     } else {
                         /* Details-ansicht leer */
+                        setMessageButtonState(false);
+                        setSaveButtonState(false);
+                        setRemoveButtonState(false);
                         setGroupName(GROUP_TAB_DEFAULT_NAME_TEXT);
                         setContactListEmpty();
                     }   
@@ -703,6 +713,10 @@ public final class GroupsView extends AbstractView implements GroupsGraphicDesig
                 if(evt.getNewValue() != null) {
                     /* Gruppe aus Liste entfernen */
                     groupoverview_separatorlist.removeListMember(((GroupDTO)evt.getNewValue()).group_id);
+                    
+                    /*Falls keine Gruppen in der Datenbank sind, loeschen verhindern */
+                    if(groupoverview_separatorlist.getListMemberSize() == 0)
+                        setRemoveButtonState(false);
                     
                     /* Falls kein Eintrag selektiert ist, den ersten selektieren */
                     controller.selectGroup();
