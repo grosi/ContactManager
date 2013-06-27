@@ -62,7 +62,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
     private JLabel detail_dynamic_label_adress;
     private JSeparator detail_dynamic_separator_email;
     private JSeparator detail_dynamic_separator_address;
-    private JButton detail_dynamic_addbutton;
+    private JButton detail_dynamic_addbutton_email;
 //    private JTextField email_adress;
     
     /* Suche */
@@ -361,20 +361,19 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         detail_dynamic_label_email = new JLabel(CONTACT_TAB_EMAIL_LABEL);
         detail_dynamic_separator_email = new JSeparator();
         detail_dynamic_imageicon_email = new ImageIcon(getClass().getResource(IMAGES_FILEPATH+"add16x16.png"));
-        detail_dynamic_addbutton = new JButton("      Hinzufügen");
-        detail_dynamic_addbutton.setIcon(detail_dynamic_imageicon_email);
+        detail_dynamic_addbutton_email = new JButton("      Hinzufügen");
+        detail_dynamic_addbutton_email.setIcon(detail_dynamic_imageicon_email);
         detail_dynamic_panel_email.add(detail_dynamic_label_email, "cell 0 0");
         detail_dynamic_panel_email.add(detail_dynamic_separator_email, "wrap");
-        detail_dynamic_panel_email.add(detail_dynamic_addbutton,"span,wrap");
+        detail_dynamic_panel_email.add(detail_dynamic_addbutton_email,"span,wrap");
         
         
-       detail_dynamic_addbutton.addActionListener(new ActionListener() {
+       detail_dynamic_addbutton_email.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent ae) {
                 addEmail(CONTACT_TAB_DEFAULT_EMAIL_TEXT, "Default",CONTACT_DEFAULT_ID);
-//                email_adress.setText("E-Mail Adresse eingeben");
-                System.out.println("ADD");
+                System.err.println("MLKDSNMCKDSNCLKNDS");
             }
         });
         
@@ -706,12 +705,20 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         this.detail_static_prename_textfield.setText(contact_prename);
     }
     
+    public void setContactPrenameTextState(boolean state) {
+        this.detail_static_prename_textfield.setEnabled(state);
+    }
+    
     /**
      * Kontakt-Nachname temporaer aendern
      * @param contact_lastname Kontakt-Nachname
      */
     public void setContactLastname(String contact_lastname) {
         this.detail_static_name_textfield.setText(contact_lastname);
+    }
+    
+    public void setContactLastnameTextState(boolean state) {
+        this.detail_static_name_textfield.setEnabled(state);
     }
     
     /**
@@ -878,6 +885,39 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
      */
     public void setRemoveButtonState(boolean state) {
         remove_button.setEnabled(state);
+    }
+    
+    
+    public void setAddEmailButtonState(boolean state) {
+        detail_dynamic_addbutton_email.setEnabled(state);
+    }
+    
+    
+    public void setAddAddressButtonState(boolean state) {
+        detail_dynamic_addbutton_address.setEnabled(state);
+    }
+    
+    
+    public void setAddPhoneButtonState(boolean state) {
+        detail_dynamic_addbutton_phone.setEnabled(state);
+    }
+    
+    
+    public void setAddGroupButtonState(boolean state) {
+        detail_dynamic_addbutton_group.setEnabled(state);
+    }
+    
+    
+    public void setAddGroupComboState(boolean state) {
+        detail_dynamic_combobox_group.setEnabled(state);
+    }
+    
+    public void setAddGroupComboItem(String text) {
+        detail_dynamic_combobox_group.addItem(text);
+    }
+    
+    public int getGroupQuantity() {
+        return all_groups.size();
     }
     
     public String getContactName() {
@@ -1954,6 +1994,13 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
                         setMessageButtonState(false);
                         setSaveButtonState(false);
                         setRemoveButtonState(false);
+                        setAddEmailButtonState(false);
+                        setAddAddressButtonState(false);
+                        setAddPhoneButtonState(false);
+                        setAddGroupButtonState(false);
+                        setAddGroupComboState(false);
+                        setContactPrenameTextState(false);
+                        setContactLastnameTextState(false);
                         setContactPrename(CONTACT_TAB_DEFAULT_EMPTYNAME_TEXT);
                         setContactLastname(CONTACT_TAB_DEFAULT_EMPTYNAME_TEXT);
                         setContactListEmpty();
@@ -2052,8 +2099,18 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
                     separatorlist.removeListMember(((ContactDTO)evt.getNewValue()).user_id);
                     
                     /*Falls keine Kontakte in der Datenbank sind, loeschen verhindern */
-                    if(separatorlist.getListMemberSize() == 0)
+                    if(separatorlist.getListMemberSize() == 0) {
+                        setAddEmailButtonState(false);
+                        setAddAddressButtonState(false);
+                        setAddPhoneButtonState(false);
                         setRemoveButtonState(false);
+                        setAddGroupButtonState(false);
+                        setAddGroupComboState(false);
+                        setContactPrenameTextState(false);
+                        setContactLastnameTextState(false);
+                        setContactPrename(CONTACT_TAB_DEFAULT_EMPTYNAME_TEXT);
+                        setContactLastname(CONTACT_TAB_DEFAULT_EMPTYNAME_TEXT);
+                    }
                     
                     /* Falls kein Eintrag selektiert ist, den ersten selektieren */
                     controller.selectContact();
@@ -2075,12 +2132,23 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
                      detail_dynamic_combobox_group.removeAllItems();
                      ArrayList<GroupDTO> group_list;
                      group_list=(ArrayList<GroupDTO>)evt.getNewValue();
-                        Iterator it = group_list.iterator();
+                       
+                     if(!group_list.isEmpty()) {
                       
                         for(GroupDTO Group : group_list) {
                           detail_dynamic_combobox_group.addItem(Group.group_name);
                         }
                         all_groups=group_list;
+                        
+                        if(getContactQuantity() > 0) {
+                            setAddGroupButtonState(true);
+                            setAddGroupComboState(true);
+                        }
+                     } else {
+                         setAddGroupButtonState(false);
+                         setAddGroupComboItem("Keine Gruppen vorhanden");
+                         setAddGroupComboState(false);
+                     }
                  }
                 break;
              
