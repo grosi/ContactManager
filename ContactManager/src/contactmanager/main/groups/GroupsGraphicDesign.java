@@ -50,4 +50,5 @@ public interface GroupsGraphicDesign {
     /** Textfelder */
     public static final String GROUP_TAB_DEFAULT_SEARCH_TEXT = "Suchbegriff eingeben...";
     public static final String GROUP_TAB_DEFAULT_NAME_TEXT = "Gruppen-Name";
+    public static final String GROUP_TAB_DEFAULT_EMPTYNAME_TEXT = "Keine Gruppen vorhanden";
 }

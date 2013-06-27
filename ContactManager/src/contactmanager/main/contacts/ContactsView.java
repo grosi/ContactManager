@@ -1947,8 +1947,8 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
                         setMessageButtonState(false);
                         setSaveButtonState(false);
                         setRemoveButtonState(false);
-                        setContactPrename(CONTACT_TAB_DEFAULT_NAME_TEXT);
-                        setContactLastname(CONTACT_TAB_DEFAULT_NAME_TEXT);
+                        setContactPrename(CONTACT_TAB_DEFAULT_EMPTYNAME_TEXT);
+                        setContactLastname(CONTACT_TAB_DEFAULT_EMPTYNAME_TEXT);
                         setContactListEmpty();
                     }   
                 }

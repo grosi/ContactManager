@@ -639,7 +639,7 @@ public final class GroupsView extends AbstractView implements GroupsGraphicDesig
                         setMessageButtonState(false);
                         setSaveButtonState(false);
                         setRemoveButtonState(false);
-                        setGroupName(GROUP_TAB_DEFAULT_NAME_TEXT);
+                        setGroupName(GROUP_TAB_DEFAULT_EMPTYNAME_TEXT);
                         setContactListEmpty();
                     }   
                 }
