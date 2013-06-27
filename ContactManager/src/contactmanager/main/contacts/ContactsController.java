@@ -7,7 +7,7 @@ import contactmanager.main.SubController;
 
 
 /**
- * @author Simon Grossenbacher
+ * @author Philipp Eder
  * @version 0.1
  * @since 27.03.2013
  */
@@ -79,7 +79,9 @@ public class ContactsController extends AbstractController implements ContactsEv
     /***************************************************************************
      * View -> Controller Methoden
      **************************************************************************/
-    
+     /**
+     * Kontakt aus Liste holen
+     */
     public void getContact() {
         int index;
         int list_size;
@@ -87,7 +89,7 @@ public class ContactsController extends AbstractController implements ContactsEv
         int contact_id;
         String[] contact_listname;
         
-        index = contacts_view.getSelectedContactIndex(); //Selektierte Gruppe in der Ubersichtsliste
+        index = contacts_view.getSelectedContactIndex(); //Selektierte Kontakt in der Ubersichtsliste
         list_size = contacts_view.getContactListSize(); //Groesse der Uerbsichtsliste
         
         /* Kontrolle ob die Selektion noch moeglich ist */
@@ -95,14 +97,14 @@ public class ContactsController extends AbstractController implements ContactsEv
             contact_id = contacts_view.getContactIdOfIndex(index);
             contact_listname = contacts_view.getContactNameOfIndex(index).split(" ");
             
-            /* Nur gespeicherte Gruppen abfragen */
+            /* Nur gespeicherte Kontakte abfragen */
             if(contact_id != CONTACT_DEFAULT_ID) {
                 contact = getContactDTO();
                 contact.user_id = contact_id;
                 contact.user_lastname = contact_listname[0];
                 contact.user_prename = contact_listname[1];
                 
-                /* Ungespeicherte Gruppen loeschen */
+                /* Ungespeicherte Kontake loeschen */
                 if(contacts_view.getContactState(CONTACT_DEFAULT_ID) == true)
                     contacts_view.setContactList(CONTACT_DEFAULT_ID, contact_listname[0], ContactsView.CONTACT_REMOVE_GROUP_WITH_ID);
                 
@@ -118,7 +120,7 @@ public class ContactsController extends AbstractController implements ContactsEv
     
     
     /**
-     * Erste Gruppe in Ubersichtsliste selektieren
+     * Erster Kontakt in übersicht Selektieren
      */
     public void selectContact() {
         int group_quantity;
@@ -142,8 +144,11 @@ public class ContactsController extends AbstractController implements ContactsEv
     }
     
     
+        /**
+     * Neuer Kontakt zur Datenbank hinzufügen
+     */
     public void addContact() {
-        /* Platzhalter in Gruppen-Ubersichtliste */
+        /* Platzhalter in Kontakt-Ubersichtliste */
         contacts_view.setContactListSilent(true);
         contacts_view.setContactList(CONTACT_DEFAULT_ID, ContactsView.CONTACT_TAB_DEFAULT_NAME_TEXT, ContactsView.CONTACT_ADD_CONTACT);
         contacts_view.setContactListSilent(false);
@@ -163,7 +168,7 @@ public class ContactsController extends AbstractController implements ContactsEv
     
        
     /**
-     * Kontakt löschen
+     * Bestehender Kontakt aus Datenbank löschen
      */
     public void removeContact() {
         ContactDTO contact;
@@ -225,7 +230,7 @@ public class ContactsController extends AbstractController implements ContactsEv
         Integer[] address_ids;
         String[] groups;
                 
-        /* Selektierte Gruppe */
+        /* Selektierter Kontakt */
         index = contacts_view.getSelectedContactIndex();
         
         /* Kein Eintrag in Uebersicht selektiert */
@@ -271,19 +276,22 @@ public class ContactsController extends AbstractController implements ContactsEv
         }
        
         
-        /* Gruppe existiert noch nicht in Datenbank */
+        /* Kontakt existiert noch nicht in Datenbank */
         contacts_view.setMouseWaitCursor(true);
         if(contact_id == CONTACT_DEFAULT_ID) 
             contacts_model.addContact(contact);
-        /* Gespeicherte Gruppe */    
+        /* Gespeicherter Kontakt */    
         else 
             contacts_model.saveContact(contact);
         contacts_view.setMouseWaitCursor(false);
         
+        /*Gelöste E-Mail aus Datenbakt entfernen*/
         contacts_model.deleteMail(contacts_view.remove_emails);
-        contacts_view.remove_emails.removeAll(contacts_view.remove_emails);        
+        contacts_view.remove_emails.removeAll(contacts_view.remove_emails);
+        /*Gelöste Adresse aus Datenbakt entfernen*/
         contacts_model.deleteAddress(contacts_view.remove_addresses);
         contacts_view.remove_addresses.removeAll(contacts_view.remove_addresses);
+        /*Gelöste Telefonnummer aus Datenbakt entfernen*/
         contacts_model.deletePhone(contacts_view.remove_phones);
         contacts_view.remove_phones.removeAll(contacts_view.remove_phones);
         String[] group_name;
@@ -343,6 +351,11 @@ public class ContactsController extends AbstractController implements ContactsEv
     }
     
     
+    
+            /**
+     * E-Mail Senden
+     * @param text Email-Adresse 
+     */
     public void sendMessage(String text) {
         
         if(getEmailClientState() == true) {
@@ -369,7 +382,8 @@ public class ContactsController extends AbstractController implements ContactsEv
     
     
     /**
-     * Kontakt-Name
+     * Feld mit Kontaktname wurde selektiert -> überpüefung ob Standarttext
+     * Falls Standarttext Feld markieren
      */
     public void nameContactFocusGained() {
         String contact_name;
@@ -380,10 +394,18 @@ public class ContactsController extends AbstractController implements ContactsEv
             contacts_view.setContactNameSelection(0, contact_name.length());
     }
     
+    
+     /**
+     * Feld mit Kontaktname nicht mehr selektiert
+     */
     public void nameContactFocusLost() {
         contacts_view.setContactNameSelection(0,0);
     }
     
+    
+     /**
+     * Kontakt Name wurde geändert -> Gruppenliste ändern
+     */
     public void nameContactChange() {
         int index;
         int list_size;
@@ -395,7 +417,7 @@ public class ContactsController extends AbstractController implements ContactsEv
         index = contacts_view.getSelectedContactIndex();
         list_size = contacts_view.getContactListSize();
        
-        /* Gruppenliste nur aendern wenn die Pausabilitaeten erfuellt sind */
+        /* Kontaktliste nur aendern wenn die Pausabilitaeten erfuellt sind */
         if(index > 0 && index != list_size) {
                 contact_name_new = contacts_view.getContactName();
                 contact_name_old = contacts_view.getContactNameOfIndex(index).split(" ");
@@ -410,7 +432,8 @@ public class ContactsController extends AbstractController implements ContactsEv
     
     
     /**
-     * Kontakt-Vorname
+     * Feld mit Kontaktvorname wurde selektiert -> überpüefung ob Standarttext
+     * Falls Standarttext Feld markieren
      */
     public void prenameContactFocusGained() {
         String contact_prename;
@@ -421,10 +444,16 @@ public class ContactsController extends AbstractController implements ContactsEv
             contacts_view.setContactPrenameSelection(0, contact_prename.length());
     }
 
+     /**
+     * Feld mit Kontaktvorname nicht mehr selektiert
+     */
     public void prenameContactFocusLost() {
         contacts_view.setContactPrenameSelection(0,0);
     }
-        
+     
+     /**
+     * Kontakt Vorname wurde geändert -> Gruppenliste ändern
+     */ 
     public void prenameContactChange() {
         int index;
         int list_size;
@@ -436,7 +465,7 @@ public class ContactsController extends AbstractController implements ContactsEv
         index = contacts_view.getSelectedContactIndex();
         list_size = contacts_view.getContactListSize();
        
-        /* Gruppenliste nur aendern wenn die Pausabilitaeten erfuellt sind */
+        /* Kontaktliste nur aendern wenn die Pausabilitaeten erfuellt sind */
         if(index > 0 && index != list_size) {
                 contact_name_new = contacts_view.getContactPrename();
                 contact_name_old = contacts_view.getContactNameOfIndex(index).split(" ");
@@ -602,13 +631,18 @@ public class ContactsController extends AbstractController implements ContactsEv
     
     
     /**
-     * Kontakt-Vorname
+     * Alle Gruppen aus Datenbank auslesen
      */
     public void getAllGroups() {
         contacts_model.allGroups();
     }
     
-        void getContactGroups(ContactDTO contactDTO) {
+    
+    /**
+     * Alle Gruppen aus Datenbank auslesen
+     * @param contact DTO Contact Transfer Objekt
+     */
+    void getContactGroups(ContactDTO contactDTO) {
         contacts_model.getContactGroups(contactDTO);
     }
     
