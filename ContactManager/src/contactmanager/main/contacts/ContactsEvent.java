@@ -11,6 +11,11 @@ public interface ContactsEvent {
     /* Allgemeine Angaben */
     public static final int CONTACT_DEFAULT_ID = 0;
     
+    /* Kontakte Handlen */
+    public static final String CONTACT_ADD_CONTACT = "ADD";
+    public static final String CONTACT_REMOVE_GROUP_WITH_ID = "REMOVE_ID";
+    public static final String CONTACT_REMOVE_GROUP_WITH_INDEX = "REMOVE_INDEX";
+    
     /* Property Changes */
     public static final String CONTACT_LIST_SELECT_EVENT = "CONTACT_LIST_SELECT";
     public static final String CONTACT_SEARCH_EVENT = "CONTACT_SEARCH";

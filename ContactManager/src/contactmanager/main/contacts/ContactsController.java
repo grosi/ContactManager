@@ -7,12 +7,14 @@ import contactmanager.main.SubController;
 
 
 /**
- * @author Philipp Eder
+ * Kontakt-Controller
+ * @author Philipp Eder, Simon Grossenbacher (Design)
  * @version 0.1
  * @since 27.03.2013
  */
 public class ContactsController extends AbstractController implements ContactsEvent, SubController {
     
+    /* Haupt-Controller */
     private MainController main_controller;
 
     /* Modelle */
@@ -21,6 +23,11 @@ public class ContactsController extends AbstractController implements ContactsEv
     /* Views */
     private ContactsView contacts_view;
     
+    
+    /**
+     * Konstruktor des Kontak-Controllers
+     * @param mainController Referenz auf Hauptcontroller
+     */
     public ContactsController(MainController mainController) {
         super();
         
@@ -36,7 +43,6 @@ public class ContactsController extends AbstractController implements ContactsEv
     }
     
     
- 
     
     /***************************************************************************
      * MainController-> SubController Methoden
@@ -48,13 +54,13 @@ public class ContactsController extends AbstractController implements ContactsEv
     public void updateData() {
         contacts_model.getContactList();
         contacts_model.allGroups();
-        System.out.println("UPDATE CONTACTS");
     }
+    
+    
     
     /***************************************************************************
      * Model/View -> MainController Methoden
      **************************************************************************/
-    
     /**
      * View zu Frame hinzufuegen
      * @param title
@@ -65,6 +71,7 @@ public class ContactsController extends AbstractController implements ContactsEv
         this.main_controller.addTabToMainFrame(title, view);
     }
     
+    
     /**
      * Spezifische DAO erstellen
      * @return GroupsDAO
@@ -74,6 +81,7 @@ public class ContactsController extends AbstractController implements ContactsEv
     public Object getDAO() {
         return this.main_controller.getDAOFactory().getContactsDAO();
     }
+    
     
     
     /***************************************************************************
@@ -144,7 +152,7 @@ public class ContactsController extends AbstractController implements ContactsEv
     }
     
     
-        /**
+    /**
      * Neuer Kontakt zur Datenbank hinzufügen
      */
     public void addContact() {
@@ -211,11 +219,8 @@ public class ContactsController extends AbstractController implements ContactsEv
             
             main_controller.setStatusBar("Kontakt '"+contact_listname[0]+" "+contact_listname[1]+"' gelöscht" );
         }
-        
-        
-        
-    
     }
+    
     
     /**
      * Kontakt speichern
@@ -284,7 +289,6 @@ public class ContactsController extends AbstractController implements ContactsEv
             }       
         }
        
-        
         /* Kontakt existiert noch nicht in Datenbank */
         contacts_view.setMouseWaitCursor(true);
         if(contact_id == CONTACT_DEFAULT_ID) 
@@ -311,13 +315,10 @@ public class ContactsController extends AbstractController implements ContactsEv
         contacts_model.addedGroups(group_name,contact,contacts_view.contact_groups, contacts_view.all_groups);
         
         main_controller.setStatusBar("Kontakt '"+contact_name[0]+" "+contact_name[1]+"' gespeichert" );
-        
     }
     
     
-    
-    
-        /**
+    /**
      * Suche angewaehlt
      */
     public void searchContactFocusGained() {
@@ -343,6 +344,7 @@ public class ContactsController extends AbstractController implements ContactsEv
             contacts_view.setSearchText(ContactsView.CONTACT_TAB_DEFAULT_SEARCH_TEXT);
     }
     
+    
     /**
      * Nach Gruppen suchen
      */
@@ -360,26 +362,25 @@ public class ContactsController extends AbstractController implements ContactsEv
     }
     
     
-    
-            /**
+    /**
      * E-Mail Senden
      * @param text Email-Adresse 
      */
     public void sendMessage(String text) {
         
         if(getEmailClientState() == true) {
-        // Kontrolle ob die Selektion noch moeglich ist 
              sendEmail(text);  
-       }    
-     
+       }   
     }
     
-        /**
+    
+    /**
      * Email-Moeglichkeit kontrollieren
      */
     public boolean getEmailClientState() {
         return main_controller.getEmailClientStatus();
     }
+    
     
     /**
      * Nachricht an entsprechende Empfaenger schreiben
@@ -404,7 +405,7 @@ public class ContactsController extends AbstractController implements ContactsEv
     }
     
     
-     /**
+    /**
      * Feld mit Kontaktname nicht mehr selektiert -> zu erstem Kontakt springen
      */
     public void nameContactFocusLost() {
@@ -412,7 +413,7 @@ public class ContactsController extends AbstractController implements ContactsEv
     }
     
     
-     /**
+    /**
      * Kontakt Name wurde geändert -> Gruppenliste ändern
      */
     public void nameContactChange() {
@@ -453,14 +454,16 @@ public class ContactsController extends AbstractController implements ContactsEv
             contacts_view.setContactPrenameSelection(0, contact_prename.length());
     }
 
-     /**
+    
+    /**
      * Feld mit Kontaktvorname nicht mehr selektiert
      */
     public void prenameContactFocusLost() {
         contacts_view.setContactPrenameSelection(0,0);
     }
      
-     /**
+    
+    /**
      * Kontakt Vorname wurde geändert -> Gruppenliste ändern
      */ 
     public void prenameContactChange() {
@@ -487,6 +490,7 @@ public class ContactsController extends AbstractController implements ContactsEv
         }   
     }
     
+    
     /**
      * Email-Adresse angewaehlt
      * @param obj Referenz auf die Email-Adresse
@@ -500,6 +504,7 @@ public class ContactsController extends AbstractController implements ContactsEv
             contacts_view.setContactEmailSelection(0, contact_email.length(),obj);
     }
     
+    
     /**
      * Email-Adresse abgewaehlt
      * @param obj Referenz auf die Email-Adresse
@@ -507,6 +512,7 @@ public class ContactsController extends AbstractController implements ContactsEv
     public void emailContactFocusLost(Object obj) {
         contacts_view.setContactEmailSelection(0,0,obj);
     }
+        
     
     /**
      * Email-Adresse geaendert
@@ -515,6 +521,7 @@ public class ContactsController extends AbstractController implements ContactsEv
     public void emailContactChange(Object obj) {
         contacts_view.setSaveButtonState(true);
     }
+    
     
     /**
      * Telefon angewaehlt
@@ -529,6 +536,7 @@ public class ContactsController extends AbstractController implements ContactsEv
             contacts_view.setContactPhoneSelection(0, contact_phone.length(),obj);
     }
     
+    
     /**
      * Telefon abgewaehlt
      * @param obj Referenz auf die Telefon-Nummer
@@ -537,6 +545,7 @@ public class ContactsController extends AbstractController implements ContactsEv
         contacts_view.setContactPhoneSelection(0,0,obj);
     }
     
+    
     /**
      * Telefon geaendert
      * @param obj Referenz auf die Telefon-Nummer
@@ -544,6 +553,7 @@ public class ContactsController extends AbstractController implements ContactsEv
     public void phoneContactChange(Object obj) {
         contacts_view.setSaveButtonState(true);
     }
+    
     
     /**
      * Strasse angewaehlt
@@ -558,6 +568,7 @@ public class ContactsController extends AbstractController implements ContactsEv
             contacts_view.setContactAddressStreetSelection(0, contact_street.length(),obj);
     }
     
+    
     /**
      * Strasse abgewaehlt
      * @param obj Referenz auf die Strasse
@@ -565,6 +576,7 @@ public class ContactsController extends AbstractController implements ContactsEv
     public void addressStreetContactFocusLost(Object obj) {
         contacts_view.setContactAddressStreetSelection(0,0,obj);
     }
+    
     
     /**
      * PLZ angewaehlt
@@ -579,6 +591,7 @@ public class ContactsController extends AbstractController implements ContactsEv
             contacts_view.setContactAddressCodeSelection(0, contact_code.length(),obj);
     }
     
+    
     /**
      * PLZ abgewaehlt
      * @param obj Referenz auf die PLZ
@@ -586,6 +599,7 @@ public class ContactsController extends AbstractController implements ContactsEv
     public void addressCodeContactFocusLost(Object obj) {
         contacts_view.setContactAddressCodeSelection(0,0,obj);
     }
+    
     
     /**
      * Stadt angewaehlt
@@ -600,6 +614,7 @@ public class ContactsController extends AbstractController implements ContactsEv
             contacts_view.setContactAddressCitySelection(0, contact_city.length(),obj);
     }
     
+    
     /**
      * Stadt abgewaehlt
      * @param obj Referenz auf die Stadt
@@ -607,6 +622,7 @@ public class ContactsController extends AbstractController implements ContactsEv
     public void addressCityContactFocusLost(Object obj) {
         contacts_view.setContactAddressCitySelection(0,0,obj);
     }
+    
     
     /**
      * Land angewaehlt
@@ -621,6 +637,7 @@ public class ContactsController extends AbstractController implements ContactsEv
             contacts_view.setContactAddressCountrySelection(0, contact_country.length(),obj);
     }
     
+    
     /**
      * Land abgewaehlt
      * @param obj Referenz auf das Land
@@ -629,6 +646,7 @@ public class ContactsController extends AbstractController implements ContactsEv
         contacts_view.setContactAddressCountrySelection(0,0,obj);
     }
     
+    
     /**
      * Adresse geaendert
      * @param obj Referenz auf die Addresse
@@ -636,7 +654,6 @@ public class ContactsController extends AbstractController implements ContactsEv
     public void addressContactChange(Object obj) {
         contacts_view.setSaveButtonState(true);
     }
-    
     
     
     /**
@@ -655,6 +672,8 @@ public class ContactsController extends AbstractController implements ContactsEv
         contacts_model.getContactGroups(contactDTO);
     }
     
+    
+    
     /***************************************************************************
      * Controller Methoden
      **************************************************************************/
@@ -665,6 +684,4 @@ public class ContactsController extends AbstractController implements ContactsEv
     private ContactDTO getContactDTO() {
         return new ContactDTO();
     }
-
-
 }

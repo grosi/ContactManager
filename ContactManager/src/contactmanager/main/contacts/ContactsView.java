@@ -17,7 +17,6 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Map;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -35,12 +34,14 @@ import javax.swing.event.ListSelectionListener;
 import net.miginfocom.swing.MigLayout;
 
 /**
- * @author Philipp Eder
+ * Kontakt-View
+ * @author Philipp Eder, Simon Grossenbacher (Design)
  * @version 0.1
  * @since 27.03.2013
  */
 public final class ContactsView extends AbstractView implements ContactsGraphicDesign, ContactsEvent {
     
+    /* Controller */
     private ContactsController controller;
     
     /* Linke Spalte */
@@ -71,7 +72,13 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
     private ImageIcon detail_dynamic_imageicon_address;
     private ImageIcon detail_dynamic_imageicon_phone;
     private ImageIcon detail_dynamic_imageicon_email;
-
+    private JPanel detail_dynamic_panel_group;
+    private JLabel detail_dynamic_label_group;
+    private JSeparator detail_dynamic_separator_group;
+    private ImageIcon detail_dynamic_imageicon_group;
+    private JButton detail_dynamic_addbutton_group;
+    private JComboBox detail_dynamic_combobox_group;
+    private JPanel detail_dynamic_panel_group_choose;
     
     /* Suche */
     private JTextField search_textfield;
@@ -81,7 +88,6 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
     private JButton remove_button;
     private JButton save_button;
     private JButton message_button;
-    
     
     /* E-Mail */
     private ArrayList<JButton> email_send_button = new ArrayList<>();
@@ -120,26 +126,13 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
     /*Gruppen von Kontakt*/
     public ArrayList<GroupDTO> contact_groups = new ArrayList<>();
     
-    /*Gelöste Daten*/
+    /*Geloeschte Daten*/
     public ArrayList<Integer> remove_groups = new ArrayList<>();
     public ArrayList<Integer> remove_addresses = new ArrayList<>();
     public ArrayList<Integer> remove_phones = new ArrayList<>();
     public ArrayList<Integer> remove_emails = new ArrayList<>();   
-    
 
     
-    /* Konstanten */
-    public static final String CONTACT_ADD_CONTACT = "ADD";
-    public static final String CONTACT_REMOVE_GROUP_WITH_ID = "REMOVE_ID";
-    public static final String CONTACT_REMOVE_GROUP_WITH_INDEX = "REMOVE_INDEX";
-    private JPanel detail_dynamic_panel_group;
-    private JLabel detail_dynamic_label_group;
-    private JSeparator detail_dynamic_separator_group;
-    private ImageIcon detail_dynamic_imageicon_group;
-    private JButton detail_dynamic_addbutton_group;
-    private JComboBox detail_dynamic_combobox_group;
-    private JPanel detail_dynamic_panel_group_choose;
-
     
     /**
      * View default Konstruktor
@@ -352,7 +345,6 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         detail_static_panel_prename.add(detail_static_prename_textfield, "cell 0 1 2 1,growx");
         
         
-        
         //Dynamic Panel E-Mail
         detail_dynamic_panel_email = new JPanel(new MigLayout("fill", //Layout Grenzen
                 "min[][grow,fill]min", //Spalten Grenzen
@@ -374,9 +366,6 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
                 System.err.println("MLKDSNMCKDSNCLKNDS");
             }
         });
-        
-        
-        
         
         
         //Dynamic Panel Adresse
@@ -459,8 +448,6 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         }); 
         
         
-    
-        
         //Detail Haupt-Panel
         detail_main_panel = new JPanel(new MigLayout("", //Layout Grenzen
                 "[grow,fill]", //Spalten Grenzen
@@ -472,9 +459,6 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         detail_main_panel.add(detail_dynamic_panel_address, "wrap");
         detail_main_panel.add(detail_dynamic_panel_phone, "wrap");
         detail_main_panel.add(detail_dynamic_panel_group, "wrap");
-        
-        
-       
         
         
         //Scroll Pane
@@ -502,50 +486,51 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
      * View -> Controller
      * Methoden werden direkt von Listener der Grafikelementen angesprochen
      **************************************************************************/ 
-       /**
+    /**
      * Neuer Kontakt generieren
-     * @param ae 
+     * @param ae ActionEvent
      */
     private void addButtonActionPerformed(ActionEvent ae) {
         controller.addContact();
     }
    
-      /**
+    
+    /**
      * Kontakt Löschen
-     * @param ae 
+     * @param ae ActionEvent
      */
     private void removeButtonActionPerformed(ActionEvent ae) {
         controller.removeContact();
         
     }
 
-     /**
+    
+    /**
      * Kontakt Speichern
-     * @param ae 
+     * @param ae ActionEvent
      */
     private void saveButtonActionPerformed(ActionEvent ae) {
         controller.saveContact();
     }
     
-     /**
+    
+    /**
      * E-Mail an erste E-Mail Adresse von Kontakt schreiben
-     * @param ae 
+     * @param ae ActionEvent
      */
     private void messageButtonActionPerformed(ActionEvent ae) {
         JTextField email;
         String emailaddress;
-        if(email_text != null)
-        {
-         email = email_text.get(0);
-         emailaddress = email.getText();
-         controller.sendMessage(emailaddress);
+        if(email_text != null) {
+            email = email_text.get(0);
+            emailaddress = email.getText();
+            controller.sendMessage(emailaddress);
         }
     }
     
-    
-     /**
+    /**
      * Such-Textfeld selektiert
-     * @param fe 
+     * @param fe FocusEvent
      */
     private void searchTextFocusGained(FocusEvent fe) {
         controller.searchContactFocusGained();
@@ -553,22 +538,24 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
     
     /**
      * Such-Textfeld deselektiert
-     * @param fe 
+     * @param fe FocusEvent
      */
     private void searchTextFocusLost(FocusEvent fe) {
         controller.searchContactFocusLost();
     }
-        /**
+    
+    /**
      * Such-Textfeld Eintrag geaendert
-     * @param fe 
+     * @param fe DocumentEvent
      */
     private void searchTextChange(DocumentEvent de) {
         controller.searchContact();
     }
     
-     /**
+    
+    /**
      * Neuer Kontakt laden
-     * @param lse 
+     * @param lse ListSelectionEvent
      */
     private void contactListValueChanged(ListSelectionEvent lse) {
         /* Nur einmaliger Event erlauben */
@@ -577,57 +564,64 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         
     }
     
-     /**
+    
+    /**
      * Kontakt wurde in Liste ausgewählt
-     * @param e 
+     * @param e FocusEvent
      */
     private void contactnameTextFocusGained(FocusEvent e) {
         controller.nameContactFocusGained();
     }
     
-     /**
+    
+    /**
      * Kontakt wurde abgewählt
-     * @param e 
+     * @param e FocusEvent
      */
     private void contactnameTextFocusLost(FocusEvent e) {
         controller.nameContactFocusLost();
     }
     
-     /**
+    
+    /**
      * Kontakt Name wurde geändert
-     * @param e 
+     * @param e DocumentEvent
      */
     private void contactnameTextChange(DocumentEvent e) {
         controller.nameContactChange();   
     }
     
-     /**
+    
+    /**
      * Kontakt Vorname wurde selektiert
-     * @param e 
+     * @param e FocusEvent
      */
     private void contactprenameTextFocusGained(FocusEvent e) {
         controller.prenameContactFocusGained();
     }
     
-     /**
+    
+    /**
      * Kontakt Vorname wurde deselektiert
-     * @param e 
+     * @param e FocusEvent
      */
     private void contactprenameTextFocusLost(FocusEvent e) {
         controller.prenameContactFocusLost();
     }
     
-     /**
+    
+    /**
      * Kontakt Vorname wurde geändert
-     * @param e 
+     * @param e DocumentEvent
      */
     private void contactprenameTextChange(DocumentEvent e) {
         controller.prenameContactChange();   
     }
     
-     /**
+    
+    /**
      * E-Mail senden Button einer selektierten Adresse gedrückt
-     * @param e 
+     * @param e ActionEvent
      */
     private void contactsendEmailAcrionEvent(ActionEvent e) {
         JButton button = (JButton)e.getSource();
@@ -636,132 +630,147 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         controller.sendMessage(text.getText());
     }
     
-     /**
+    
+    /**
      * E-Mail Adresse angewählt
-     * @param e 
+     * @param e FocusEvent
      */
     private void emailTextFocusGained(FocusEvent e) {
         controller.emailContactFocusGained(e.getSource());
     }
     
-     /**
+    
+    /**
      * E-Mail Adresse abgewählt
-     * @param e 
+     * @param e FocusEvent
      */
     private void emailTextFocusLost(FocusEvent e) {
         controller.emailContactFocusLost(e.getSource());
     }
     
+    
     /**
      * E-Mail Adresse geändert
-     * @param e 
+     * @param e Object
      */
     private void emailTextChange(Object obj) {
         controller.emailContactChange(obj);
     }
     
+    
     /**
      * Telefonnummer angewählt
-     * @param e 
+     * @param e FocusEvent
      */
     private void phoneTextFocusGained(FocusEvent e) {
         controller.phoneContactFocusGained(e.getSource());
     }
     
+    
     /**
      * Telefonnummer abgewählt
-     * @param e 
+     * @param e FocusEvent
      */
     private void phoneTextFocusLost(FocusEvent e) {
         controller.phoneContactFocusLost(e.getSource());
     }
     
+    
     /**
      * Telefonnummer geändert
-     * @param e 
+     * @param e Object
      */
     private void phoneTextChange(Object obj) {
         controller.phoneContactChange(obj);
     }
     
+    
     /**
      * Strasse einer Adresse angewählt
-     * @param e 
+     * @param e FocusEvent
      */
     private void addressStreetTextFocusGained(FocusEvent e) {
         controller.addressStreetContactFocusGained(e.getSource());
     }
 
+    
     /**
      * Strasse einer Adresse angewählt
-     * @param e 
+     * @param e FocusEvent
      */
     private void addressStreetTextFocusLost(FocusEvent e) {
         controller.addressStreetContactFocusLost(e.getSource());
     }
     
+    
     /**
      * Postleizahl einer Adresse angewählt
-     * @param e 
+     * @param e FocusEvent
      */
     private void addressCodeTextFocusGained(FocusEvent e) {
         controller.addressCodeContactFocusGained(e.getSource());
     }
 
+    
     /**
      * Postleizahl einer Adresse angewählt
-     * @param e 
+     * @param e FocusEvent
      */
     private void addressCodeTextFocusLost(FocusEvent e) {
         controller.addressCodeContactFocusLost(e.getSource());
     }
     
+    
     /**
      * Stadt einer Adresse angewählt
-     * @param e 
+     * @param e FocusEvent
      */
     private void addressCityTextFocusGained(FocusEvent e) {
         controller.addressCityContactFocusGained(e.getSource());
     }
     
+    
     /**
      * Stadt einer Adresse abgewählt
-     * @param e 
+     * @param e FocusEvent
      */
     private void addressCityTextFocusLost(FocusEvent e) {
         controller.addressCityContactFocusLost(e.getSource());
     }
     
+    
     /**
      * Land einer Adresse angewählt
-     * @param e 
+     * @param e FocusEvent
      */
     private void addressCountryTextFocusGained(FocusEvent e) {
         controller.addressCountryContactFocusGained(e.getSource());
     }
     
+    
     /**
      * Land einer Adresse abgewählt
-     * @param e 
+     * @param e FocusEvent
      */
     private void addressCountryTextFocusLost(FocusEvent e) {
         controller.addressCountryContactFocusLost(e.getSource());
     }
     
+    
     /**
      * Adresse hat geändert
-     * @param obj 
+     * @param obj Object
      */
     private void addressTextChange(Object obj) {
         controller.addressContactChange(obj);
     }
     
     
+    
     /***************************************************************************
      * Controller -> View
      * setter und getter Methoden, die dem Controller das Steuern ermoeglichen
      **************************************************************************/
-    
     /**
      * Index des selektierten Kontakts der Uebersichtsliste
      * @return Index: -1 wenn nichts selektiert ist 
@@ -770,6 +779,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         return this.separatorlist.getSelectedIndex();
     }
     
+    
     /**
      * Kontakt mit dem angegebenen Index selektieren
      * @param index Gruppen-Index
@@ -777,6 +787,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
     public void setSelectedContactIndex(int index) {
         this.separatorlist.setSelectedIndex(index);
     }
+    
     
     /**
      * ID eines Kontakts in der Uebersichtsliste
@@ -788,6 +799,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         return member.getID();
     }
     
+    
     /**
      * Name eines Kontakts in der Uebersichtsliste
      * @param index Index der Gruppe in der Liste
@@ -798,6 +810,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         return member.getText();
     }
     
+    
     /**
      * Kontakt-Vorname temporaer aendern
      * @param contact_prename Kontakt-Vorname
@@ -805,6 +818,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
     public void setContactPrename(String contact_prename) {
         this.detail_static_prename_textfield.setText(contact_prename);
     }
+    
     
     /**
      * Kontakt-Vorname ändern aktivieren/deaktivieren
@@ -814,6 +828,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         this.detail_static_prename_textfield.setEnabled(state);
     }
     
+    
     /**
      * Kontakt-Nachname temporaer aendern
      * @param contact_lastname Kontakt-Nachname
@@ -822,6 +837,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         this.detail_static_name_textfield.setText(contact_lastname);
     }
     
+    
     /**
      * Kontakt-Nachname ändern aktivieren/deaktivieren
      * @param state Enable Status
@@ -829,6 +845,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
     public void setContactLastnameTextState(boolean state) {
         this.detail_static_name_textfield.setEnabled(state);
     }
+    
     
     /**
      * Kontakt Uebersichtsliste anpassen
@@ -853,6 +870,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         }
     }
     
+    
     /**
      * Event Listener fuer die naechsten 2 Aktionen ausschalten
      * @param state 
@@ -860,6 +878,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
     public void setContactListSilent(boolean state) {
         this.separatorlist.setListenerSilent(state);
     }
+    
     
     /**
      * Liste Löschen
@@ -872,9 +891,9 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         /* Alle Elemente der Liste zuerst loeschen */
         for(int i = 0; i < contact_quantity; i++){    
             setContactList(1, "", CONTACT_REMOVE_GROUP_WITH_INDEX);
-            //groupoverview_separatorlist.removeListMemberOfIndex(1);
         }
     }
+    
     
     /**
      * Alle Email-Adressen loeschen
@@ -894,6 +913,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
             detail_dynamic_panel_email.revalidate();
         } 
     }
+    
     
     /**
      * Alle Adressen-Adressen loeschen
@@ -915,6 +935,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         } 
     }
     
+    
     /**
      * Alle Adressen-Adressen loeschen
      */
@@ -931,6 +952,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
             detail_dynamic_panel_group.revalidate();
         } 
     }
+    
     
     /**
      * Alle Adressen-Adressen loeschen
@@ -949,6 +971,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         } 
     }
     
+    
     /**
      * Kontrolle ob ein Kontakt vorhanden ist anhand der Kontakt-ID
      * @param contact_id Kontakt-ID
@@ -961,6 +984,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
             return true;
     }
     
+    
     /**
      * Groesse der Kontakt-Ubersichtsliste 
      */
@@ -968,12 +992,14 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         return this.separatorlist.getListSize();
     }
     
+    
     /**
      * Anzahl vorhanden Kontakte
      */
     public int getContactQuantity() {
         return this.separatorlist.getListMemberSize();
     }
+    
     
     /**
      * Save-Button aktiviern oder deaktivieren
@@ -983,6 +1009,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         this.save_button.setEnabled(state);
     }
     
+    
     /**
      * Message-Button aktiviern oder deaktivieren
      * @param state
@@ -990,6 +1017,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
     public void setMessageButtonState(boolean state) {
         message_button.setEnabled(state);
     }
+    
     
     /**
      * Loeschen-Button aktiviern oder deaktivieren
@@ -999,6 +1027,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         remove_button.setEnabled(state);
     }
     
+    
     /**
      * Hinzufuegen Email-Button aktiviern oder deaktivieren
      * @param state
@@ -1006,6 +1035,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
     public void setAddEmailButtonState(boolean state) {
         detail_dynamic_addbutton_email.setEnabled(state);
     }
+    
     
     /**
      * Hinzufuegen Address-Button aktiviern oder deaktivieren
@@ -1015,7 +1045,8 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         detail_dynamic_addbutton_address.setEnabled(state);
     }
     
-     /**
+    
+    /**
      * Hinzufuegen Telefonnummer-Button aktiviern oder deaktivieren
      * @param state
      */   
@@ -1023,13 +1054,15 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         detail_dynamic_addbutton_phone.setEnabled(state);
     }
     
-     /**
+    
+    /**
      * Hinzufuegen Gruppen-Button aktiviern oder deaktivieren
      * @param state
      */  
     public void setAddGroupButtonState(boolean state) {
         detail_dynamic_addbutton_group.setEnabled(state);
     }
+    
     
     /**
      * Auswahl Gruppen aktiviern oder deaktivieren
@@ -1039,6 +1072,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         detail_dynamic_combobox_group.setEnabled(state);
     }
     
+    
     /**
      * Hinzufuegen Gruppennamen zur Combobox
      * @param text Gruppennahmen
@@ -1046,6 +1080,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
     public void setAddGroupComboItem(String text) {
         detail_dynamic_combobox_group.addItem(text);
     }
+    
     
     /**
      * Anzahl Gruppen zurückgeben
@@ -1055,6 +1090,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         return all_groups.size();
     }
     
+    
     /**
      * Nachname von aktuellem Kontakt zurückgeben
      * @return Nachname
@@ -1062,6 +1098,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
     public String getContactName() {
         return detail_static_name_textfield.getText();
     }
+    
     
     /**
      * Gruppen-Namen selektieren
@@ -1072,6 +1109,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         detail_static_name_textfield.select(first, last);
     }
     
+    
     /**
      * Vornachname von aktuellem Kontakt zurückgeben
      * @return Vornachname
@@ -1079,6 +1117,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
     public String getContactPrename() {
         return detail_static_prename_textfield.getText();
     }
+    
     
     /**
      * Gruppen-VorNamen selektieren
@@ -1088,6 +1127,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
     public void setContactPrenameSelection(int first, int last) {
         detail_static_prename_textfield.select(first, last);
     }
+    
     
     /**
      * Auslesen aller E-Mail Adressen und in einem String Array zurückgeben
@@ -1107,6 +1147,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         return emails;
     }
     
+    
     /**
      * Auslesen aller E-Mail Typen und in einem String Array zurückgeben
      * @return Emailtypen
@@ -1125,6 +1166,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         
         return types;
     }
+    
     
     /**
      * Auslesen aller E-Mail ids und in einem String Array zurückgeben
@@ -1150,7 +1192,6 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
             for(JTextField text : phone_text) {
                 phone[i] = text.getText();
                 i++;
-                //emails.add(text.getText());
             }
         } else
             phone = null;
@@ -1183,15 +1224,16 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
      * Auslesen aller Telefonnummernids und in einem String Array zurückgeben
      * @return Telefonnummerids
      */  
-      public Integer[] getPhoneIDs() {
-        
-         if(phone_id.size() > 0)
-            return (Integer[])phone_id.toArray(new Integer[phone_id.size()]);
-         else
-            return null;
+    public Integer[] getPhoneIDs() {
+
+       if(phone_id.size() > 0)
+          return (Integer[])phone_id.toArray(new Integer[phone_id.size()]);
+       else
+          return null;
         
     }
      
+    
     /**
      * Auslesen aller Strassen und in einem String Array zurückgeben
      * @return Strassen
@@ -1204,7 +1246,6 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
             for(JTextField text : address_street) {
                 street[i] = text.getText();
                 i++;
-                //emails.add(text.getText());
             }
         } else
             street = null;
@@ -1212,31 +1253,33 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         return street;
     }
    
+     
     /**
      * Auslesen aller Postleizahlen und in einem String Array zurückgeben
      * @return Postleizahlen
      */  
-      public String[] getAddressCodes() {
-        String[] code = new String[address_code.size()];//new ArrayList<>();
-        int i = 0;
-        
-        if(address_code.size() > 0) {
-            for(JTextField text : address_code) {
-                code[i] = text.getText();
-                i++;
-                //emails.add(text.getText());
-            }
-        } else
-            code = null;
-        
-        return code;
+    public String[] getAddressCodes() {
+      String[] code = new String[address_code.size()];//new ArrayList<>();
+      int i = 0;
+
+      if(address_code.size() > 0) {
+          for(JTextField text : address_code) {
+              code[i] = text.getText();
+              i++;
+              //emails.add(text.getText());
+          }
+      } else
+          code = null;
+
+      return code;
     }
      
+    
     /**
      * Auslesen aller Städte und in einem String Array zurückgeben
      * @return Städte
      */  
-     public String[] getAddressCitys() {
+    public String[] getAddressCitys() {
         String[] city = new String[address_city.size()];//new ArrayList<>();
         int i = 0;
         
@@ -1252,11 +1295,12 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         return city;
     }
      
+    
     /**
      * Auslesen aller Länder und in einem String Array zurückgeben
      * @return Länder
      */  
-     public String[] getAddressCountrys() {
+    public String[] getAddressCountrys() {
         String[] country = new String[address_country.size()];//new ArrayList<>();
         int i = 0;
         
@@ -1273,7 +1317,6 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
     }
       
          
-     
     /**
      * Auslesen aller Adresstypen und in einem String Array zurückgeben
      * @return Adresstypen
@@ -1297,7 +1340,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
      * Auslesen aller Adressenids und in einem String Array zurückgeben
      * @return AderessenIDs
      */   
-     public Integer[] getAddressIDs() {
+    public Integer[] getAddressIDs() {
            
         if(address_id.size() > 0)
             return (Integer[])address_id.toArray(new Integer[address_id.size()]);
@@ -1311,8 +1354,8 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
      * Auslesen aller Gruppen und in einem String Array zurückgeben
      * @return Gruppen
      */  
-     public String[] getGroups() {
-       String[] groups = new String[group_text.size()];//new ArrayList<>();
+    public String[] getGroups() {
+       String[] groups = new String[group_text.size()];
        int i = 0;
        int j = 0;
        boolean test = false;
@@ -1339,11 +1382,12 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         return groups;
     }
         
+    
     /**
      * Alle gelösten E-Mails in einem Integer Array zurückgeben
      * @return gelösche Emails
      */      
-     public Integer[] getRemovedEmails() {
+    public Integer[] getRemovedEmails() {
         Integer removes[]= new Integer[remove_emails.size()]; 
         int i=0;
         if(remove_emails.size() > 0) {
@@ -1359,13 +1403,14 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
     }
        
     
-           /**
+    /**
      * Suche-Text
      * @return Such-Text
      */
     public String getSearchText() {
         return this.search_textfield.getText();
     }
+    
     
     /**
      * Suche-Text setzen
@@ -1374,6 +1419,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
     public void setSearchText(String text) {
         this.search_textfield.setText(text);
     }
+    
     
     /**
      * Suche selektieren
@@ -1384,6 +1430,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         search_textfield.select(first, last);
     }
     
+    
     /**
      * Ausgewählte E-Mail Adresse
      * @param obj Objekt JTextField in welchem E-Mail gespeichert ist
@@ -1392,6 +1439,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
     public String getContactEmail(Object obj) {
         return ((JTextField)obj).getText();
     }
+    
     
     /**
      * Selektieren E-Mail Adresse
@@ -1403,6 +1451,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         ((JTextField)obj).select(first, last);
     }
     
+    
     /**
      * Ausgewählte Telefonnummer
      * @param obj Objekt JTextField in welchem Telefonnummer gespeichert ist
@@ -1411,6 +1460,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
     public String getContactPhone(Object obj) {
         return ((JTextField)obj).getText();
     }
+    
     
     /**
      * Selektieren Telefonnummer
@@ -1422,6 +1472,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         ((JTextField)obj).select(first, last);
     }
     
+    
     /**
      * Ausgewählte Strasse
      * @param obj Objekt JTextField in welchem Strasse gespeichert ist
@@ -1430,6 +1481,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
     public String getContactAddressStreet(Object obj) {
         return ((JTextField)obj).getText();
     }
+    
     
     /**
      * Selektieren Strasse
@@ -1441,6 +1493,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         ((JTextField)obj).select(first, last);
     }
     
+    
     /**
      * Ausgewählte Postleizahl
      * @param obj Objekt JTextField in welchem Postleizahl gespeichert ist
@@ -1449,6 +1502,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
     public String getContactAddressCode(Object obj) {
         return ((JTextField)obj).getText();
     }
+    
     
     /**
      * Selektieren Postleizahl
@@ -1460,6 +1514,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         ((JTextField)obj).select(first, last);
     }
     
+    
     /**
      * Ausgewählte Stadt
      * @param obj Objekt JTextField in welchem Stadt gespeichert ist
@@ -1469,7 +1524,8 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         return ((JTextField)obj).getText();
     }
     
-     /**
+    
+    /**
      * Selektieren Stadt
      * @param first Erster Buchstaben des Strings 
      * @param last Letzter Buchstaben des Strings
@@ -1479,6 +1535,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         ((JTextField)obj).select(first, last);
     }
    
+    
     /**
      * Ausgewähltes Land
      * @param obj Objekt JTextField in welchem Land gespeichert ist
@@ -1518,8 +1575,6 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         remove_group.setIcon(remove_image);
         group_name.setEditable(false);
         
-        
-        
         group_name.addFocusListener(new FocusListener() {
 
             @Override
@@ -1549,7 +1604,6 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
             detail_dynamic_panel_group.add(group_new, "span 2,growx,wrap");
             detail_dynamic_panel_group.add(c, constraint_map.get(c));             
         }
-
 
         /* Daten in Liste speichern*/
         group_panel.add(group_new);
@@ -1582,8 +1636,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         JButton remove_phone = new JButton("Löschen");
         remove_phone.setIcon(remove_image);
         phone_nummer.setMinimumSize(new Dimension(100, 0));
-        
-        
+
         phone_type.addActionListener(new ActionListener() {
 
             @Override
@@ -1658,7 +1711,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         detail_dynamic_panel_phone.revalidate();
     }
     
-  
+    
     /**
      * Telefonnummer löschen
      * @param ae
@@ -1688,7 +1741,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
     }
     
      
-      /**
+    /**
      * Telefonnummer Angewählt -> Löschenbutton Anzeigen
      * @param ae 
      */      
@@ -1699,8 +1752,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         JPanel panel = phone_panel.get(index);
         panel.add(remove);
         remove.setVisible(true);
-        panel.revalidate();
-        
+        panel.revalidate();    
     }
     
     
@@ -1712,12 +1764,12 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         JTextField text = (JTextField)fe.getSource();
         int index = phone_text.indexOf(text);
         try{
-        JButton remove = phone_remove_button.get(index);
-        JPanel panel = phone_panel.get(index);
-        remove.setVisible(false);
-        panel.remove(remove);
-        panel.revalidate();
-        }catch (ArrayIndexOutOfBoundsException ex){
+            JButton remove = phone_remove_button.get(index);
+            JPanel panel = phone_panel.get(index);
+            remove.setVisible(false);
+            panel.remove(remove);
+            panel.revalidate();
+        } catch (ArrayIndexOutOfBoundsException ex){
             
         }
         
@@ -1740,14 +1792,10 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         remove_groups.add(index);
         detail_dynamic_panel_group.remove(panel);
         detail_dynamic_panel_group.revalidate();
-        group_panel.remove(index);
-        
-        
+        group_panel.remove(index);   
     }
     
 
-    
-     
     /**
      * Gruppe Angewählt -> Löschenbutton Anzeigen
      * @param ae 
@@ -1758,11 +1806,9 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         JButton remove = group_remove_button.get(index);
         JPanel panel = group_panel.get(index);
         
-
         panel.add(remove);
         remove.setVisible(true);
-        panel.revalidate();
-        
+        panel.revalidate();    
     }
     
     
@@ -1777,8 +1823,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         JPanel panel = group_panel.get(index);
         remove.setVisible(false);
         panel.remove(remove);
-        panel.revalidate();
-        
+        panel.revalidate();  
     }
    
     
@@ -1813,7 +1858,6 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         code_address.setMinimumSize(new Dimension(30, 0));
         city_address.setMinimumSize(new Dimension(166, 0));
         country_address.setMinimumSize(new Dimension(100, 0));
-        
         
         DocumentListener documentlistener = new DocumentListener() {
 
@@ -1906,7 +1950,6 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         });
         country_address.getDocument().addDocumentListener(documentlistener);
            
-           
         remove_address.addActionListener(new ActionListener() {
 
             @Override
@@ -1930,10 +1973,8 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
  
            }
             
-            detail_dynamic_panel_address.add(c, constraint_map.get(c));  
-            
+            detail_dynamic_panel_address.add(c, constraint_map.get(c));    
         }
-
 
         /* Daten in Liste speichern*/
         address_panel.add(address_new);
@@ -1945,9 +1986,9 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         address_remove_button.add(remove_address);
         address_id.add(id);
         
-        detail_dynamic_panel_address.revalidate();      
-            
+        detail_dynamic_panel_address.revalidate();           
      }
+    
         
     /**
      * Adresse löschen
@@ -1975,8 +2016,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
             remove_addresses.add(address_id.get(index));
             detail_dynamic_panel_address.remove(panel);
         }
-        detail_dynamic_panel_address.revalidate();
-        
+        detail_dynamic_panel_address.revalidate();  
     }
     
      
@@ -1995,8 +2035,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
                 case 3: index = address_city.indexOf(text);
                     break;
                 case 4: index = address_country.indexOf(text);
-                    break;
-                 
+                    break;        
         }
         
         JButton remove = address_remove_button.get(index);
@@ -2006,9 +2045,8 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         panel.revalidate();      
     }
     
-    
-    
-     /**
+
+    /**
      * Adresse Abgewählt -> Sendenbutton Anzeigen
      * @param ae 
      */  
@@ -2026,19 +2064,16 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
                     break;
         }         
         
-        
         try{
-        JButton remove = address_remove_button.get(index);
-        JPanel panel = address_panel.get(index);   
-        remove.setVisible(false);
-        panel.remove(remove);       
-        panel.revalidate();
+            JButton remove = address_remove_button.get(index);
+            JPanel panel = address_panel.get(index);   
+            remove.setVisible(false);
+            panel.remove(remove);       
+            panel.revalidate();
         } catch (ArrayIndexOutOfBoundsException ex) {
           
-        }
-         
+        } 
     }
-    
     
     
     /**
@@ -2065,7 +2100,6 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         JButton send_email = new JButton("Senden");
         send_email.setIcon(send_image);
         email_adress.setMinimumSize(new Dimension(100, 0));
-        
         
         email_type.addActionListener(new ActionListener() {
 
@@ -2136,13 +2170,9 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
                 email_new.add(email_adress, " span 2");
                 email_new.add(send_email);
                 detail_dynamic_panel_email.add(email_new, "span 2,growx,wrap");
-                
- 
            }
             
-            detail_dynamic_panel_email.add(c, constraint_map.get(c));
-            
-            
+            detail_dynamic_panel_email.add(c, constraint_map.get(c));           
         }
         /* Daten in Liste speichern*/
         email_panel.add(email_new);
@@ -2155,10 +2185,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         detail_dynamic_panel_email.revalidate();
     }
     
-    
-    
-    
-    
+
     /**
      * Email löschen
      * @param ae 
@@ -2204,10 +2231,8 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         panel.add(remove);      
         remove.setVisible(true);
 
-        
         panel.revalidate();
         detail_dynamic_label_email.revalidate();
-      
     }
     
     
@@ -2219,22 +2244,22 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
         JTextField text = (JTextField)fedeselect.getSource();
         int index = email_text.indexOf(text);
         try {
-        JButton send = email_send_button.get(index);
-        JButton remove = email_remove_button.get(index);
-        JPanel panel = email_panel.get(index);
-        remove.setVisible(false);
-        panel.remove(remove);
-        panel.add(send);
-        panel.revalidate();
-        detail_dynamic_label_email.revalidate();
+            JButton send = email_send_button.get(index);
+            JButton remove = email_remove_button.get(index);
+            JPanel panel = email_panel.get(index);
+            remove.setVisible(false);
+            panel.remove(remove);
+            panel.add(send);
+            panel.revalidate();
+            detail_dynamic_label_email.revalidate();
         }
         catch (ArrayIndexOutOfBoundsException ex) {
           
-        }
-                
+        }        
     }
     
-     /**
+    
+    /**
      * Speicherbutton aktiviern oder deaktivieren
      * @param state
      */  
@@ -2252,8 +2277,6 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
     }  
      
 
-
-    
     
     /***************************************************************************
      * Model -> View
@@ -2365,10 +2388,12 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
                 }
                 break;
                 
+                
             case CONTACT_INSERT_EVENT:
                 if(evt.getNewValue() != null) {
                     setContactList(CONTACT_DEFAULT_ID, "", CONTACT_REMOVE_GROUP_WITH_ID);
                 }
+               
                 
             case CONTACT_UPDATE_EVENT:
                 if(evt.getNewValue() != null) {
@@ -2381,6 +2406,7 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
                     setSaveButtonState(false);
                 }
                 break;
+             
                 
             case CONTACT_DELETE_EVENT:
                 if(evt.getNewValue() != null) {
@@ -2405,16 +2431,20 @@ public final class ContactsView extends AbstractView implements ContactsGraphicD
                     controller.selectContact();
                 }
                 break;
+              
                 
             case CONTACT_SELECT_GROUPS_EVENT:
                 break;
+              
                 
             case CONTACT_ADD_GROUP_EVENT:
                 break;
+              
                 
             case CONTACT_DELETE_GROUP_EVENT:
                 break;
             
+                
             case CONTACT_ALL_GROUP_EVENT:
                  if(evt.getNewValue() != null) {
                     /* Gruppe aus Liste entfernen */

@@ -7,7 +7,8 @@ import java.util.ArrayList;
 
 
 /**
- * @author Philipp Eder
+ * Kontakt-Modell
+ * @author Philipp Eder, Simon Grossenbacher (Design)
  * @version 0.1
  * @since 27.03.2013
  */
@@ -33,7 +34,7 @@ public final class ContactsModel extends AbstractModel implements ContactsEvent 
     }
     
     
-     /**
+    /**
      * Alle vorhanden Kontakte der Datenbank einlesen
      */
     public void getContactList() { 
@@ -158,8 +159,7 @@ public final class ContactsModel extends AbstractModel implements ContactsEvent 
     } 
 
 
-
-        /**
+    /**
      * Alle Gruppen auslesen
      */
     public void allGroups() {
@@ -174,7 +174,7 @@ public final class ContactsModel extends AbstractModel implements ContactsEvent 
     } 
 
  
-     /**
+    /**
      * Gruppen von einem Kontakt auslesen
      * @param contact Contact Transfer Objecet
      */
@@ -190,7 +190,7 @@ public final class ContactsModel extends AbstractModel implements ContactsEvent 
     }
 
     
-      /**
+    /**
      * Gruppen welche gelöscht wurde evaluieren und aus Datenbank löschen
      * @param groups Ausgewählte Gruppen für Kontakt
      * @param contact Contact Transfer Objecet
@@ -223,7 +223,7 @@ public final class ContactsModel extends AbstractModel implements ContactsEvent 
     }
 
     
-       /**
+    /**
      * Gruppen welche hinzugefügt wurde evaluieren und zur Datenbank hinzufügen
      * @param groups Ausgewählte Gruppen für Kontakt
      * @param contact Contact Transfer Objecet
@@ -231,40 +231,37 @@ public final class ContactsModel extends AbstractModel implements ContactsEvent 
      * @param groupcontact_all Alle Gruppen die existieren
      */ 
     void addedGroups(String[] groups,ContactDTO contact, ArrayList<GroupDTO> groupcontact_list, ArrayList<GroupDTO> groupcontact_all) {
-      boolean test=false;
-      try{
-        if(groups.length>0)
-        {
-          /*Evaluieren welche Gruppen schon gespeichert sind */
-          for(int i = 0; i < groups.length; i++) {
-            for(GroupDTO Group : groupcontact_list) {
-                if(((String)Group.group_name).equals(groups[i]))
-                    test=true;
+        boolean test=false;
+        try{
+            if(groups.length>0) {
+                /*Evaluieren welche Gruppen schon gespeichert sind */
+                for(int i = 0; i < groups.length; i++) {
+                  for(GroupDTO Group : groupcontact_list) {
+                      if(((String)Group.group_name).equals(groups[i]))
+                          test=true;
+                  }
+                    if(test==false) {
+                        /* Gruppe vervollständigen und speichern*/
+                        for(GroupDTO Groupall : groupcontact_all) {
+                            if(((String)Groupall.group_name).equals(groups[i])){
+                                try {
+                                    contactsdao.addContactToGroup(contact.user_id, Groupall.group_id); 
+                                } catch (DAOException ex) {
+                                    groupcontact_list = null;
+                                }
+                            }     
+                        }    
+                    } else
+                    test=false; 
+                }
             }
-            if(test==false){
-                /* Gruppe vervollständigen und speichern*/
-                for(GroupDTO Groupall : groupcontact_all) {
-                if(((String)Groupall.group_name).equals(groups[i])){
-                 try {
-                     contactsdao.addContactToGroup(contact.user_id, Groupall.group_id); 
-                 } catch (DAOException ex) {
-                    groupcontact_list = null;
-                 }
-               }   
-             }
-
-            }
-            else
-             test=false; 
-        }
-      }
-     } catch (NullPointerException  ex) {
+        } catch (NullPointerException  ex) {
           
         }
-      }
+    }
 
     
-      /**
+    /**
      * Emailadressen von Kontakt löschen
      * @param Mails Emailids
      */
@@ -278,7 +275,8 @@ public final class ContactsModel extends AbstractModel implements ContactsEvent 
          }
     }
 
-     /**
+    
+    /**
      * Adressen von Kontakt löschen
      * @param Addresses Adressenids
      */
@@ -293,7 +291,7 @@ public final class ContactsModel extends AbstractModel implements ContactsEvent 
     }
 
     
-     /**
+    /**
      * Telefonnummern von Kontakt löschen
      * @param Phones Telefonnummerids
      */
