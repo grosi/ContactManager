@@ -23,7 +23,7 @@ import javax.swing.ListSelectionModel;
 
 /**
  * Swing-Komponente, die eine Check-Liste zur Verfuegung stellt
- * @author grosi
+ * @author Simon Grossenbacher
  * @version 0.1
  * @since 25.04.2013
  * @TODO remove Methoden zum leeren der Liste hinzufuegen

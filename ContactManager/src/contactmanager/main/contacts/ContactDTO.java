@@ -4,8 +4,8 @@ package contactmanager.main.contacts;
 import java.util.ArrayList;
 
 /**
- * Transfer Ojekt fuer Kontakte
- * @author grosi
+ * Transfer bjekt fuer Kontakte
+ * @author Simon Grossenbacher
  * @version 0.1
  * @since 28.03.2013
  */

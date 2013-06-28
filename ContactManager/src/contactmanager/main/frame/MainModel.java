@@ -12,7 +12,7 @@ import java.net.URISyntaxException;
 
 /**
  * Haupt-Modell der Applikation
- * @author grosi
+ * @author Simon Grossenbacher
  * @version 0.1
  * @since 27.03.2013
  */
